@@ -42,7 +42,6 @@ public class StudentAddController extends BaseAuthorization {
     @Override
     public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("Hello");
         // get user data  //
         String studentCode = request.getParameter("studentCode");
         String studentFullName = request.getParameter("fullname");
