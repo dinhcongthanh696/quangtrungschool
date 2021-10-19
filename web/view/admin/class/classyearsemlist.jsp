@@ -33,21 +33,27 @@
                         var totalPage = toObject.totalPage;
                         var classes = toObject.classes;
                         for (let i = 0; i < classes.length; i++) {
+                            var endDate = classes[i].endDate.toString();
+                            var startDate = classes[i].startDate.toString();
                             $(".right .table tbody").append(
-                                    "<tr>   "
+                                "<tr>   "
                                     + "<td>" + classes[i].classroom.classCode + "</td>"
                                     + "<td>" + classes[i].year + "</td>"
                                     + "<td>" + classes[i].semester + "</td>"
+                                    + "<td>" + classes[i].startDate + "</td>"
+                                    + "<td>" + classes[i].endDate  + "</td>"
                                     + "<td>"
-                                    + ((typeof classes[i].homeroomTeacher.teacherCode === 'undefined') ? "Unkown" : classes[i].homeroomTeacher.teacherCode)
-                                    + " | <a href=/QuangTrungSchool/admin-classyearsemester-update?classCode=" + classes[i].classroom.classCode + "&year=" + classes[i].year
-                                    + "&semester=" + classes[i].semester + "&teacherCode=" + classes[i].homeroomTeacher.teacherCode + ">Edit</a>"
+                                        + ((typeof classes[i].homeroomTeacher.teacherCode === 'undefined') ? "Unkown" : classes[i].homeroomTeacher.teacherCode)
+                                        + " | <a href=/QuangTrungSchool/admin-classyearsemester-update?classCode=" + classes[i].classroom.classCode + "&year=" + classes[i].year
+                                        + "&semester=" + classes[i].semester + "&teacherCode=" + classes[i].homeroomTeacher.teacherCode + ">Edit</a>"
                                     + "</td>"
                                     +"<td>"
-                                    + "<a href=/QuangTrungSchool/admin-classyearsemester-schedule?"
-                                    +"classCode="+ classes[i].classroom.classCode +"&year="+ classes[i].year +"&semester="+ classes[i].semester +">Edit</a>"
+                                        + "<a href=/QuangTrungSchool/admin-classyearsemester-schedule?"
+                                        +"classCode="+ classes[i].classroom.classCode +"&year="+ classes[i].year 
+                                        +"&semester="+ classes[i].semester +"&startDate="+ startDate + "&endDate="+ endDate
+                                        +">Edit</a>"
                                     +"</td>"
-                                    + "</tr>");
+                                + "</tr>");
                         }
                         var query = $("#query").val();
                         for (let pageId = 1; pageId <= totalPage; pageId++) {
@@ -99,6 +105,8 @@
                         <td>Class Code</td>
                         <td>Year</td>
                         <td>Semester</td>
+                        <td>Start Date</td>
+                        <td>End Date</td>
                         <td>Homeroom Teacher</td>
                         <td>Schedule</td>
                     </tr>
@@ -110,6 +118,8 @@
                             <td>${cys.classroom.classCode}</td>
                             <td>${cys.year}</td>
                             <td>${cys.semester}</td>
+                            <td>${cys.startDate}</td>
+                            <td>${cys.endDate}</td>
                             <td>
                                 ${empty cys.homeroomTeacher.teacherCode  ? 'Unkown' :  cys.homeroomTeacher.teacherCode}
                                 |  <a href="/QuangTrungSchool/admin-classyearsemester-update?classCode=${cys.classroom.classCode}&year=${cys.year}&semester=${cys.semester}&teacherCode=${cys.homeroomTeacher.teacherCode}">
@@ -117,7 +127,10 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/QuangTrungSchool/admin-classyearsemester-schedule?classCode=${cys.classroom.classCode}&year=${cys.year}&semester=${cys.semester}">Edit</a>
+                                <a href="/QuangTrungSchool/admin-classyearsemester-schedule?
+                                   classCode=${cys.classroom.classCode}&year=${cys.year}&semester=${cys.semester}&startDate=${cys.startDate}&endDate=${cys.endDate}">
+                                    Edit
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>

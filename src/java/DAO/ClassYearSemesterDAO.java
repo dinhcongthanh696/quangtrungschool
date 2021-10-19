@@ -45,6 +45,8 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
                 cys.setClassroom(classroom);
                 cys.setYear(rs.getInt("year"));
                 cys.setSemester(rs.getInt("semester"));
+                cys.setStartDate(rs.getDate("stat_date"));
+                cys.setEndDate(rs.getDate("end_date"));
                 classYearSemesters.add(cys);
             }
         } catch (SQLException ex) {
@@ -81,6 +83,8 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
                     cys.setClassroom(classroom);
                     cys.setYear(rs.getInt("year"));
                     cys.setSemester(rs.getInt("semester"));
+                    cys.setStartDate(rs.getDate("stat_date"));
+                    cys.setEndDate(rs.getDate("end_date"));
                     classYearSemesters.add(cys);
                 }
             } catch (SQLException ex) {
@@ -105,6 +109,8 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
                     cys.setClassroom(classroom);
                     cys.setYear(rs.getInt("year"));
                     cys.setSemester(rs.getInt("semester"));
+                    cys.setStartDate(rs.getDate("stat_date"));
+                    cys.setEndDate(rs.getDate("end_date"));
                     classYearSemesters.add(cys);
                 }
             } catch (SQLException ex1) {
@@ -200,10 +206,10 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
             prepared_stmt.setInt(3, classroom.getYear());
             prepared_stmt.setInt(4, classroom.getSemester());
             prepared_stmt.executeUpdate();
-            for(Teacher teacher : classroom.getTeachersOfClass()){
-                if(teacher.getTeacherCode().equals(classroom.getHomeroomTeacher().getTeacherCode())){
+            for (Teacher teacher : classroom.getTeachersOfClass()) {
+                if (teacher.getTeacherCode().equals(classroom.getHomeroomTeacher().getTeacherCode())) {
                     sql = "INSERT INTO groupaccount VALUES(?,?) ";
-                }else{
+                } else {
                     sql = "DELETE FROM groupaccount WHERE gid = ? AND username = ? ";
                 }
                 prepared_stmt = connection.prepareStatement(sql);
@@ -219,7 +225,7 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
                 Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {

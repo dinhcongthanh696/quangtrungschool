@@ -26,6 +26,10 @@
                 Date : <input disabled="disabled" value="${param.day}" class="form-control">
                 <input type="hidden" name="semester" value="${param.semester}">
                 Semester : <input disabled="disabled" value="${param.semester}" class="form-control">
+                <input type="hidden" name="startDate" value="${param.startDate}">
+                Start Date : <input disabled="disabled" value="${param.startDate}" class="form-control">
+                <input type="hidden" name="endDate" value="${param.endDate}">
+                End Date : <input disabled="disabled" value="${param.endDate}" class="form-control">
                 <label for="course">Course : </label>
                 <select name="course" id="course" class="form-select">
                     <c:forEach items="${requestScope.courses}" var="course">

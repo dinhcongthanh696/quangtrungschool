@@ -69,6 +69,8 @@ public class ScheduleAddController extends BaseAuthorization {
         String raw_classCode = request.getParameter("classCode");
         String raw_courseCode = request.getParameter("course");
         String raw_teacherCode = request.getParameter("teacher");
+        String raw_startDate = request.getParameter("startDate");
+        String raw_endDate = request.getParameter("endDate");
         
         
         Schedule schedule = new Schedule();
@@ -92,7 +94,7 @@ public class ScheduleAddController extends BaseAuthorization {
         calendar.setTime(date);
         int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
         response.sendRedirect("admin-classyearsemester-schedule?weekNumber="+weekNumber+"&classCode="+raw_classCode+
-                "&year="+year+"&semester="+semester);
+                "&year="+year+"&semester="+semester+"&startDate="+raw_startDate+"&endDate="+raw_endDate);
     }
 
 

@@ -35,8 +35,10 @@
                 var week = $("#week").val();
                 var semester = $("#semester").val();
                 var classCode = $("#classCode").val();
+                var startDate = $("#startDate").val();
+                var endDate = $("#endDate").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule?year=" + year + "&weekNumber=" + week
-                        + "&classCode=" + classCode +"&semester="+semester;
+                        + "&classCode=" + classCode +"&semester="+ semester +"&startDate="+startDate+"&endDate="+endDate; 
             }
 
             function doDelete(str, stt) {
@@ -73,8 +75,11 @@
                 var year = $("#year").val();
                 var semester = $("#semester").val();
                 var classCode = $("#classCode").val();
+                var startDate = $("#startDate").val();
+                var endDate = $("#endDate").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-add?year=" + year + "&day=" +
-                        day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester;
+                        day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester 
+                        +"&startDate="+startDate+"&endDate="+endDate;
             }
 
             function doUpdate(str) {
@@ -82,11 +87,15 @@
                 var day = str_split[0];
                 var slot = str_split[1];
                 var teacherCode = str_split[2];
+                var courseCode = str_split[3];
                 var year = $("#year").val();
                 var semester = $("#semester").val();
                 var classCode = $("#classCode").val();
+                var startDate = $("#startDate").val();
+                var endDate = $("#endDate").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-update?year=" + year + "&day=" +
-                        day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester + "&teacherCode="+teacherCode;
+                        day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester + "&teacherCode="+teacherCode
+                        +"&startDate="+startDate+"&endDate="+endDate+"&courseCode="+courseCode;
             }
         </script>
     </head>
@@ -100,6 +109,10 @@
             <input value="${requestScope.year}" disabled="disabled" class="form-control">
             Semester : <input type="hidden" value="${requestScope.semester}" id="semester"> 
             <input value="${requestScope.semester}" disabled="disabled" class="form-control"><br/>
+            Start Date : <input type="hidden" value="${requestScope.startDate}" id="startDate">
+            <input value="${requestScope.startDate}" disabled="disabled" class="form-control"><br/>
+            End Date : <input type="hidden" value="${requestScope.endDate}" id="endDate">
+            <input value="${requestScope.endDate}" disabled="disabled" class="form-control"><br/>
             <table class="table table-bordered table-hover">
                 <thead>    
                     <tr>
@@ -139,7 +152,7 @@
                                                 Teacher : <span> ${schedule.teacher.teacherCode} </span>
                                             </p>
                                             <button class="btn btn-primary" onclick="doUpdate(this.value)" 
-                                                    value="${day[0].concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)}
+                                                    value="${day[0].concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode).concat(' ').concat(schedule.course.courseCode)}
                                                     ">
                                                 Edit
                                             </button>

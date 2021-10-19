@@ -10,6 +10,7 @@ import DAO.ClassYearSemesterDAO;
 import Login.BaseAuthorization;
 import Model.ClassYearSemester;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class ClassYearSemesterListController extends BaseAuthorization {
             throws ServletException, IOException {
         String query = request.getParameter("query");
         if (!query.isEmpty()) {
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
             int pageId = 1;
             int totalClassesYearSemester = classyearsemesterDAO.getAll().size();
             List<ClassYearSemester> searchedClaseses = new ArrayList<>();
@@ -80,6 +81,7 @@ public class ClassYearSemesterListController extends BaseAuthorization {
             int offset = (pageId - 1) * CLASSPERPAGE;
             searchedClaseses = classyearsemesterDAO.search(query, offset, CLASSPERPAGE);
             String classestoJSON = gson.toJson(searchedClaseses);
+            System.out.println(classestoJSON);
             String JSONObject = "{ \"totalPage\" : "+ pageNeeded +", \"classes\" : "+classestoJSON+"}";
             response.getWriter().print(JSONObject);
         }

@@ -45,6 +45,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String raw_semester = request.getParameter("semester");
         String raw_year = request.getParameter("year");
         String raw_teacherCode = request.getParameter("teacherCode");
+        String raw_courseCode = request.getParameter("courseCode");
         
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
@@ -58,6 +59,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         request.setAttribute("teacherCode", raw_teacherCode);
         request.setAttribute("year", year);
         request.setAttribute("teachers", teachers);
+        request.setAttribute("courseCode", raw_courseCode);
         request.getRequestDispatcher("view/admin/class/scheduleupdate.jsp").forward(request, response);
     }
 
@@ -69,6 +71,8 @@ public class ScheduleUpdateController extends BaseAuthorization {
         Date date = Date.valueOf(request.getParameter("date"));
         int semester = Integer.parseInt(request.getParameter("semester"));
         String teacherCode = request.getParameter("teacher");
+        String raw_startDate = request.getParameter("startDate");
+        String raw_endDate = request.getParameter("endDate");
         
         Schedule schedule = new Schedule();
         ClassRoom classroom = new ClassRoom();
@@ -85,7 +89,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         int year = calendar.get(Calendar.YEAR);
         int week = calendar.get(Calendar.WEEK_OF_YEAR);
         response.sendRedirect("admin-classyearsemester-schedule?year="+year+"&weekNumber="+week+"&classCode="+classCode
-        +"&semester="+semester);
+        +"&semester="+semester+"&startDate="+raw_startDate+"&endDate="+raw_endDate);
     }
 
 }
