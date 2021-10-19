@@ -11,6 +11,7 @@ import DAO.AccountDAO;
 import DAO.StudentDAO;
 import Login.BaseAuthorization;
 import Model.Account;
+import Model.Group;
 import Model.Student;
 import java.io.IOException;
 import java.sql.Date;
@@ -52,7 +53,11 @@ public class StudentAddController extends BaseAuthorization {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         // get user data //
+        int studentGroup = 1;
         Account account = new Account(username,password);
+        Group group = new Group();
+        group.setGid(studentGroup);
+        account.getGroups().add(group);
         Student student = new Student(studentCode, studentFullName , address, dob, email, phone, account);
         studentDAO.insert(student);     // insert new student
         response.sendRedirect("admin-student-list?pageId=1"); // redirect to first page of student list

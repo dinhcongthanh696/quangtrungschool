@@ -10,7 +10,6 @@ import DAO.AbstractTeacherDAO;
 import DAO.AccountDAO;
 import DAO.TeacherDAO;
 import Login.BaseAuthorization;
-import Model.Account;
 import Model.Teacher;
 import com.google.gson.Gson;
 import java.io.IOException;

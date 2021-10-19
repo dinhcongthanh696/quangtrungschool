@@ -11,6 +11,7 @@ import DAO.AccountDAO;
 import DAO.TeacherDAO;
 import Login.BaseAuthorization;
 import Model.Account;
+import Model.Group;
 import Model.Teacher;
 import java.io.IOException;
 import java.sql.Date;
@@ -45,8 +46,12 @@ public class TeacherAddController extends BaseAuthorization {
         Date dob = Date.valueOf(request.getParameter("dob"));
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
+        int teacherGroup = 2;
+        Group group = new Group();
+        group.setGid(teacherGroup);
         Account account = new Account(username,password);
-        Teacher teacher = new Teacher(teacherCode, username, address, dob, email, phone, account);
+        account.getGroups().add(group);
+        Teacher teacher = new Teacher(teacherCode, teacherFullName, address, dob, email, phone, account);
         teacherDAO.insert(teacher);
         response.sendRedirect("admin-teacher-list?pageId=1");
     }

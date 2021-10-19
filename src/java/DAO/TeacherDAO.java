@@ -92,6 +92,11 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt.setString(1, teacher.getAccount().getUsername());
             prepare_stmt.setString(2, teacher.getAccount().getPassword());
             prepare_stmt.executeUpdate();
+            sql = "INSERT INTO groupaccount VALUES(?,?)";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setInt(1, teacher.getAccount().getGroups().get(0).getGid());
+            prepare_stmt.setString(2, teacher.getAccount().getUsername());
+            prepare_stmt.executeUpdate();
             sql = "INSERT INTO teacher VALUES(?,?,?,?,?,?,?)";
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getTeacherCode());

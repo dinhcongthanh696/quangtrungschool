@@ -105,13 +105,18 @@ public class StudentDAO extends AbstractStudentDAO {
 
     @Override
     public void insert(Student student) {
-        String sql = "INSERT INTO account VALUES(?,?,?)";
+        String sql = "INSERT INTO account VALUES(?,?)";
         PreparedStatement prepare_stmt;
         try {
             connection.setAutoCommit(false);
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getAccount().getUsername());
             prepare_stmt.setString(2, student.getAccount().getPassword());
+            prepare_stmt.executeUpdate();
+            sql = "INSERT INTO groupaccount VALUES(?,?) ";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setInt(1, student.getAccount().getGroups().get(0).getGid());
+            prepare_stmt.setString(2, student.getAccount().getUsername());
             prepare_stmt.executeUpdate();
             sql = "INSERT INTO student VALUES(?,?,?,?,?,?,?)";
             prepare_stmt = connection.prepareStatement(sql);
