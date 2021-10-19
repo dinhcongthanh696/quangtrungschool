@@ -6,10 +6,13 @@
 package Login;
 
 import DAO.AbstractAccountDAO;
+import DAO.AbstractGroupDAO;
 import DAO.AccountDAO;
+import DAO.GroupDAO;
 import Model.Account;
 import Model.Group;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -26,10 +29,12 @@ import javax.servlet.http.HttpSession;
 public class LoginController extends HttpServlet {
 
     private final AbstractAccountDAO accountDAO;
+    private final AbstractGroupDAO groupDAO;
     private final int COOKIETIMEOUT = 7 * 24 * 3600;
 
     public LoginController() {
         accountDAO = new AccountDAO();
+        groupDAO = new GroupDAO();
     }
     
     public Cookie getCookie(String name,Cookie[] cookies){
@@ -74,6 +79,8 @@ public class LoginController extends HttpServlet {
             }
             response.sendRedirect(url);
         } else {
+            List<Group> groups = groupDAO.getAll();
+            request.setAttribute("groups", groups);
             request.getRequestDispatcher("view/login.jsp").forward(request, response);
         } 
     }

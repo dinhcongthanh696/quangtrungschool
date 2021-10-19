@@ -28,10 +28,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ScheduleUpdateController", urlPatterns = {"/admin-classyearsemester-schedule-update"})
 public class ScheduleUpdateController extends BaseAuthorization {
+
     private final AbstractTeacherDAO teacherDAO;
     private final AbstractScheduleDAO scheduleDAO;
-    
-    public ScheduleUpdateController(){
+
+    public ScheduleUpdateController() {
         teacherDAO = new TeacherDAO();
         scheduleDAO = new ScheduleDAO();
     }
@@ -46,7 +47,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String raw_year = request.getParameter("year");
         String raw_teacherCode = request.getParameter("teacherCode");
         String raw_courseCode = request.getParameter("courseCode");
-        
+
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
         int semester = Integer.parseInt(raw_semester);
@@ -73,7 +74,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String teacherCode = request.getParameter("teacher");
         String raw_startDate = request.getParameter("startDate");
         String raw_endDate = request.getParameter("endDate");
-        
+
         Schedule schedule = new Schedule();
         ClassRoom classroom = new ClassRoom();
         Teacher teacher = new Teacher();
@@ -88,8 +89,8 @@ public class ScheduleUpdateController extends BaseAuthorization {
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int week = calendar.get(Calendar.WEEK_OF_YEAR);
-        response.sendRedirect("admin-classyearsemester-schedule?year="+year+"&weekNumber="+week+"&classCode="+classCode
-        +"&semester="+semester+"&startDate="+raw_startDate+"&endDate="+raw_endDate);
+        response.sendRedirect("admin-classyearsemester-schedule?year=" + year + "&weekNumber=" + week + "&classCode=" + classCode
+                + "&semester=" + semester + "&startDate=" + raw_startDate + "&endDate=" + raw_endDate);
     }
 
 }

@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "TakeCourseController", urlPatterns = {"/admin-classyearsemester-schedule"})
-public class ScheduleController extends BaseAuthorization{
+public class ScheduleController extends BaseAuthorization {
 
     private final AbstractCourseDAO courseDAO;
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
@@ -115,8 +115,8 @@ public class ScheduleController extends BaseAuthorization{
         Year year = new Year();
         year.setYear(Integer.parseInt(raw_year));
         getAllDays(year, startDate, endDate);
-        Week currentWeek = (raw_weekNum != null) ? year.getWeeks().get(Integer.parseInt(raw_weekNum) - calendarStartDate.get(Calendar.WEEK_OF_YEAR)) : 
-                year.getWeeks().get(0);
+        Week currentWeek = (raw_weekNum != null) ? year.getWeeks().get(Integer.parseInt(raw_weekNum) - calendarStartDate.get(Calendar.WEEK_OF_YEAR))
+                : year.getWeeks().get(0);
 
         List<Schedule> schedules = scheduleDAO.getSlotsOfClassInWeek(raw_classCode, currentWeek);
 
@@ -128,7 +128,7 @@ public class ScheduleController extends BaseAuthorization{
         request.setAttribute("semester", semester);
         request.setAttribute("startDate", raw_startDate);
         request.setAttribute("endDate", raw_endDate);
-        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response); 
+        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response);
     }
 
     @Override

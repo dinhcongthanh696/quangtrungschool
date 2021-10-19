@@ -25,16 +25,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ScheduleDeleteController", urlPatterns = {"/admin-classyearsemester-schedule-delete"})
 public class ScheduleDeleteController extends BaseAuthorization {
+
     private final AbstractScheduleDAO scheduleDAO;
-    
-    public ScheduleDeleteController(){
+
+    public ScheduleDeleteController() {
         scheduleDAO = new ScheduleDAO();
     }
 
     @Override
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     @Override
@@ -43,7 +44,7 @@ public class ScheduleDeleteController extends BaseAuthorization {
         Date date = Date.valueOf(request.getParameter("day"));
         int slot = Integer.parseInt(request.getParameter("slot"));
         String raw_classCode = request.getParameter("classCode");
-        
+
         Schedule schedule = new Schedule();
         ClassRoom classroom = new ClassRoom();
         classroom.setClassCode(raw_classCode);
@@ -52,6 +53,5 @@ public class ScheduleDeleteController extends BaseAuthorization {
         schedule.setDate(date);
         scheduleDAO.delete(schedule);
     }
-
 
 }
