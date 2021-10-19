@@ -92,7 +92,6 @@ public class StudentDAO extends AbstractStudentDAO {
                 classroom.setClassCode(rs.getString("class_code"));
                 learning.setStudent(student);
                 learning.setClassroom(classroom);
-                learning.setStartDate(rs.getDate("started_date"));
                 learning.setYear(rs.getInt("year"));
                 learning.setSemester(rs.getInt("semester"));
                 student.getStudentLearning().add(learning);

@@ -8,6 +8,8 @@ package Controller.admin.Student;
 import DAO.AbstractLearningDAO;
 import DAO.LearningDAO;
 import Login.BaseAuthorization;
+import Model.Learning;
+import Model.Student;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +33,6 @@ public class StudentDeleteClassController extends BaseAuthorization {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String studentCode = request.getParameter("studentCode");
-        String classCode = request.getParameter("classCode");
         int year = 0;
         int semester = 0;
         if (request.getParameter("year") != null) {
@@ -40,7 +41,13 @@ public class StudentDeleteClassController extends BaseAuthorization {
         if (request.getParameter("semester") != null) {
             semester = Integer.parseInt(request.getParameter("semester"));
         }
-        learningDAO.delete(studentCode, classCode, year, semester);
+        Learning learning = new Learning();
+        Student student = new Student();
+        student.setStudentCode(studentCode);
+        learning.setStudent(student);
+        learning.setYear(year);
+        learning.setSemester(semester);
+        learningDAO.delete(learning);
     }
 
     @Override

@@ -15,14 +15,12 @@ public class Learning {
     private Student student;
     private ClassRoom classroom;
     private int year;
-    private Date startDate;
     private int semester;
 
-    public Learning(Student student, ClassRoom classroom, int year, Date startDate,int semester) {
+    public Learning(Student student, ClassRoom classroom, int year,int semester) {
         this.student = student;
         this.classroom = classroom;
         this.year = year;
-        this.startDate = startDate;
         this.semester = semester;
     }
 
@@ -53,14 +51,6 @@ public class Learning {
 
     public void setYear(int year) {
         this.year = year;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
     }
 
     public int getSemester() {

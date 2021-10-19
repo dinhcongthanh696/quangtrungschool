@@ -43,9 +43,8 @@
                     $.post("/QuangTrungSchool/admin-student-class-delete",
                             {
                                 studentCode: arr[0],
-                                classCode: arr[1],
-                                year: arr[2],
-                                semester: arr[3]
+                                year: arr[1],
+                                semester: arr[2]
                             },
                             function (data, textStatus) {
 
@@ -62,9 +61,8 @@
                 var totalClasses = $("#totalClasses").val();
                 var isDuplicate = false;
                 for (let i = 1; i <= totalClasses; i++) {
-                    if (classCode === $("#" + i).children()[2].innerHTML &&
-                            year == $("#" + i).children()[3].innerHTML &&
-                            semester == $("#" + i).children()[5].innerHTML ) {
+                    if (    year == $("#" + i).children()[3].innerHTML &&
+                            semester == $("#" + i).children()[4].innerHTML ) {
                         isDuplicate = true;
                         break;
                     }
@@ -102,14 +100,12 @@
                     </c:forEach>
                     <br/>
                 </select> <br/>
-                <label for="startDate">Start Date: </label>
-                <input type="date" name="startDate" id="startDate" required="required"><br/>
                 <input type="radio" checked="checked" id="semester1" name="semester" value="1" onclick="checkDuplidate()"> 
                 <label for="semester1">Semester 1</label>
                 <input type="radio" id="semester2" name="semester" value="2" onclick="checkDuplidate()"> 
                 <label for="semester2">Semester 2</label> <br/>
                 <button class="btn btn-primary" type="submit" id="submit">Take Class</button> 
-                <span>X ${param.studentCode} already take this class year semester</span>
+                <span>X ${param.studentCode} already take this year semester</span>
                 <br/>
             </form>
             <h2>Classes ${param.studentCode} has taken</h2>
@@ -120,7 +116,6 @@
                         <th>Student Code </th>
                         <th>Class Code </th>
                         <th>Year </th>
-                        <th>Start Date </th>
                         <th>Semester </th>
                         <th>Delete</th>
                     </tr>
@@ -134,12 +129,11 @@
                             <td>${sl.student.studentCode}</td>
                             <td>${sl.classroom.classCode}</td>
                             <td>${sl.year}</td>
-                            <td>${sl.startDate}</td>
                             <td>${sl.semester}</td>
                             <td>
                                 <button class="btn btn-danger" 
                                         onclick="doDelete(this.value,${stt})" 
-                                        value="${sl.student.studentCode.concat(",").concat(sl.classroom.classCode).concat(",").concat(sl.year).concat(",").concat(sl.semester)}">
+                                        value="${sl.student.studentCode.concat(",").concat(sl.year).concat(",").concat(sl.semester)}">
                                     Delete
                                 </button> 
                             </td>

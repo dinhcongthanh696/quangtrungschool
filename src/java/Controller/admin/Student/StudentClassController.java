@@ -63,8 +63,7 @@ public class StudentClassController extends BaseAuthorization {
         classroom.setClassCode(classCode);
         int year = Integer.parseInt(request.getParameter("year"));
         int semester = Integer.parseInt(request.getParameter("semester"));
-        Date startDate = Date.valueOf(request.getParameter("startDate"));
-        Learning studentLearning = new Learning(student, classroom, year, startDate, semester);
+        Learning studentLearning = new Learning(student, classroom, year, semester);
         learningDAO.save(studentLearning);
         response.sendRedirect("admin-student-class-add?studentCode="+studentCode);
     }

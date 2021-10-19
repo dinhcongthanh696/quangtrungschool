@@ -26,14 +26,13 @@ public class LearningDAO extends AbstractLearningDAO {
 
     @Override
     public void save(Learning learning) {
-        String sql = "INSERT INTO learning VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO learning VALUES(?,?,?,?)";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, learning.getStudent().getStudentCode());
             prepare_stmt.setString(2, learning.getClassroom().getClassCode());
             prepare_stmt.setInt(3, learning.getYear());
-            prepare_stmt.setDate(4, learning.getStartDate());
-            prepare_stmt.setInt(5, learning.getSemester());
+            prepare_stmt.setInt(4, learning.getSemester());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(LearningDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,7 +63,6 @@ public class LearningDAO extends AbstractLearningDAO {
                 learning.setClassroom(classroom);
                 learning.setStudent(student);
                 learning.setYear(rs.getInt("year"));
-                learning.setStartDate(rs.getDate("started_date"));
                 learning.setYear(rs.getInt("semester"));
                 return learning;
             }
@@ -92,7 +90,6 @@ public class LearningDAO extends AbstractLearningDAO {
                 learning = new Learning();
                 learning.setStudent(student);
                 learning.setClassroom(classroom);
-                learning.setStartDate(rs.getDate("started_date"));
                 learning.setYear(rs.getInt("year"));
                 learning.setSemester(rs.getInt("semester"));
                 learnings.add(learning);
@@ -105,14 +102,13 @@ public class LearningDAO extends AbstractLearningDAO {
 
 
     @Override
-    public void delete(String studentCode, String classCode, int year, int semester) {
-        String sql = "DELETE FROM learning WHERE student_code = ? AND class_code = ? AND year = ? AND semester = ?";
+    public void delete(Learning learning) {
+        String sql = "DELETE FROM learning WHERE student_code = ? AND year = ? AND semester = ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, studentCode);
-            prepare_stmt.setString(2, classCode);
-            prepare_stmt.setInt(3, year);
-            prepare_stmt.setInt(4, semester);
+            prepare_stmt.setString(1, learning.getStudent().getStudentCode());
+            prepare_stmt.setInt(2, learning.getYear());
+            prepare_stmt.setInt(3, learning.getSemester());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(LearningDAO.class.getName()).log(Level.SEVERE, null, ex);

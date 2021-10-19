@@ -16,5 +16,5 @@ public abstract class AbstractLearningDAO extends BaseDAO{
     public abstract void save(Learning learning);
     public abstract Learning getStudentLearning(String studentCode,String classCode,int year,int semester);
     public abstract List<Learning> getAll();
-    public abstract void delete(String studentCode,String classCode,int year,int semester);
+    public abstract void delete(Learning learning);
 }
