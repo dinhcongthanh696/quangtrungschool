@@ -46,14 +46,8 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        System.out.println("Session id : "+session.getId());
         Account account;
         Cookie[] cookies = request.getCookies();
-        if(cookies != null){
-            for(Cookie c : cookies){
-                System.out.println(c.getName());
-            }
-        }
         Cookie cookieUsername = getCookie("username", cookies);
         if(cookieUsername != null){
             account = accountDAO.getById(cookieUsername.getValue());

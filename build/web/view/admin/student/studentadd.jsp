@@ -20,7 +20,6 @@
                         {url: "/QuangTrungSchool/admin-student-check-add",
                             type: 'GET',
                             success: function (response) {  // servlet /admin-student-add response 2 arraylist STUDENTS AND ACCOUTS
-                                alert(response);
                                 const JSONtoObjects = JSON.parse(response);
                                 students = JSONtoObjects.students;
                             }
