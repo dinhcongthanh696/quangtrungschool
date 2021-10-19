@@ -189,39 +189,40 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
     @Override
     public void update(ClassYearSemester classroom) {
         String sql = "UPDATE classyearsemester SET homeroom_teacher = ? "
-                + "WHERE class_code = ? AND year = ? AND semester = ?";
+                + "WHERE class_code = ? AND year = ? AND semester = ? ";
         try {
+            connection.setAutoCommit(false);
             PreparedStatement prepared_stmt = connection.prepareStatement(sql);
             prepared_stmt.setString(1, classroom.getHomeroomTeacher().getTeacherCode());
             prepared_stmt.setString(2, classroom.getClassroom().getClassCode());
             prepared_stmt.setInt(3, classroom.getYear());
             prepared_stmt.setInt(4, classroom.getSemester());
             prepared_stmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public void getCourses(ClassYearSemester cys) {
-        String sql = "SELECT * FROM classcourse INNER JOIN course ON classcourse.course_code = course.course_code "
-                + "WHERE "
-                + "class_code = ? AND year = ? AND semester = ?";
-        try {
-            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, cys.getClassroom().getClassCode());
-            prepare_stmt.setInt(2, cys.getYear());
-            prepare_stmt.setInt(3, cys.getSemester());
-            ResultSet rs = prepare_stmt.executeQuery();
-            Course course;
-            while (rs.next()) {
-                course = new Course();
-                course.setCourseCode(rs.getString("course_code"));
-                course.setCourseName(rs.getString("course_name"));
-                cys.getCourses().add(course);
+            for(Teacher teacher : classroom.getTeachersOfClass()){
+                if(teacher.getTeacherCode().equals(classroom.getHomeroomTeacher().getTeacherCode())){
+                    sql = "INSERT INTO groupaccount VALUES(?,?) ";
+                }else{
+                    sql = "DELETE FROM groupaccount WHERE gid = ? AND username = ? ";
+                }
+                prepared_stmt = connection.prepareStatement(sql);
+                prepared_stmt.setInt(1, 3); // 3 repersent for main teacher group
+                prepared_stmt.setString(2, teacher.getTeacherCode());
+                prepared_stmt.executeUpdate();
             }
+            connection.commit();
         } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

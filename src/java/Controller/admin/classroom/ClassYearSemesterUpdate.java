@@ -70,6 +70,7 @@ public class ClassYearSemesterUpdate extends BaseAuthorization {
             int year = Integer.parseInt(request.getParameter("year"));
             int semester = Integer.parseInt(request.getParameter("semester"));
             ClassYearSemester classYearSemester = new ClassYearSemester(classroom, homeroomTeacher, year, semester);
+            classyearsemesterDAO.getTeachers(classYearSemester);
             classyearsemesterDAO.update(classYearSemester);
         }
         response.sendRedirect("admin-classyearsemester-list");
