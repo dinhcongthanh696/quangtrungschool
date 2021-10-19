@@ -116,12 +116,14 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
 
     @Override
     public void insert(ClassYearSemester cys) {
-        String sql = "INSERT INTO classyearsemester (class_code,[year],semester) VALUES(?,?,?)";
+        String sql = "INSERT INTO classyearsemester (class_code,[year],semester,stat_date,end_date) VALUES(?,?,?,?,?)";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, cys.getClassroom().getClassCode());
             prepare_stmt.setInt(2, cys.getYear());
             prepare_stmt.setInt(3, cys.getSemester());
+            prepare_stmt.setDate(4, cys.getStartDate());
+            prepare_stmt.setDate(5, cys.getEndDate());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);

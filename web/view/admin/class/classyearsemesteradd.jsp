@@ -21,6 +21,10 @@
                 display: none;
                 color: red;
             }
+
+            .right .form-control{
+                width : 30%;
+            }
         </style>
         <script>
             var semesters = [];
@@ -47,17 +51,31 @@
                                         break;
                                     }
                                 }
-                                if(isDuplicated){
+                                if (isDuplicated) {
                                     document.getElementById("submit").disabled = true;
-                                    $(".right span").css("display", "inline");
-                                }else{
+                                    $(".right span#alertClass").css("display", "inline");
+                                } else {
                                     document.getElementById("submit").disabled = false;
-                                    $(".right span").css("display", "none");
+                                    $(".right span#alertClass").css("display", "none");
                                 }
 
                             }
                         }
                 );
+            }
+
+            function checkDateBeforeDate() {
+                var startDate = $("#startDate").val();
+                var endDate = $("#endDate").val();
+                if (startDate.length != 0 && endDate.length != 0) {
+                    if (startDate < endDate) {
+                        document.getElementById("submit").disabled = false;
+                        $(".right span#alertDate").css("display", "none");
+                    } else {
+                        document.getElementById("submit").disabled = true;
+                        $(".right span#alertDate").css("display", "inline");
+                    }
+                }
             }
 
             function onClickSemester(checkedBoxValue) {
@@ -70,10 +88,10 @@
                 }
                 if (isDuplicate) {
                     document.getElementById("submit").disabled = true;
-                    $(".right span").css("display", "inline");
+                    $(".right span#alertClass").css("display", "inline");
                 } else {
                     document.getElementById("submit").disabled = false;
-                    $(".right span").css("display", "none");
+                    $(".right span#alertClass").css("display", "none");
                 }
             }
         </script>
@@ -82,13 +100,13 @@
         <jsp:include page="../header.jsp"></jsp:include>
             <section class="right">
                 <h2>Add Class By Year Semester</h2>
-            <form action="" method="POST">
+                <form action="/QuangTrungSchool/admin-classyearsemester-add" method="POST">
                     <label for="classroom">Class Room: </label>
                     <select id="classroom" name="classroom" onchange="searchSemester()" required="required">
                         <option value="">None</option>
-                        <c:forEach items="${requestScope.classrooms}" var="classroom">
+                    <c:forEach items="${requestScope.classrooms}" var="classroom">
                         <option value="${classroom.classCode}">${classroom.classCode}</option>
-                        </c:forEach>
+                    </c:forEach>
                 </select><br/>
                 <label for="year">Year: </label>
                 <select id="year" name="year" onchange="searchSemester()" required="required">
@@ -102,8 +120,13 @@
                 <input type="radio" checked="checked" value="1" name="semester" id="semester1" onclick="onClickSemester(this.value)">
                 <label for="semester2">Semester 2</label>
                 <input type="radio" value="2" name="semester" id="semester2" onclick="onClickSemester(this.value)"><br/>
+                <label for="startDate">Start Date: </label>
+                <input type="date" name="startDate" id="startDate" required="required" class="form-control" onchange="checkDateBeforeDate()">
+                <label for="endDate">End Date: </label>
+                <span id="alertDate">X start date must before end date</span>
+                <input type="date" name="endDate" id="endDate" required="required" class="form-control" onchange="checkDateBeforeDate()">
                 <button type="submit" class="btn btn-primary" id="submit">Add</button> 
-                <span>X This class has already taken this semester of year </span>
+                <span id="alertClass">X This class has already taken this semester of year </span>
             </form>
         </section>
         <jsp:include page="../footer.jsp"></jsp:include>

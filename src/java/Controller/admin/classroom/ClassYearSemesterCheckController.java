@@ -36,7 +36,6 @@ public class ClassYearSemesterCheckController extends BaseAuthorization {
         if(!classCode.isEmpty() && year != -1){
             List<ClassYearSemester> classes = classyearsemesterDAO.getSemesters(classCode, year);
             Gson jsonifier = new Gson();
-            System.out.println(jsonifier.toJson(classes));
             response.getWriter().print(jsonifier.toJson(classes));
         }
     }
