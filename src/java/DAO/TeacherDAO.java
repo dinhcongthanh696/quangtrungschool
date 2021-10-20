@@ -293,4 +293,35 @@ public class TeacherDAO extends AbstractTeacherDAO {
         return teachers;
     }
 
+    @Override
+    public Teacher getByUsername(String username) {
+        String sql = "SELECT * FROM teacher INNER JOIN account ON teacher.username = account.username "
+                + "WHERE teacher.username = ?";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        Teacher teacher = null;
+        Account account;
+        try {
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, username);
+            rs = prepare_stmt.executeQuery();
+            if (rs.next()) {
+                teacher = new Teacher();
+                account = new Account();
+                teacher.setTeacherCode(rs.getString("teacher_code"));
+                teacher.setFullname(rs.getString("teacher_fullname"));
+                teacher.setAddress(rs.getString("teacher_address"));
+                teacher.setDob(rs.getDate("teacher_dob"));
+                teacher.setEmail(rs.getString("teacher_email"));
+                teacher.setPhone(rs.getString("teacher_phone"));
+                account.setUsername(rs.getString("username"));
+                account.setPassword(rs.getString("password"));
+                teacher.setAccount(account);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return teacher;
+    }
+
 }

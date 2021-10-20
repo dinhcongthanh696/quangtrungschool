@@ -15,23 +15,33 @@
             header{
                 font-size: 20px;
             }
+            
+            .img-rounded{
+                width: 100%;
+                height: 160px;
+            }
         </style>
     </head>
     <body>
         <header>
-            <img src="/QuangTrungSchool/view/img/header.png">
+            <img src="/QuangTrungSchool/view/img/header.png" class="img-rounded">
             <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a href="#" class="navbar-brand">QT-HD</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="/QuangTrungSchool/teacher-home">Home</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="/QuangTrungSchool/teacher-home?action=logout">
                             <span class="glyphicon glyphicon-log-out"></span>Logout
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/QuangTrungSchool/teacher-detail">
+                            <span class="glyphicon glyphicon-user"></span>Info
                         </a>
                     </li>
                 </ul>

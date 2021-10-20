@@ -47,7 +47,8 @@ public class AccountDAO extends AbstractAccountDAO {
         Account account = null;
         String sql = "select ac.username,ac.password,f.url,g.gid from account as ac left join groupaccount as gc on ac.username = gc.username\n"
                 + "left join [group] as g on gc.gid = g.gid left join groupfeature as gf on g.gid = gf.gid\n"
-                + "left join feature as f on gf.fid = f.fid WHERE ac.username = ?";
+                + "left join feature as f on gf.fid = f.fid WHERE ac.username = ? "
+                + "ORDER BY g.gid";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, username);

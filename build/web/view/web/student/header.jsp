@@ -13,12 +13,17 @@
             .navbar{
                 font-size: 23px;
             }
+            
+            .img-rounded{
+                width: 100%;
+                height: 160px;
+            }
         </style>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
     </head>
     <body>
         <header>
-            <img src="/QuangTrungSchool/view/img/header.png">
+            <img src="/QuangTrungSchool/view/img/header.png" class="img-rounded">
             <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">

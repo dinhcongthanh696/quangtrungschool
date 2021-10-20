@@ -27,9 +27,7 @@
         </style>
     </head>
     <body>
-        <jsp:include page="header.jsp">
-            <jsp:param name="img" value="/QuangTrungSchool/view/img/header.png"></jsp:param>
-        </jsp:include>
+        <jsp:include page="header.jsp"></jsp:include>
         <section class="left">
             <h2>Activities</h2>
             <ul class="list-group">

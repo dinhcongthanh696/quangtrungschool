@@ -10,6 +10,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractClassYearSemesterDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/js/functions.js</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/footer.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractGroupDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/WEB-INF/applicationContext.xml</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/img/hangcay.jpg</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/ClassYearSemester.java</file>
@@ -39,6 +40,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/class/classyearsemlist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Person.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/HomeController.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/GroupDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Course.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Teacher/TeacherUpdateController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/header.jsp</file>

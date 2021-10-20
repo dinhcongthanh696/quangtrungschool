@@ -88,12 +88,17 @@
                 color: blue;
                 font-size: 15px;
             }
+            
+            .img-rounded{
+                width: 100%;
+                height: 160px;
+            }
         </style>
         <script src="/QuangTrungSchool/view/js/functions.js"></script>
     </head>
     <body>
         <div>
-            <img src="/QuangTrungSchool/view/img/header.png">
+            <img src="/QuangTrungSchool/view/img/header.png" class="img-rounded">
         </div>
             <nav class="navbar navbar-inverse">
                 <div class="container-fluid">

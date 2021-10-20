@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public abstract class AbstractTeacherDAO extends BaseDAO{
     public abstract List<Teacher> getAll();
     public abstract Teacher getById(String teacherCode);
+    public abstract Teacher getByUsername(String username);
     public abstract void insert(Teacher teacher);
     public abstract List<Teacher> search(String query,int offset,int fetch);
     public abstract List<Teacher> getFreeTeacher(Date date,int slot);
