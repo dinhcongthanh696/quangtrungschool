@@ -17,6 +17,7 @@ public class Student extends Person {
 
     private String studentCode;
     private List<Learning> studentLearning = new ArrayList<>();
+    private boolean isAttended = true;
     public Student() {
     }
 
@@ -32,6 +33,16 @@ public class Student extends Person {
     public void setStudentLearning(List<Learning> studentLearning) {
         this.studentLearning = studentLearning;
     }
+
+    public boolean isIsAttended() {
+        return isAttended;
+    }
+
+    public void setIsAttended(boolean isAttended) {
+        this.isAttended = isAttended;
+    }
+    
+    
 
     public String getStudentCode() {
         return studentCode;

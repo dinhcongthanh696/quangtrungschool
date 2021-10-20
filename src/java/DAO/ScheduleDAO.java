@@ -8,6 +8,7 @@ package DAO;
 import Model.ClassRoom;
 import Model.Course;
 import Model.Schedule;
+import Model.Student;
 import Model.Teacher;
 import Model.Week;
 import java.sql.PreparedStatement;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author My Computer
  */
-public class ScheduleDAO extends AbstractScheduleDAO{
+public class ScheduleDAO extends AbstractScheduleDAO {
 
     @Override
     public List<Schedule> getSlotsOfClassInWeek(String classCode, Week week) {
@@ -34,7 +35,7 @@ public class ScheduleDAO extends AbstractScheduleDAO{
         List<Schedule> schedules = new ArrayList<>();
         Date day;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        for(Object[] params : week.getDays()){
+        for (Object[] params : week.getDays()) {
             try {
                 day = formatter.parse((String) params[0]);
                 days.add(day);
@@ -53,7 +54,7 @@ public class ScheduleDAO extends AbstractScheduleDAO{
             ClassRoom classroom;
             Course course;
             Teacher teacher;
-            while(rs.next()){
+            while (rs.next()) {
                 schedule = new Schedule();
                 classroom = new ClassRoom();
                 classroom.setClassCode(rs.getString("class_code"));
@@ -71,7 +72,7 @@ public class ScheduleDAO extends AbstractScheduleDAO{
                 schedule.setActive(rs.getInt("active"));
                 schedules.add(schedule);
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,7 +114,7 @@ public class ScheduleDAO extends AbstractScheduleDAO{
     }
 
     @Override
-    public void update(Schedule schedule) {
+    public void updateTeacher(Schedule schedule) {
         String sql = "UPDATE schedule SET teacher_code = ? WHERE "
                 + "class_code = ? AND date = ? AND slot = ?";
         try {
@@ -127,7 +128,50 @@ public class ScheduleDAO extends AbstractScheduleDAO{
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-    
+
+    @Override
+    public void getById(Schedule schedule) {
+        String sql = "SELECT * FROM schedule as sche left join learning as l on sche.class_code = l.class_code\n"
+                + "AND sche.semester = l.semester AND DATEPART(year,sche.date) = l.year LEFT JOIN student as s ON "
+                + "l.student_code = s.student_code "
+                + " WHERE sche.class_code = ? AND sche.date = ? AND sche.slot = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, schedule.getClassroom().getClassCode());
+            prepare_stmt.setDate(2, schedule.getDate());
+            prepare_stmt.setInt(3, schedule.getSlot());
+            ResultSet rs = prepare_stmt.executeQuery();
+            schedule.setActive(-1);
+            Student student;
+            while (rs.next()) {
+                if (schedule.getActive() == -1) {
+                    schedule.setActive(rs.getInt("active"));
+                    schedule.setAttendance(rs.getString("attendance"));
+                }
+                student = new Student();
+                student.setStudentCode(rs.getString("student_code"));
+                student.setFullname(rs.getString("student_fullname"));
+                schedule.getStudents().add(student);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void updateAttendance(Schedule schedule) {
+         String sql = "UPDATE schedule SET attendance = ? WHERE "
+                + "class_code = ? AND date = ? AND slot = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, schedule.getAttendance());
+            prepare_stmt.setString(2, schedule.getClassroom().getClassCode());
+            prepare_stmt.setDate(3, schedule.getDate());
+            prepare_stmt.setInt(4, schedule.getSlot());
+            prepare_stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

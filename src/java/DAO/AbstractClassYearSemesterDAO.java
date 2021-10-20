@@ -6,7 +6,6 @@
 package DAO;
 
 import Model.ClassYearSemester;
-import Model.Teacher;
 import java.util.List;
 
 /**

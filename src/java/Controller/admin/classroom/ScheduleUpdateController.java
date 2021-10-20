@@ -84,7 +84,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         schedule.setClassroom(classroom);
         schedule.setSlot(slot);
         schedule.setDate(date);
-        scheduleDAO.update(schedule);
+        scheduleDAO.updateTeacher(schedule);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);

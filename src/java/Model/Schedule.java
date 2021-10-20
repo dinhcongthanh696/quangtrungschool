@@ -6,6 +6,8 @@
 package Model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,6 +22,7 @@ public class Schedule {
     private Teacher teacher;
     private String attendance;
     private int active;
+    private List<Student> students = new ArrayList<>();
 
     public ClassRoom getClassroom() {
         return classroom;
@@ -32,6 +35,16 @@ public class Schedule {
     public Course getCourse() {
         return course;
     }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+    
+    
 
     public void setCourse(Course course) {
         this.course = course;

@@ -51,8 +51,7 @@ public class ClassYearSemester {
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
-
-
+    
     public List<Teacher> getTeachersOfClass() {
         return teachersOfClass;
     }

@@ -22,10 +22,10 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "TeacherDetail", urlPatterns = {"/teacher-detail"})
-public class TeacherDetail extends BaseAuthorization {
+public class TeacherDetailController extends BaseAuthorization {
     private final AbstractTeacherDAO teacherDAO;
     
-    public TeacherDetail(){
+    public TeacherDetailController(){
         teacherDAO = new TeacherDAO();
     }
     

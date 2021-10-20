@@ -7,6 +7,7 @@ package Controller.web.teacher;
 
 import DAO.AbstractTeacherDAO;
 import DAO.TeacherDAO;
+import Login.BaseAuthorization;
 import Model.Account;
 import Model.Schedule;
 import Model.Teacher;
@@ -29,10 +30,10 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "TeacherSchedule", urlPatterns = {"/teacher-schedule"})
-public class TeacherSchedule extends HttpServlet {
+public class TeacherScheduleController extends BaseAuthorization {
     private final AbstractTeacherDAO teacherDAO;
     
-    public TeacherSchedule(){
+    public TeacherScheduleController(){
         teacherDAO = new TeacherDAO();
     }
 
@@ -101,9 +102,6 @@ public class TeacherSchedule extends HttpServlet {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
         Teacher teacher = teacherDAO.getByUsername(account.getUsername());
-        for(Schedule sche : teacher.getSchedules()){
-            System.out.println(sche.getClassroom().getClassCode()+" "+sche.getCourse().getCourseCode()+" "+sche.getDate());
-        }
         request.setAttribute("year", year);
         request.setAttribute("week", currentWeek);
         request.setAttribute("teacher", teacher);
@@ -120,7 +118,7 @@ public class TeacherSchedule extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -134,7 +132,7 @@ public class TeacherSchedule extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

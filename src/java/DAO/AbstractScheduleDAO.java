@@ -17,5 +17,7 @@ public abstract class AbstractScheduleDAO extends BaseDAO{
     public abstract List<Schedule> getSlotsOfClassInWeek(String classCode,Week week);
     public abstract void insert(Schedule schedule);
     public abstract void delete(Schedule schedule);
-    public abstract void update(Schedule schedule);
+    public abstract void updateTeacher(Schedule schedule);
+    public abstract void updateAttendance(Schedule schedule);
+    public abstract void getById(Schedule schedule);
 }
