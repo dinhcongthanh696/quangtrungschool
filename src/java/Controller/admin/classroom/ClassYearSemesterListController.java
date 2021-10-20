@@ -81,7 +81,6 @@ public class ClassYearSemesterListController extends BaseAuthorization {
             int offset = (pageId - 1) * CLASSPERPAGE;
             searchedClaseses = classyearsemesterDAO.search(query, offset, CLASSPERPAGE);
             String classestoJSON = gson.toJson(searchedClaseses);
-            System.out.println(classestoJSON);
             String JSONObject = "{ \"totalPage\" : "+ pageNeeded +", \"classes\" : "+classestoJSON+"}";
             response.getWriter().print(JSONObject);
         }

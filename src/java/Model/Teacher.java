@@ -6,6 +6,8 @@
 package Model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,6 +15,7 @@ import java.sql.Date;
  */
 public class Teacher extends Person{
     private String teacherCode;
+    private List<Schedule> schedules = new ArrayList<>();
 
     public Teacher(String teacherCode, String fullname, String address, Date dob, String email, String phone, Account account) {
         super(fullname, address, dob, email, phone, account);
@@ -20,6 +23,14 @@ public class Teacher extends Person{
     }
 
     public Teacher() {
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 
     public String getTeacherCode() {

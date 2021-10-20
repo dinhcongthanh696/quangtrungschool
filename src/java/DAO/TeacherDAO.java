@@ -6,6 +6,9 @@
 package DAO;
 
 import Model.Account;
+import Model.ClassRoom;
+import Model.Course;
+import Model.Schedule;
 import Model.Teacher;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -31,7 +34,7 @@ public class TeacherDAO extends AbstractTeacherDAO {
             Teacher teacher;
             Account account;
             ResultSet rs = prepare_stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 teacher = new Teacher();
                 account = new Account();
                 teacher.setTeacherCode(rs.getString("teacher_code"));
@@ -274,38 +277,6 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt.setDate(2, date);
             ResultSet rs = prepare_stmt.executeQuery();
             while (rs.next()) {  // CODE TO ADD NEW TEACHER WITH THEIR ACCOUNT
-                    teacher = new Teacher();
-                    account = new Account();
-                    teacher.setTeacherCode(rs.getString("teacher_code"));
-                    teacher.setFullname(rs.getString("teacher_fullname"));
-                    teacher.setAddress(rs.getString("teacher_address"));
-                    teacher.setDob(rs.getDate("teacher_dob"));
-                    teacher.setEmail(rs.getString("teacher_email"));
-                    teacher.setPhone(rs.getString("teacher_phone"));
-                    account.setUsername(rs.getString("username"));
-                    account.setPassword(rs.getString("password"));
-                    teacher.setAccount(account);
-                    teachers.add(teacher);
-                }
-        } catch (SQLException ex) {
-            Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return teachers;
-    }
-
-    @Override
-    public Teacher getByUsername(String username) {
-        String sql = "SELECT * FROM teacher INNER JOIN account ON teacher.username = account.username "
-                + "WHERE teacher.username = ?";
-        PreparedStatement prepare_stmt;
-        ResultSet rs;
-        Teacher teacher = null;
-        Account account;
-        try {
-            prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, username);
-            rs = prepare_stmt.executeQuery();
-            if (rs.next()) {
                 teacher = new Teacher();
                 account = new Account();
                 teacher.setTeacherCode(rs.getString("teacher_code"));
@@ -317,6 +288,57 @@ public class TeacherDAO extends AbstractTeacherDAO {
                 account.setUsername(rs.getString("username"));
                 account.setPassword(rs.getString("password"));
                 teacher.setAccount(account);
+                teachers.add(teacher);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return teachers;
+    }
+
+    @Override
+    public Teacher getByUsername(String username) {
+        String sql = "SELECT * FROM teacher INNER JOIN account ON teacher.username = account.username "
+                + "LEFT JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
+                + "WHERE teacher.username = ?";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        Teacher teacher = null;
+        Account account;
+        Schedule schedule;
+        ClassRoom classroom;
+        Course course;
+        try {
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, username);
+            rs = prepare_stmt.executeQuery();
+            while (rs.next()) {
+                if (teacher == null) {
+                    teacher = new Teacher();
+                    account = new Account();
+                    teacher.setTeacherCode(rs.getString("teacher_code"));
+                    teacher.setFullname(rs.getString("teacher_fullname"));
+                    teacher.setAddress(rs.getString("teacher_address"));
+                    teacher.setDob(rs.getDate("teacher_dob"));
+                    teacher.setEmail(rs.getString("teacher_email"));
+                    teacher.setPhone(rs.getString("teacher_phone"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    teacher.setAccount(account);
+                }
+                if(rs.getString("class_code") != null){
+                    schedule = new Schedule();
+                    classroom = new ClassRoom();
+                    course = new Course();
+                    classroom.setClassCode(rs.getString("class_code"));
+                    course.setCourseCode(rs.getString("course_code"));
+                    schedule.setClassroom(classroom);
+                    schedule.setCourse(course);
+                    schedule.setActive(rs.getInt("active"));
+                    schedule.setDate(rs.getDate("date"));
+                    schedule.setSlot(rs.getInt("slot"));
+                    teacher.getSchedules().add(schedule);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);

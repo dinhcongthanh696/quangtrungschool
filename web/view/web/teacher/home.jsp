@@ -31,7 +31,11 @@
         <section class="left">
             <h2>Activities</h2>
             <ul class="list-group">
-                <li class="list-group-item"><a><i class="fas fa-plus"></i>Lịch giảng dạy hàng tuần</a></li>
+                <li class="list-group-item">
+                    <a href="/QuangTrungSchool/teacher-schedule">
+                        <i class="fas fa-plus"></i>Lịch giảng dạy hàng tuần
+                    </a>
+                </li>
             </ul>
         </section>
         <jsp:include page="footer.jsp"></jsp:include>

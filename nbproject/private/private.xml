@@ -7,6 +7,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Feature.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ClassYearSemesterUpdate.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractStudentDAO.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/teacherdetail.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractClassYearSemesterDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/js/functions.js</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/footer.jsp</file>
@@ -53,6 +54,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/class/classyearsemesteradd.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/home.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/teacher/teacheradd.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/teacher/TeacherDetail.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ScheduleController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Week.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Login/BaseAuthorization.java</file>

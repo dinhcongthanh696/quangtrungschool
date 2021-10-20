@@ -80,7 +80,8 @@ public class ScheduleDAO extends AbstractScheduleDAO{
 
     @Override
     public void insert(Schedule schedule) {
-        String sql = "INSERT INTO schedule VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO schedule (class_code,course_code,slot,[date],semester,teacher_code,attendance) "
+                + " VALUES(?,?,?,?,?,?,?)";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, schedule.getClassroom().getClassCode());
@@ -90,7 +91,6 @@ public class ScheduleDAO extends AbstractScheduleDAO{
             prepare_stmt.setInt(5, schedule.getSemester());
             prepare_stmt.setString(6, schedule.getTeacher().getTeacherCode());
             prepare_stmt.setString(7, schedule.getAttendance());
-            prepare_stmt.setInt(8, schedule.getActive());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
