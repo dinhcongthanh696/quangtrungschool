@@ -36,6 +36,11 @@
                         <i class="fas fa-plus"></i>Lịch giảng dạy hàng tuần
                     </a>
                 </li>
+                <li class="list-group-item">
+                    <a href="/QuangTrungSchool/teacher-main-class-list">
+                        <i class="fas fa-plus"></i>Chỉnh sửa điểm cho học sinh
+                    </a>
+                </li>
             </ul>
         </section>
         <jsp:include page="footer.jsp"></jsp:include>

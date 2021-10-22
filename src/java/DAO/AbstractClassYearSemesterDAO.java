@@ -16,6 +16,8 @@ public abstract class AbstractClassYearSemesterDAO extends BaseDAO{
     public abstract List<ClassYearSemester> getAll();
     public abstract List<ClassYearSemester> search(String query,int offset,int fetch);
     public abstract List<ClassYearSemester> getSemesters(String classCode,int year);
+    public abstract void getStudents(ClassYearSemester classroom);
+    public abstract void getCourses(ClassYearSemester classroom);
     public abstract void update(ClassYearSemester classroom);
     public abstract void getTeachers(ClassYearSemester classroom);
     public abstract void insert(ClassYearSemester cys);

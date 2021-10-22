@@ -17,11 +17,12 @@ public class ClassYearSemester {
     private ClassRoom classroom;
     private Teacher homeroomTeacher;
     private List<Teacher> teachersOfClass = new ArrayList<>();
+    private List<Student> students;
+    private List<Course> courses;
     private int year;
     private int semester;
     private Date startDate;
     private Date endDate;
-    private List<Course> courses = new ArrayList<>();
 
     public ClassYearSemester(ClassRoom classroom, Teacher homeroomTeacher, int year, int semester,Date startDate,Date endDate) {
         this.classroom = classroom;
@@ -38,11 +39,6 @@ public class ClassYearSemester {
         this.year = year;
         this.semester = semester;
     }
-    
-    
-
-    public ClassYearSemester() {
-    }
 
     public List<Course> getCourses() {
         return courses;
@@ -50,6 +46,18 @@ public class ClassYearSemester {
 
     public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+    
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+    public ClassYearSemester() {
     }
     
     public List<Teacher> getTeachersOfClass() {

@@ -81,7 +81,7 @@
                     <td>Slot ${slot} </td>
                     <c:forEach items="${requestScope.week.days}" var="day">
                         <c:set value="false" var="isHaving"></c:set>
-                        <c:forEach items="${requestScope.teacher.schedules}" var="schedule">
+                        <c:forEach items="${sessionScope.teacher.schedules}" var="schedule">
                             <c:if test="${schedule.slot eq slot and ('').concat(schedule.date) eq ('').concat(day[0])}">
                                 <c:set value="true" var="isHaving"></c:set>
                                     <td>   

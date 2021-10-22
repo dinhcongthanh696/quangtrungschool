@@ -235,4 +235,64 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
         }
     }
 
+    @Override
+    public void getStudents(ClassYearSemester classroom) {
+        List<Student> students = new ArrayList<>();
+        String sql = "select * from classyearsemester as cys "
+                + "inner join learning as l on cys.class_code = l.class_code AND cys.year = l.year\n"
+                + "AND cys.semester = l.semester inner join student as s on l.student_code = s.student_code "
+                + "WHERE cys.class_code = ? AND cys.year = ? AND cys.semester = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, classroom.getClassroom().getClassCode());
+            prepare_stmt.setInt(2, classroom.getYear());
+            prepare_stmt.setInt(3, classroom.getSemester());
+            ResultSet rs = prepare_stmt.executeQuery();
+            Student student;
+            while (rs.next()) {
+                student = new Student();
+                student.setStudentCode(rs.getString("student_code"));
+                student.setFullname(rs.getString("student_fullname"));
+                student.setAddress(rs.getString("student_address"));
+                student.setDob(rs.getDate("student_dob"));
+                student.setEmail(rs.getString("student_email"));
+                student.setPhone(rs.getString("student_phone"));
+                students.add(student);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        classroom.setStudents(students);
+    }
+
+    @Override
+    public void getCourses(ClassYearSemester classroom) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "select cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.is_marked\n"
+                + "from classyearsemester as cys inner join schedule as sch ON\n"
+                + "cys.class_code = sch.class_code AND cys.semester = sch.semester AND\n"
+                + "sch.date >= cys.stat_date AND sch.date <= cys.end_date inner join course as c\n"
+                + "on sch.course_code = c.course_code\n"
+                + "WHERE cys.class_code = ? AND cys.year = ? AND cys.semester = ? "
+                + "GROUP BY cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.is_marked";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, classroom.getClassroom().getClassCode());
+            prepare_stmt.setInt(2, classroom.getYear());
+            prepare_stmt.setInt(3, classroom.getSemester());
+            ResultSet rs = prepare_stmt.executeQuery();
+            Course course;
+            while(rs.next()){
+                course = new Course();
+                course.setCourseCode(rs.getString("course_code"));
+                course.setCourseName(rs.getString("course_name"));
+                course.setIsMarked(rs.getBoolean("is_marked"));
+                courses.add(course);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        classroom.setCourses(courses);
+    }
+
 }

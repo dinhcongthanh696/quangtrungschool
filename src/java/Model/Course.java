@@ -12,7 +12,7 @@ package Model;
 public class Course {
     private String courseCode;
     private String courseName;
-    
+    private boolean isMarked;
     
 
     public String getCourseCode() {
@@ -30,6 +30,15 @@ public class Course {
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
+
+    public boolean isIsMarked() {
+        return isMarked;
+    }
+
+    public void setIsMarked(boolean isMarked) {
+        this.isMarked = isMarked;
+    }
+    
     
     
 }

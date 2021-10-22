@@ -5,6 +5,7 @@
  */
 package Model;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.List;
  */
 public class Teacher extends Person{
     private String teacherCode;
-    private List<Schedule> schedules = new ArrayList<>();
+    private List<Schedule> schedules;
+    private List<ClassYearSemester> classes;
 
     public Teacher(String teacherCode, String fullname, String address, Date dob, String email, String phone, Account account) {
         super(fullname, address, dob, email, phone, account);
@@ -24,6 +26,16 @@ public class Teacher extends Person{
 
     public Teacher() {
     }
+
+    public List<ClassYearSemester> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<ClassYearSemester> classes) {
+        this.classes = classes;
+    }
+    
+    
 
     public List<Schedule> getSchedules() {
         return schedules;

@@ -100,11 +100,12 @@ public class TeacherScheduleController extends BaseAuthorization {
         int weekNumber = (raw_week == null) ? calendar.get(Calendar.WEEK_OF_YEAR) : Integer.parseInt(raw_week);
         Week currentWeek = year.getWeeks().get(weekNumber - 1);
         HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        Teacher teacher = teacherDAO.getByUsername(account.getUsername());
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        if(teacher.getSchedules() == null){
+            teacherDAO.getSchedules(teacher);
+        }
         request.setAttribute("year", year);
         request.setAttribute("week", currentWeek);
-        request.setAttribute("teacher", teacher);
         request.getRequestDispatcher("view/web/teacher/teacherschedule.jsp").forward(request, response);
     }
 

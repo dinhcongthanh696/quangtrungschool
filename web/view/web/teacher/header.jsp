@@ -31,7 +31,11 @@
                     <a href="#" class="navbar-brand">QT-HD</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li><a href="/QuangTrungSchool/teacher-home">Home</a></li>
+                    <li>
+                        <a href="/QuangTrungSchool/teacher-home">
+                        <span class="glyphicon glyphicon-home"></span>    Home
+                        </a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>

@@ -26,13 +26,13 @@
                     <th>Username</th>
                 </tr>
                 <tr>
-                    <td>${requestScope.teacher.teacherCode}</td>
-                    <td>${requestScope.teacher.fullname}</td>
-                    <td>${(empty requestScope.teacher.address) ? 'Unkown' : requestScope.teacher.address}</td>
-                    <td>${requestScope.teacher.dob}</td>
-                    <td>${(empty requestScope.teacher.email) ? 'Unkown' : requestScope.teacher.email}</td>
-                    <td>${(empty requestScope.teacher.phone) ? 'Unkown' : requestScope.teacher.phone}</td>
-                    <td>${requestScope.teacher.account.username}</td>
+                    <td>${sessionScope.teacher.teacherCode}</td>
+                    <td>${sessionScope.teacher.fullname}</td>
+                    <td>${(empty sessionScope.teacher.address) ? 'Unkown' : sessionScope.teacher.address}</td>
+                    <td>${sessionScope.teacher.dob}</td>
+                    <td>${(empty sessionScope.teacher.email) ? 'Unkown' : sessionScope.teacher.email}</td>
+                    <td>${(empty sessionScope.teacher.phone) ? 'Unkown' : sessionScope.teacher.phone}</td>
+                    <td>${sessionScope.teacher.account.username}</td>
                 </tr>
             </table>
         </div>

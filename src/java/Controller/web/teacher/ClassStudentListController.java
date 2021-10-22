@@ -5,14 +5,15 @@
  */
 package Controller.web.teacher;
 
-import DAO.AbstractTeacherDAO;
-import DAO.TeacherDAO;
-import Login.BaseAuthorization;
-import Model.Account;
+import DAO.AbstractClassYearSemesterDAO;
+import DAO.ClassYearSemesterDAO;
+import Model.ClassYearSemester;
 import Model.Teacher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,17 +22,27 @@ import javax.servlet.http.HttpSession;
  *
  * @author My Computer
  */
-@WebServlet(name = "TeacherDetail", urlPatterns = {"/teacher-detail"})
-public class TeacherDetailController extends BaseAuthorization {
-    private final AbstractTeacherDAO teacherDAO;
+@WebServlet(name = "ClassStudentListController", urlPatterns = {"/class-student-list"})
+public class ClassStudentListController extends HttpServlet {
+    private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     
-    public TeacherDetailController(){
-        teacherDAO = new TeacherDAO();
+    public ClassStudentListController(){
+        classyearsemesterDAO = new ClassYearSemesterDAO();
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("view/web/teacher/teacherdetail.jsp").forward(request, response);
+        String raw_index = request.getParameter("index");
+        HttpSession session = request.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        int index = Integer.parseInt(raw_index);
+        ClassYearSemester classyearsemester = teacher.getClasses().get(index - 1);
+        if(classyearsemester.getStudents() == null){
+            classyearsemesterDAO.getStudents(classyearsemester);
+        }
+        request.setAttribute("class", classyearsemester);
+        request.setAttribute("classindex", index);
+        request.getRequestDispatcher("view/web/teacher/classstudentlist.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -44,7 +55,7 @@ public class TeacherDetailController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -58,7 +69,7 @@ public class TeacherDetailController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

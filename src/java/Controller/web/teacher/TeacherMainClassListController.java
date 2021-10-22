@@ -7,12 +7,12 @@ package Controller.web.teacher;
 
 import DAO.AbstractTeacherDAO;
 import DAO.TeacherDAO;
-import Login.BaseAuthorization;
-import Model.Account;
 import Model.Teacher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,17 +21,22 @@ import javax.servlet.http.HttpSession;
  *
  * @author My Computer
  */
-@WebServlet(name = "TeacherDetail", urlPatterns = {"/teacher-detail"})
-public class TeacherDetailController extends BaseAuthorization {
+@WebServlet(name = "TeacherMainClassListController", urlPatterns = {"/teacher-main-class-list"})
+public class TeacherMainClassListController extends HttpServlet {
     private final AbstractTeacherDAO teacherDAO;
     
-    public TeacherDetailController(){
+    public TeacherMainClassListController(){
         teacherDAO = new TeacherDAO();
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("view/web/teacher/teacherdetail.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        if(teacher.getClasses() == null){
+            teacherDAO.getMainClasses(teacher);
+        }
+        request.getRequestDispatcher("view/web/teacher/teacherclasses.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -44,7 +49,7 @@ public class TeacherDetailController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -58,7 +63,7 @@ public class TeacherDetailController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
