@@ -13,4 +13,6 @@ import Model.Mark;
  */
 public abstract class AbstractMarkDAO extends BaseDAO{
     public abstract void insert(Mark mark);
+    public abstract void update(Mark mark);
+    public abstract void delete(Mark mark);
 }

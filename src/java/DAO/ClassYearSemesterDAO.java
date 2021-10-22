@@ -9,6 +9,7 @@ import Model.Account;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
+import Model.Learning;
 import Model.Student;
 import Model.Teacher;
 import java.sql.PreparedStatement;
@@ -249,8 +250,13 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
             prepare_stmt.setInt(3, classroom.getSemester());
             ResultSet rs = prepare_stmt.executeQuery();
             Student student;
+            Learning learning = new Learning();
+            learning.setClassroom(classroom.getClassroom());
+            learning.setYear(classroom.getYear());
+            learning.setSemester(classroom.getSemester());
             while (rs.next()) {
                 student = new Student();
+                student.getStudentLearning().add(learning);
                 student.setStudentCode(rs.getString("student_code"));
                 student.setFullname(rs.getString("student_fullname"));
                 student.setAddress(rs.getString("student_address"));
@@ -282,7 +288,7 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
             prepare_stmt.setInt(3, classroom.getSemester());
             ResultSet rs = prepare_stmt.executeQuery();
             Course course;
-            while(rs.next()){
+            while (rs.next()) {
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
                 course.setCourseName(rs.getString("course_name"));

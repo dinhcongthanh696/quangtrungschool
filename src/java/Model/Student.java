@@ -17,6 +17,7 @@ public class Student extends Person {
 
     private String studentCode;
     private List<Learning> studentLearning = new ArrayList<>();
+    private List<Mark> marks;
     private boolean isAttended = true;
     public Student() {
     }
@@ -28,6 +29,14 @@ public class Student extends Person {
 
     public List<Learning> getStudentLearning() {
         return studentLearning;
+    }
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<Mark> marks) {
+        this.marks = marks;
     }
 
     public void setStudentLearning(List<Learning> studentLearning) {

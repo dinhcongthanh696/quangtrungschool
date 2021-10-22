@@ -43,4 +43,29 @@ public class MarkDAO extends AbstractMarkDAO {
         }
     }
 
+    @Override
+    public void update(Mark mark) {
+        String sql = "UPDATE mark SET mark = ? WHERE no = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setDouble(1, mark.getMark());
+            prepare_stmt.setInt(2, mark.getNo());
+            prepare_stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void delete(Mark mark) {
+        String sql = "DELETE FROM mark WHERE no = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setInt(1, mark.getNo());
+            prepare_stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

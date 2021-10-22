@@ -7,7 +7,9 @@ package DAO;
 
 import Model.Account;
 import Model.ClassRoom;
+import Model.Course;
 import Model.Learning;
+import Model.Mark;
 import Model.Student;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -285,6 +287,42 @@ public class StudentDAO extends AbstractStudentDAO {
             }
         }
         return students;
+    }
+
+    @Override
+    public void getMarks(Student student) {
+        List<Mark> marks = new ArrayList<>();
+        String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.is_marked from student as s inner join learning as l on s.student_code = l.student_code\n"
+                + "inner join mark as m on l.student_code = m.student_code AND m.class_code = l.class_code AND m.year = l.year\n"
+                + "AND m.semester = l.semester "
+                + "INNER JOIN course as c ON m.course_code = c.course_code "
+                + "WHERE l.class_code = ? AND l.year = ? AND l.semester = ? "
+                + "ORDER BY m.course_code,m.exam_type";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            Learning learning = student.getStudentLearning().get(0);
+            prepare_stmt.setString(1, learning.getClassroom().getClassCode());
+            prepare_stmt.setInt(2, learning.getYear());
+            prepare_stmt.setInt(3, learning.getSemester());
+            ResultSet rs = prepare_stmt.executeQuery();
+            Mark mark;
+            Course course;
+            while(rs.next()){
+                mark = new Mark();
+                course = new Course();
+                course.setCourseCode(rs.getString("course_code"));
+                course.setIsMarked(rs.getBoolean("is_marked"));
+                mark.setStudent(student);
+                mark.setCourse(course);
+                mark.setNo(rs.getInt("no"));
+                mark.setExam_type(rs.getInt("exam_type"));
+                mark.setMark(rs.getDouble("mark"));
+                marks.add(mark);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student.setMarks(marks);
     }
 
 }

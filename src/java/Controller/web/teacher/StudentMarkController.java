@@ -7,8 +7,10 @@ package Controller.web.teacher;
 
 import DAO.AbstractClassYearSemesterDAO;
 import DAO.AbstractMarkDAO;
+import DAO.AbstractStudentDAO;
 import DAO.ClassYearSemesterDAO;
 import DAO.MarkDAO;
+import DAO.StudentDAO;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
@@ -32,10 +34,12 @@ import javax.servlet.http.HttpSession;
 public class StudentMarkController extends HttpServlet {
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     private final AbstractMarkDAO markDAO;
+    private final AbstractStudentDAO studentDAO;
     
     public StudentMarkController(){
         classyearsemesterDAO = new ClassYearSemesterDAO();
         markDAO = new MarkDAO();
+        studentDAO = new StudentDAO();
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,37 +53,34 @@ public class StudentMarkController extends HttpServlet {
         }
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         Student student = classroom.getStudents().get(studentindex - 1);
+        studentDAO.getMarks(student);
         request.setAttribute("class", classroom);
         request.setAttribute("student", student);
         request.setAttribute("classindex", classindex);
+        request.setAttribute("studentindex",studentindex);
         request.getRequestDispatcher("view/web/teacher/studentmark.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String classCode = request.getParameter("classCode");
-        int year = Integer.parseInt(request.getParameter("year"));
-        int semester = Integer.parseInt(request.getParameter("semester"));
-        String studentCode = request.getParameter("studentCode");
+        int studentindex = Integer.parseInt(request.getParameter("studentindex"));
+        int classindex = Integer.parseInt(request.getParameter("classindex"));
+        HttpSession session = request.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        ClassYearSemester teacherclass =  teacher.getClasses().get(classindex - 1);
+        Student student = teacherclass.getStudents().get(studentindex - 1);
+        
+
         int type = Integer.parseInt(request.getParameter("type"));
         double mark = Double.parseDouble(request.getParameter("mark"));
         String raw_course = request.getParameter("course");
         String courseCode = raw_course.split(" ")[0];
-        
-        ClassYearSemester classyearsemester = new ClassYearSemester();
-        ClassRoom classroom = new ClassRoom();
-        classroom.setClassCode(classCode);
-        classyearsemester.setClassroom(classroom);
-        classyearsemester.setYear(year);
-        classyearsemester.setSemester(semester);
-        Student student = new Student();
-        student.setStudentCode(studentCode);
         Course course = new Course();
         course.setCourseCode(courseCode);
-        Mark studentMark = new Mark(0, student, classyearsemester, course, mark, type);
+        
+        Mark studentMark = new Mark(0, student, teacherclass, course, mark, type);
         markDAO.insert(studentMark);
-        int classindex = Integer.parseInt(request.getParameter("classindex"));
         response.sendRedirect("class-student-list?index="+classindex);
         
     }
