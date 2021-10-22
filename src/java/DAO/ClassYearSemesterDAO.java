@@ -301,4 +301,39 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
         classroom.setCourses(courses);
     }
 
+    @Override
+    public int getTotalSearchedClasses(String query) {
+        String sql = "SELECT COUNT(*) as totalclasses FROM classyearsemester WHERE ";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        try {
+            int intType = Integer.parseInt(query);
+            sql += "? IN (year,semester)";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setInt(1, intType);
+                rs = prepare_stmt.executeQuery();
+                if(rs.next()){
+                    return rs.getInt("totalclasses");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (NumberFormatException ex) {
+            sql += "? IN (class_code,homeroom_teacher) ";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setString(1, query);
+                rs = prepare_stmt.executeQuery();
+                if(rs.next()){
+                    return rs.getInt("totalclasses");
+                }
+            } catch (SQLException ex1) {
+                Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return 0;
+    }
+    
+    
 }
