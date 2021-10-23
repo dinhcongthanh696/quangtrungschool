@@ -22,7 +22,7 @@ public class Schedule {
     private Teacher teacher;
     private String attendance;
     private int active;
-    private List<Student> students = new ArrayList<>();
+    private List<StudentAttendance> studentattendances = new ArrayList<>();
 
     public ClassRoom getClassroom() {
         return classroom;
@@ -36,15 +36,13 @@ public class Schedule {
         return course;
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public List<StudentAttendance> getStudentattendances() {
+        return studentattendances;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
+    public void setStudentattendances(List<StudentAttendance> studentattendances) {
+        this.studentattendances = studentattendances;
     }
-    
-    
 
     public void setCourse(Course course) {
         this.course = course;

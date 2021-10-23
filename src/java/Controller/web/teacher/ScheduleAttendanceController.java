@@ -15,6 +15,8 @@ import Model.ClassYearSemester;
 import Model.Course;
 import Model.Schedule;
 import Model.Student;
+import Model.StudentAttendance;
+import Model.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
@@ -22,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,46 +44,17 @@ public class ScheduleAttendanceController extends BaseAuthorization {
     @Override
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("slot") == null || request.getParameter("date") == null
-                || request.getParameter("classCode") == null) {
-            response.sendError(403);
-            return;
-        }
-        int slot = Integer.parseInt(request.getParameter("slot"));
-        Date date = Date.valueOf(request.getParameter("date"));
-        String raw_classCode = request.getParameter("classCode");
-        ClassRoom classroom = new ClassRoom();
-        classroom.setClassCode(raw_classCode);
-        Schedule schedule = new Schedule();
-        schedule.setClassroom(classroom);
-        schedule.setDate(date);
-        schedule.setSlot(slot);
+        int scheduleindex = Integer.parseInt(request.getParameter("scheduleindex"));
+        HttpSession session  = request.getSession();
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        Schedule schedule = teacher.getSchedules().get(scheduleindex);
         scheduleDAO.getById(schedule);
         if (schedule.getActive() != 2) {
             response.sendError(403);
             return;
         }
-        getStudentAttendance(schedule);
         request.setAttribute("schedule", schedule);
-        request.setAttribute("classCode", raw_classCode);
-        request.setAttribute("slot", slot);
-        request.setAttribute("date", date);
         request.getRequestDispatcher("view/web/teacher/scheduleattendance.jsp").forward(request, response);
-    }
-
-    public void getStudentAttendance(Schedule schedule) {
-        if (schedule.getAttendance() == null) {
-            return;
-        }
-        String[] attendance_split = schedule.getAttendance().split("[,]");
-        for (Student student : schedule.getStudents()) {
-            for (String studentAttend : attendance_split) {
-                if (student.getStudentCode().equals(studentAttend)) {
-                    student.setIsAttended(false);
-                    break;
-                }
-            }
-        }
     }
 
     @Override

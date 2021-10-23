@@ -28,24 +28,24 @@
                 </tr>
             <c:set var="totalStudent" value=""></c:set>
             <form action="/QuangTrungSchool/teacher-schedule-attendance" method="POST"> 
-                <input type="hidden" value="${requestScope.classCode}" name="classCode"> 
-                <input type="hidden" value="${requestScope.slot}" name="slot"> 
-                <input type="hidden" value="${requestScope.date}" name="date"> 
-                <c:forEach items="${requestScope.schedule.students}" var="student">
+                <input type="hidden" value="${requestScope.schedule.classroom.classCode}" name="classCode"> 
+                <input type="hidden" value="${requestScope.schedule.slot}" name="slot"> 
+                <input type="hidden" value="${requestScope.schedule.date}" name="date"> 
+                <c:forEach items="${requestScope.schedule.studentattendances}" var="studentattendance">
                     <tr>
                         <td>
-                            ${student.studentCode}
+                            ${studentattendance.student.studentCode}
                         </td>
                         <td>
-                            ${student.fullname}
+                            ${studentattendance.student.fullname}
                         </td>
                         <td>
-                            <input type="radio" name="${student.studentCode}" 
-                                value=""    ${student.isAttended ? "checked='checked'" : ""}> Attended
-                            <input type="radio" name="${student.studentCode}" value="${student.studentCode}" ${!student.isAttended ? "checked='checked'" : ""}> Absent
+                            <input type="radio" name="${studentattendance.student.studentCode}" 
+                                value=""    ${studentattendance.status eq 1 ? "checked='checked'" : ""}> Attended
+                            <input type="radio" name="${studentattendance.student.studentCode}" value="${studentattendance.student.studentCode}" ${studentattendance.status eq -1 ? "checked='checked'" : ""}> Absent
                         </td>
                     </tr>
-                    <c:set var="totalStudent" value="${totalStudent.concat(student.studentCode).concat(',')}"></c:set>
+                    <c:set var="totalStudent" value="${totalStudent.concat(studentattendance.student.studentCode).concat(',')}"></c:set>
                 </c:forEach>
                 <input type="hidden" name="totalStudent" value="${totalStudent}">   
             </table>

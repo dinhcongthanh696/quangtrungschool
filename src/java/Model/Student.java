@@ -18,7 +18,7 @@ public class Student extends Person {
     private String studentCode;
     private List<Mark> marks;
     private List<ClassYearSemester> classes;
-    private boolean isAttended = true;
+    private List<StudentAttendance> studentAttendances;
     public Student() {
     }
 
@@ -43,20 +43,16 @@ public class Student extends Person {
         this.marks = marks;
     }
 
-    
-
-    public boolean isIsAttended() {
-        return isAttended;
-    }
-
-    public void setIsAttended(boolean isAttended) {
-        this.isAttended = isAttended;
-    }
-    
-    
-
     public String getStudentCode() {
         return studentCode;
+    }
+
+    public List<StudentAttendance> getStudentAttendances() {
+        return studentAttendances;
+    }
+
+    public void setStudentAttendances(List<StudentAttendance> studentAttendances) {
+        this.studentAttendances = studentAttendances;
     }
 
     public void setStudentCode(String studentCode) {

@@ -9,6 +9,7 @@ import Model.ClassRoom;
 import Model.Course;
 import Model.Schedule;
 import Model.Student;
+import Model.StudentAttendance;
 import Model.Teacher;
 import Model.Week;
 import java.sql.PreparedStatement;
@@ -141,17 +142,26 @@ public class ScheduleDAO extends AbstractScheduleDAO {
             prepare_stmt.setDate(2, schedule.getDate());
             prepare_stmt.setInt(3, schedule.getSlot());
             ResultSet rs = prepare_stmt.executeQuery();
-            schedule.setActive(-1);
             Student student;
+            StudentAttendance studentAttendance;
+            schedule.setStudentattendances(new ArrayList<>());
             while (rs.next()) {
-                if (schedule.getActive() == -1) {
-                    schedule.setActive(rs.getInt("active"));
-                    schedule.setAttendance(rs.getString("attendance"));
-                }
+                schedule.setActive(rs.getInt("active"));
+                schedule.setAttendance(rs.getString("attendance"));
                 student = new Student();
                 student.setStudentCode(rs.getString("student_code"));
                 student.setFullname(rs.getString("student_fullname"));
-                schedule.getStudents().add(student);
+                studentAttendance = new StudentAttendance();
+                studentAttendance.setStudent(student);
+                studentAttendance.setSchedule(schedule);
+                if (schedule.getAttendance() == null) {
+                    studentAttendance.setStatus(0);   //REPERSENT FOR NOT YET
+                } else if (schedule.getAttendance().contains(student.getStudentCode())) {
+                    studentAttendance.setStatus(-1);  // ABSENT
+                } else {
+                    studentAttendance.setStatus(1);   // ATTENDED
+                }
+                schedule.getStudentattendances().add(studentAttendance);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -160,7 +170,7 @@ public class ScheduleDAO extends AbstractScheduleDAO {
 
     @Override
     public void updateAttendance(Schedule schedule) {
-         String sql = "UPDATE schedule SET attendance = ? WHERE "
+        String sql = "UPDATE schedule SET attendance = ? WHERE "
                 + "class_code = ? AND date = ? AND slot = ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);

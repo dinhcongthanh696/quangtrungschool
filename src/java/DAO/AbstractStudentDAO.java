@@ -7,6 +7,7 @@ package DAO;
 
 import Model.Account;
 import Model.ClassYearSemester;
+import Model.Course;
 import Model.Student;
 import java.util.List;
 
@@ -30,6 +31,10 @@ public abstract class AbstractStudentDAO extends BaseDAO {
     
     public abstract void getMarks(Student student,ClassYearSemester classyearsemester);
     
+    public abstract void getClasses(Student student);
+    
     public abstract Student getByUsername(Account account);
+    
+    public abstract void getStudentAttendance(Student student,ClassYearSemester classyearsemester,Course course);
     
 }

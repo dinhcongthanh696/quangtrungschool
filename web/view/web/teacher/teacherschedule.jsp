@@ -34,13 +34,8 @@
                 window.location = "/QuangTrungSchool/teacher-schedule?year=" + year + "&week=" + week;
             }
 
-            function takeAttendance(str) {
-                var str_split = str.split(" ");
-                var date = str_split[0];
-                var slot = str_split[1];
-                var classCode = str_split[2];
-                window.location = "/QuangTrungSchool/teacher-schedule-attendance?classCode=" + classCode + "&date=" + date
-                        + "&slot=" + slot;
+            function takeAttendance(scheduleindex) {
+                window.location = "/QuangTrungSchool/teacher-schedule-attendance?scheduleindex="+scheduleindex;
             }
         </script>
     </head>
@@ -76,6 +71,9 @@
                     <td>${day[0]}</td>
                 </c:forEach>
             </tr>
+
+            <c:set var="scheduleindex" value="${requestScope.scheduleindex}"></c:set>
+
             <c:forEach begin="1" end="6" var="slot">
                 <tr>
                     <td>Slot ${slot} </td>
@@ -96,12 +94,13 @@
                                         </c:when>
                                         <c:otherwise>
                                             <button class="btn btn-success" onclick="takeAttendance(this.value)" 
-                                                    value="${''.concat(day[0]).concat(' ').concat(slot).concat(' ').concat(schedule.classroom.classCode)}">
+                                                    value="${scheduleindex}">
                                                 Edit attendance
                                             </button>
                                         </c:otherwise>    
                                     </c:choose>
                                 </td>
+                                <c:set var="scheduleindex" value="${scheduleindex + 1}"></c:set>
                             </c:if>
                         </c:forEach>
                         <c:if test="${!isHaving}">

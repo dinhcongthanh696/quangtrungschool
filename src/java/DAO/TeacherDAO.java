@@ -377,14 +377,13 @@ public class TeacherDAO extends AbstractTeacherDAO {
         ClassRoom classroom;
         Course course;
         String sql = "SELECT * FROM teacher "
-                + " LEFT JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
+                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
                 + " WHERE teacher.teacher_code = ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getTeacherCode());
             ResultSet rs = prepare_stmt.executeQuery();
             while (rs.next()) {
-                if (rs.getString("class_code") != null) {
                     schedule = new Schedule();
                     classroom = new ClassRoom();
                     course = new Course();
@@ -396,7 +395,6 @@ public class TeacherDAO extends AbstractTeacherDAO {
                     schedule.setDate(rs.getDate("date"));
                     schedule.setSlot(rs.getInt("slot"));
                     schedules.add(schedule);
-                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);

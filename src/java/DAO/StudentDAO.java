@@ -13,7 +13,10 @@ import Model.Feature;
 import Model.Group;
 import Model.Learning;
 import Model.Mark;
+import Model.Schedule;
 import Model.Student;
+import Model.StudentAttendance;
+import Model.Teacher;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -303,7 +306,7 @@ public class StudentDAO extends AbstractStudentDAO {
     }
 
     @Override
-    public void getMarks(Student student,ClassYearSemester classyearsemester) {
+    public void getMarks(Student student, ClassYearSemester classyearsemester) {
         List<Mark> marks = new ArrayList<>();
         String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.is_marked from student as s inner join learning as l on s.student_code = l.student_code\n"
                 + "inner join mark as m on l.student_code = m.student_code AND m.class_code = l.class_code AND m.year = l.year\n"
@@ -364,6 +367,99 @@ public class StudentDAO extends AbstractStudentDAO {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return student;
+    }
+
+    @Override
+    public void getClasses(Student student) {
+        List<ClassYearSemester> classes = new ArrayList<>();
+        String sql = "SELECT cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code FROM student as s "
+                + "inner join learning as l\n"
+                + "on s.student_code = l.student_code inner join classyearsemester as cys \n"
+                + "on l.semester = cys.semester AND l.year = cys.year AND l.class_code = cys.class_code\n"
+                + "inner join schedule as sche on sche.date >= cys.stat_date AND sche.date <= cys.end_date AND \n"
+                + "sche.semester = cys.semester AND sche.class_code = cys.class_code\n"
+                + "WHERE s.student_code = ? "
+                + " GROUP BY cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, student.getStudentCode());
+            ResultSet rs = prepare_stmt.executeQuery();
+            ClassYearSemester classyearsemester = new ClassYearSemester();
+            ClassRoom classroom;
+            classyearsemester.setClassroom(new ClassRoom());
+            Teacher teacher;
+            Course course;
+            while (rs.next()) {
+                if (!rs.getString("class_code").equals(classyearsemester.getClassroom().getClassCode())
+                        && classyearsemester.getYear() != rs.getInt("year")
+                        && classyearsemester.getSemester() != rs.getInt("semester")) {
+                    classyearsemester = new ClassYearSemester();
+                    classroom = new ClassRoom();
+                    teacher = new Teacher();
+                    teacher.setTeacherCode(rs.getString("homeroom_teacher"));
+                    classroom.setClassCode(rs.getString("class_code"));
+                    classyearsemester.setClassroom(classroom);
+                    classyearsemester.setHomeroomTeacher(teacher);
+                    classyearsemester.setStartDate(rs.getDate("stat_date"));
+                    classyearsemester.setEndDate(rs.getDate("end_date"));
+                    classyearsemester.setYear(rs.getInt("year"));
+                    classyearsemester.setSemester(rs.getInt("semester"));
+                    classes.add(classyearsemester);
+                }
+                course = new Course();
+                course.setCourseCode(rs.getString("course_code"));
+                classyearsemester.getCourses().add(course);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student.setClasses(classes);
+    }
+
+    @Override
+    public void getStudentAttendance(Student student, ClassYearSemester classyearsemester, Course course) {
+        List<StudentAttendance> studentAttendances = new ArrayList<>();
+        String sql = "select * from schedule as sch\n"
+                + "where sch.class_code = ? AND sch.course_code = ? AND sch.semester = ? \n"
+                + "AND sch.date >= ? AND sch.date <= ? ";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, classyearsemester.getClassroom().getClassCode());
+            prepare_stmt.setString(2, course.getCourseCode());
+            prepare_stmt.setInt(3, classyearsemester.getSemester());
+            prepare_stmt.setDate(4, classyearsemester.getStartDate());
+            prepare_stmt.setDate(5, classyearsemester.getEndDate());
+            StudentAttendance studentAttendance;
+            Schedule schedule;
+            ClassRoom classroom;
+            Teacher teacher;
+            ResultSet rs = prepare_stmt.executeQuery();
+            while(rs.next()){
+                studentAttendance = new StudentAttendance();
+                schedule = new Schedule();
+                teacher = new Teacher();
+                teacher.setTeacherCode(rs.getString("teacher_code"));
+                schedule.setClassroom(classyearsemester.getClassroom());
+                schedule.setCourse(course);
+                schedule.setDate(rs.getDate("date"));
+                schedule.setAttendance(rs.getString("attendance"));
+                if(schedule.getAttendance() == null){
+                    studentAttendance.setStatus(0);   //REPERSENT FOR NOT YET
+                }else if(schedule.getAttendance().contains(student.getStudentCode())){
+                    studentAttendance.setStatus(-1);  // ABSENT
+                }else{
+                    studentAttendance.setStatus(1);   // ATTENDED
+                }
+                
+                schedule.setTeacher(teacher);
+                schedule.setSlot(rs.getInt("slot"));
+                studentAttendance.setSchedule(schedule);
+                studentAttendances.add(studentAttendance);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student.setStudentAttendances(studentAttendances);
     }
 
 }
