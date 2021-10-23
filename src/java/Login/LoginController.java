@@ -7,12 +7,15 @@ package Login;
 
 import DAO.AbstractAccountDAO;
 import DAO.AbstractGroupDAO;
+import DAO.AbstractStudentDAO;
 import DAO.AbstractTeacherDAO;
 import DAO.AccountDAO;
 import DAO.GroupDAO;
+import DAO.StudentDAO;
 import DAO.TeacherDAO;
 import Model.Account;
 import Model.Group;
+import Model.Student;
 import Model.Teacher;
 import java.io.IOException;
 import java.util.List;
@@ -34,12 +37,14 @@ public class LoginController extends HttpServlet {
     private final AbstractAccountDAO accountDAO;
     private final AbstractGroupDAO groupDAO;
     private final AbstractTeacherDAO teacherDAO;
+    private final AbstractStudentDAO  studentDAO;
     private final int COOKIETIMEOUT = 7 * 24 * 3600;
 
     public LoginController() {
         accountDAO = new AccountDAO();
         groupDAO = new GroupDAO();
         teacherDAO = new TeacherDAO();
+        studentDAO = new StudentDAO();
     }
     
     public Cookie getCookie(String name,Cookie[] cookies){
@@ -72,6 +77,8 @@ public class LoginController extends HttpServlet {
             switch (account.getRoleNumber()) {
                 case 1:
                     url = "web-student-home";
+                    Student student = studentDAO.getByUsername(account);
+                    session.setAttribute("student", student);
                     break;
                 case 2:
                     url = "teacher-home";

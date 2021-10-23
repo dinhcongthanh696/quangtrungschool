@@ -11,6 +11,7 @@ import DAO.AbstractStudentDAO;
 import DAO.ClassYearSemesterDAO;
 import DAO.MarkDAO;
 import DAO.StudentDAO;
+import Login.BaseAuthorization;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "StudentMarkController", urlPatterns = {"/student-mark"})
-public class StudentMarkController extends HttpServlet {
+public class StudentMarkController extends BaseAuthorization {
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     private final AbstractMarkDAO markDAO;
     private final AbstractStudentDAO studentDAO;
@@ -42,7 +43,7 @@ public class StudentMarkController extends HttpServlet {
         studentDAO = new StudentDAO();
     }
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
@@ -53,7 +54,7 @@ public class StudentMarkController extends HttpServlet {
         }
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         Student student = classroom.getStudents().get(studentindex - 1);
-        studentDAO.getMarks(student);
+        studentDAO.getMarks(student,classroom);
         request.setAttribute("class", classroom);
         request.setAttribute("student", student);
         request.setAttribute("classindex", classindex);
@@ -62,7 +63,7 @@ public class StudentMarkController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         int classindex = Integer.parseInt(request.getParameter("classindex"));

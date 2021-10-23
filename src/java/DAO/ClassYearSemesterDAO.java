@@ -250,13 +250,8 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
             prepare_stmt.setInt(3, classroom.getSemester());
             ResultSet rs = prepare_stmt.executeQuery();
             Student student;
-            Learning learning = new Learning();
-            learning.setClassroom(classroom.getClassroom());
-            learning.setYear(classroom.getYear());
-            learning.setSemester(classroom.getSemester());
             while (rs.next()) {
                 student = new Student();
-                student.getStudentLearning().add(learning);
                 student.setStudentCode(rs.getString("student_code"));
                 student.setFullname(rs.getString("student_fullname"));
                 student.setAddress(rs.getString("student_address"));

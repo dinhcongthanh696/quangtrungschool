@@ -7,6 +7,7 @@ package Controller.web.teacher;
 
 import DAO.AbstractClassYearSemesterDAO;
 import DAO.ClassYearSemesterDAO;
+import Login.BaseAuthorization;
 import Model.ClassYearSemester;
 import Model.Teacher;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "ClassStudentListController", urlPatterns = {"/class-student-list"})
-public class ClassStudentListController extends HttpServlet {
+public class ClassStudentListController extends BaseAuthorization {
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     
     public ClassStudentListController(){
@@ -55,7 +56,7 @@ public class ClassStudentListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -69,7 +70,7 @@ public class ClassStudentListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

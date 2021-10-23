@@ -9,6 +9,7 @@ import DAO.AbstractClassYearSemesterDAO;
 import DAO.AbstractScheduleDAO;
 import DAO.ClassYearSemesterDAO;
 import DAO.ScheduleDAO;
+import Login.BaseAuthorization;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
@@ -19,7 +20,6 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "ScheduleAttendanceController", urlPatterns = {"/teacher-schedule-attendance"})
-public class ScheduleAttendanceController extends HttpServlet {
+public class ScheduleAttendanceController extends BaseAuthorization {
 
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     private final AbstractScheduleDAO scheduleDAO;
@@ -39,7 +39,7 @@ public class ScheduleAttendanceController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if (request.getParameter("slot") == null || request.getParameter("date") == null
                 || request.getParameter("classCode") == null) {
@@ -84,16 +84,13 @@ public class ScheduleAttendanceController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String attendance = "";
         String totalStudent = request.getParameter("totalStudent");
         String[] totalStudent_split = totalStudent.split("[,]");
         String studentCode;
         for (String student : totalStudent_split) {
-            if (student.isEmpty()) {
-                continue;
-            }
             studentCode = request.getParameter(student);
             if (!studentCode.isEmpty()) {
                 attendance += studentCode + ",";

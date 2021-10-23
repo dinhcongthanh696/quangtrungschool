@@ -45,7 +45,7 @@
                             <input type="radio" name="${student.studentCode}" value="${student.studentCode}" ${!student.isAttended ? "checked='checked'" : ""}> Absent
                         </td>
                     </tr>
-                    <c:set var="totalStudent" value="${totalStudent.concat(',').concat(student.studentCode)}"></c:set>
+                    <c:set var="totalStudent" value="${totalStudent.concat(student.studentCode).concat(',')}"></c:set>
                 </c:forEach>
                 <input type="hidden" name="totalStudent" value="${totalStudent}">   
             </table>

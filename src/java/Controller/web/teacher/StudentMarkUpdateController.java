@@ -7,6 +7,7 @@ package Controller.web.teacher;
 
 import DAO.AbstractMarkDAO;
 import DAO.MarkDAO;
+import Login.BaseAuthorization;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
@@ -27,7 +28,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "StudentMarkUpdateController", urlPatterns = {"/student-mark-update"})
-public class StudentMarkUpdateController extends HttpServlet {
+public class StudentMarkUpdateController extends BaseAuthorization {
     private final AbstractMarkDAO markDAO;
     
     public StudentMarkUpdateController(){
@@ -35,7 +36,7 @@ public class StudentMarkUpdateController extends HttpServlet {
     }
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         int classindex = Integer.parseInt(request.getParameter("classindex"));
@@ -52,7 +53,7 @@ public class StudentMarkUpdateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Mark studentMark = new Mark();
         int no = Integer.parseInt(request.getParameter("no"));

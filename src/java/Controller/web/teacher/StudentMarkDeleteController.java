@@ -7,6 +7,7 @@ package Controller.web.teacher;
 
 import DAO.AbstractMarkDAO;
 import DAO.MarkDAO;
+import Login.BaseAuthorization;
 import Model.Mark;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "StudentMarkDeleteController", urlPatterns = {"/student-mark-delete"})
-public class StudentMarkDeleteController extends HttpServlet {
+public class StudentMarkDeleteController extends BaseAuthorization {
     private final AbstractMarkDAO markDAO;
     
     public StudentMarkDeleteController(){
@@ -49,7 +50,7 @@ public class StudentMarkDeleteController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -63,7 +64,7 @@ public class StudentMarkDeleteController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

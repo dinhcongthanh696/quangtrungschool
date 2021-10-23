@@ -15,6 +15,7 @@
                 text-align: center;
                 padding-top: 10px;
                 clear: both;
+                margin-top: 20%;
             }
         </style>
     </head>

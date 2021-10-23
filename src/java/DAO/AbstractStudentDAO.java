@@ -5,6 +5,8 @@
  */
 package DAO;
 
+import Model.Account;
+import Model.ClassYearSemester;
 import Model.Student;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public abstract class AbstractStudentDAO extends BaseDAO {
     
     public abstract List<Student> search(String query,int offset,int fetch);
     
-    public abstract void getMarks(Student student);
+    public abstract void getMarks(Student student,ClassYearSemester classyearsemester);
+    
+    public abstract Student getByUsername(Account account);
     
 }

@@ -226,6 +226,19 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getAccount().getUsername());
             prepare_stmt.executeUpdate();
+            sql = "DELETE FROM groupaccount WHERE username = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, teacher.getAccount().getUsername());
+            prepare_stmt.executeUpdate();
+            sql = "UPDATE schedule SET teacher_code = NULL "
+                    + "WHERE teacher_code = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, teacher.getTeacherCode());
+            prepare_stmt.executeUpdate();
+            sql = "UPDATE classyearsemester SET homeroom_teacher = NULL WHERE teacher_code = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, teacher.getTeacherCode());
+            prepare_stmt.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -16,8 +16,8 @@ import java.util.List;
 public class Student extends Person {
 
     private String studentCode;
-    private List<Learning> studentLearning = new ArrayList<>();
     private List<Mark> marks;
+    private List<ClassYearSemester> classes;
     private boolean isAttended = true;
     public Student() {
     }
@@ -27,10 +27,14 @@ public class Student extends Person {
         this.studentCode = studentCode;
     }
 
-    public List<Learning> getStudentLearning() {
-        return studentLearning;
+    public List<ClassYearSemester> getClasses() {
+        return classes;
     }
 
+    public void setClasses(List<ClassYearSemester> classes) {
+        this.classes = classes;
+    }
+    
     public List<Mark> getMarks() {
         return marks;
     }
@@ -39,9 +43,7 @@ public class Student extends Person {
         this.marks = marks;
     }
 
-    public void setStudentLearning(List<Learning> studentLearning) {
-        this.studentLearning = studentLearning;
-    }
+    
 
     public boolean isIsAttended() {
         return isAttended;

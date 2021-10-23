@@ -7,7 +7,10 @@ package DAO;
 
 import Model.Account;
 import Model.ClassRoom;
+import Model.ClassYearSemester;
 import Model.Course;
+import Model.Feature;
+import Model.Group;
 import Model.Learning;
 import Model.Mark;
 import Model.Student;
@@ -70,7 +73,7 @@ public class StudentDAO extends AbstractStudentDAO {
             prepare_stmt.setString(1, studentCode);
             rs = prepare_stmt.executeQuery();
             Account account;
-            Learning learning;
+            ClassYearSemester classyearsemester;
             ClassRoom classroom;
             while (rs.next()) {
                 if (student == null) {
@@ -87,16 +90,14 @@ public class StudentDAO extends AbstractStudentDAO {
                     student.setAccount(account);
                 }
                 if (rs.getString("class_code") == null) {
-                    break;
+                    classyearsemester = new ClassYearSemester();
+                    classroom = new ClassRoom();
+                    classroom.setClassCode(rs.getString("class_code"));
+                    classyearsemester.setClassroom(classroom);
+                    classyearsemester.setYear(rs.getInt("year"));
+                    classyearsemester.setSemester(rs.getInt("semester"));
+                    student.getClasses().add(classyearsemester);
                 }
-                learning = new Learning();
-                classroom = new ClassRoom();
-                classroom.setClassCode(rs.getString("class_code"));
-                learning.setStudent(student);
-                learning.setClassroom(classroom);
-                learning.setYear(rs.getInt("year"));
-                learning.setSemester(rs.getInt("semester"));
-                student.getStudentLearning().add(learning);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -202,6 +203,18 @@ public class StudentDAO extends AbstractStudentDAO {
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getAccount().getUsername());
             prepare_stmt.executeUpdate();
+            sql = "DELETE FROM groupaccount WHERE username = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, student.getAccount().getUsername());
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM news WHERE constructor = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, student.getAccount().getUsername());
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM mark WHERE student_code = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, student.getStudentCode());
+            prepare_stmt.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
             try {
@@ -290,24 +303,24 @@ public class StudentDAO extends AbstractStudentDAO {
     }
 
     @Override
-    public void getMarks(Student student) {
+    public void getMarks(Student student,ClassYearSemester classyearsemester) {
         List<Mark> marks = new ArrayList<>();
         String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.is_marked from student as s inner join learning as l on s.student_code = l.student_code\n"
                 + "inner join mark as m on l.student_code = m.student_code AND m.class_code = l.class_code AND m.year = l.year\n"
                 + "AND m.semester = l.semester "
                 + "INNER JOIN course as c ON m.course_code = c.course_code "
-                + "WHERE l.class_code = ? AND l.year = ? AND l.semester = ? "
+                + "WHERE l.class_code = ? AND l.year = ? AND l.semester = ? AND s.student_code = ? "
                 + "ORDER BY m.course_code,m.exam_type";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            Learning learning = student.getStudentLearning().get(0);
-            prepare_stmt.setString(1, learning.getClassroom().getClassCode());
-            prepare_stmt.setInt(2, learning.getYear());
-            prepare_stmt.setInt(3, learning.getSemester());
+            prepare_stmt.setString(1, classyearsemester.getClassroom().getClassCode());
+            prepare_stmt.setInt(2, classyearsemester.getYear());
+            prepare_stmt.setInt(3, classyearsemester.getSemester());
+            prepare_stmt.setString(4, student.getStudentCode());
             ResultSet rs = prepare_stmt.executeQuery();
             Mark mark;
             Course course;
-            while(rs.next()){
+            while (rs.next()) {
                 mark = new Mark();
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
@@ -323,6 +336,34 @@ public class StudentDAO extends AbstractStudentDAO {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         student.setMarks(marks);
+    }
+
+    @Override
+    public Student getByUsername(Account account) {
+        String sql = "SELECT * FROM student "
+                + "WHERE username = ?";
+        Student student = null;
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, account.getUsername());
+            ResultSet rs = prepare_stmt.executeQuery();
+            while (rs.next()) {
+                if (student == null) {
+                    student = new Student();
+                    student.setStudentCode(rs.getString("student_code"));
+                    student.setFullname(rs.getString("student_fullname"));
+                    student.setAddress(rs.getString("student_address"));
+                    student.setDob(rs.getDate("student_dob"));
+                    student.setEmail(rs.getString("student_email"));
+                    student.setPhone(rs.getString("student_phone"));
+                    student.setAccount(account);
+                }
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return student;
     }
 
 }
