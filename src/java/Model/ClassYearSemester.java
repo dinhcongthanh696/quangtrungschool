@@ -18,7 +18,7 @@ public class ClassYearSemester {
     private Teacher homeroomTeacher;
     private List<Teacher> teachersOfClass = new ArrayList<>();
     private List<Student> students;
-    private List<Course> courses;
+    private List<Course> courses = new ArrayList<>();
     private int year;
     private int semester;
     private Date startDate;

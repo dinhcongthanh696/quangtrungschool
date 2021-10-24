@@ -49,7 +49,7 @@
                     </a>
                 </li>
                 <li class="list-group-item">
-                    <a href="/QuangTrungSchool/student-class-liststudent">
+                    <a href="/QuangTrungSchool/student-class-mark">
                         <span class="glyphicon glyphicon-plus"></span> Báo cáo điểm
                     </a>
                 </li>

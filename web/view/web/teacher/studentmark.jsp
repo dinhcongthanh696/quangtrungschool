@@ -119,8 +119,8 @@
             <h2>Student Marks</h2>
             <c:set value="1" var="studentcourseindex"></c:set>
             <c:forEach items="${requestScope.student.studentcourses}" var="studentcourse">
+                <c:set value="1" var="markindex"></c:set>
                 <c:forEach items="${studentcourse.marks}" var="mark">
-                    <c:set value="1" var="markindex"></c:set>
                         <tr>
                             <td>${mark.no}</td>
                         <td>${studentcourse.course.courseCode}</td>

@@ -33,15 +33,17 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "StudentMarkController", urlPatterns = {"/student-mark"})
 public class StudentMarkController extends BaseAuthorization {
+
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     private final AbstractMarkDAO markDAO;
     private final AbstractStudentDAO studentDAO;
-    
-    public StudentMarkController(){
+
+    public StudentMarkController() {
         classyearsemesterDAO = new ClassYearSemesterDAO();
         markDAO = new MarkDAO();
         studentDAO = new StudentDAO();
     }
+
     @Override
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -49,16 +51,14 @@ public class StudentMarkController extends BaseAuthorization {
         Teacher teacher = (Teacher) session.getAttribute("teacher");
         int classindex = Integer.parseInt(request.getParameter("classindex"));
         ClassYearSemester classroom = teacher.getClasses().get(classindex - 1);
-        if(classroom.getCourses() == null){
-            classyearsemesterDAO.getCourses(classroom);
-        }
+        classyearsemesterDAO.getCourses(classroom);
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         Student student = classroom.getStudents().get(studentindex - 1);
-        studentDAO.getStudentCourses(student,classroom);
+        studentDAO.getStudentCourses(student, classroom);
         request.setAttribute("class", classroom);
         request.setAttribute("student", student);
         request.setAttribute("classindex", classindex);
-        request.setAttribute("studentindex",studentindex);
+        request.setAttribute("studentindex", studentindex);
         request.getRequestDispatcher("view/web/teacher/studentmark.jsp").forward(request, response);
     }
 
@@ -69,9 +69,8 @@ public class StudentMarkController extends BaseAuthorization {
         int classindex = Integer.parseInt(request.getParameter("classindex"));
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
-        ClassYearSemester classyearsemester =  teacher.getClasses().get(classindex - 1);
+        ClassYearSemester classyearsemester = teacher.getClasses().get(classindex - 1);
         Student student = classyearsemester.getStudents().get(studentindex - 1);
-        
 
         int type = Integer.parseInt(request.getParameter("type"));
         double score = Double.parseDouble(request.getParameter("mark"));
@@ -79,15 +78,14 @@ public class StudentMarkController extends BaseAuthorization {
         String courseCode = raw_course.split(" ")[0];
         Course course = new Course();
         course.setCourseCode(courseCode);
-        
+
         StudentCourse studentCourse = new StudentCourse();
         studentCourse.setStudent(student);
         studentCourse.setCourse(course);
         Mark mark = new Mark(0, classyearsemester, score, type);
-        markDAO.insert(studentCourse,mark);
-        response.sendRedirect("class-student-list?index="+classindex);
-        
-    }
+        markDAO.insert(studentCourse, mark);
+        response.sendRedirect("class-student-list?index=" + classindex);
 
+    }
 
 }

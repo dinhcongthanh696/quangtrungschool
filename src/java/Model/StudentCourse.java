@@ -17,7 +17,6 @@ public class StudentCourse {
     private Student student;
     private List<Mark> marks = new ArrayList<>();
     private double totalScore;
-    private int certificate;
 
     public Course getCourse() {
         return course;
@@ -51,14 +50,6 @@ public class StudentCourse {
         this.totalScore = totalScore;
     }
 
-
-    public int getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(int certificate) {
-        this.certificate = certificate;
-    }
     
     
 }
