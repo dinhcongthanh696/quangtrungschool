@@ -30,7 +30,7 @@ public abstract class AbstractStudentDAO extends BaseDAO {
     
     public abstract List<Student> search(String query,int offset,int fetch);
     
-    public abstract void getMarks(Student student,ClassYearSemester classyearsemester);
+    public abstract void getStudentCourses(Student student,ClassYearSemester classyearsemester);
     
     public abstract void getClasses(Student student);
     

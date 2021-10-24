@@ -6,7 +6,6 @@
 package Model;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ import java.util.List;
 public class Student extends Person {
 
     private String studentCode;
-    private List<Mark> marks;
+    private List<StudentCourse> studentcourses;
     private List<ClassYearSemester> classes;
     private List<StudentAttendance> studentAttendances;
     public Student() {
@@ -34,14 +33,15 @@ public class Student extends Person {
     public void setClasses(List<ClassYearSemester> classes) {
         this.classes = classes;
     }
-    
-    public List<Mark> getMarks() {
-        return marks;
+
+    public List<StudentCourse> getStudentcourses() {
+        return studentcourses;
     }
 
-    public void setMarks(List<Mark> marks) {
-        this.marks = marks;
+    public void setStudentcourses(List<StudentCourse> studentcourses) {
+        this.studentcourses = studentcourses;
     }
+    
 
     public String getStudentCode() {
         return studentCode;

@@ -20,8 +20,8 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
-        Student : <input disabled="disabled" class="form-control" value="${requestScope.mark.student.studentCode}">
-        Course : <input disabled="disabled" class="form-control" value="${requestScope.mark.course.courseCode}">
+        Student : <input disabled="disabled" class="form-control" value="${requestScope.studentcourse.student.studentCode}">
+        Course : <input disabled="disabled" class="form-control" value="${requestScope.studentcourse.course.courseCode}">
         Exam Type : <input disabled="disabled" class="form-control" value="${requestScope.mark.exam_type}">
         
         
@@ -29,13 +29,13 @@
             <input type="hidden" name="classindex" value="${requestScope.classindex}">
             <input type="hidden" name="studentindex" value="${requestScope.studentindex}">
             <input type="hidden" name="no" value="${requestScope.mark.no}">
-            <c:if test="${mark.course.isMarked}">
+            <c:if test="${requestScope.studentcourse.course.isMarked}">
             <label for="mark"> Mark :</label>
-            <input type="number" id="mark" name="mark" step="0.01" value="${requestScope.mark.mark}" min="0" max="10" class="form-control">
+            <input type="number" id="mark" name="mark" step="0.01" value="${requestScope.mark.score}" min="0" max="10" class="form-control">
             </c:if>
-            <c:if test="${!mark.course.isMarked}">
-                <input type="radio" name="mark" id="pass" value="-1" ${mark.mark eq -1 ? "checked='checked'" : ""}> <label for="pass">Pass </label>
-                <input type="radio" name="mark" id="notpass" value="-2" ${mark.mark eq -2 ? "checked='checked'" : ""}> <label for="notpass">Not Pass</label>
+            <c:if test="${!requestScope.studentcourse.course.isMarked}">
+                <input type="radio" name="mark" id="pass" value="-1" ${requestScope.mark.score eq -1 ? "checked='checked'" : ""}> <label for="pass">Pass </label>
+                <input type="radio" name="mark" id="notpass" value="-2" ${requestScope.mark.score eq -2 ? "checked='checked'" : ""}> <label for="notpass">Not Pass</label>
             </c:if>
             <button class="btn btn-primary">Save changes</button>
         </form>

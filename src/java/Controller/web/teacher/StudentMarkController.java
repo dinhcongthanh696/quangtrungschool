@@ -17,12 +17,12 @@ import Model.ClassYearSemester;
 import Model.Course;
 import Model.Mark;
 import Model.Student;
+import Model.StudentCourse;
 import Model.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -54,7 +54,7 @@ public class StudentMarkController extends BaseAuthorization {
         }
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         Student student = classroom.getStudents().get(studentindex - 1);
-        studentDAO.getMarks(student,classroom);
+        studentDAO.getStudentCourses(student,classroom);
         request.setAttribute("class", classroom);
         request.setAttribute("student", student);
         request.setAttribute("classindex", classindex);
@@ -69,19 +69,22 @@ public class StudentMarkController extends BaseAuthorization {
         int classindex = Integer.parseInt(request.getParameter("classindex"));
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
-        ClassYearSemester teacherclass =  teacher.getClasses().get(classindex - 1);
-        Student student = teacherclass.getStudents().get(studentindex - 1);
+        ClassYearSemester classyearsemester =  teacher.getClasses().get(classindex - 1);
+        Student student = classyearsemester.getStudents().get(studentindex - 1);
         
 
         int type = Integer.parseInt(request.getParameter("type"));
-        double mark = Double.parseDouble(request.getParameter("mark"));
+        double score = Double.parseDouble(request.getParameter("mark"));
         String raw_course = request.getParameter("course");
         String courseCode = raw_course.split(" ")[0];
         Course course = new Course();
         course.setCourseCode(courseCode);
         
-        Mark studentMark = new Mark(0, student, teacherclass, course, mark, type);
-        markDAO.insert(studentMark);
+        StudentCourse studentCourse = new StudentCourse();
+        studentCourse.setStudent(student);
+        studentCourse.setCourse(course);
+        Mark mark = new Mark(0, classyearsemester, score, type);
+        markDAO.insert(studentCourse,mark);
         response.sendRedirect("class-student-list?index="+classindex);
         
     }

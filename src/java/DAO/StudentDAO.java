@@ -16,6 +16,7 @@ import Model.Mark;
 import Model.Schedule;
 import Model.Student;
 import Model.StudentAttendance;
+import Model.StudentCourse;
 import Model.Teacher;
 import Model.Week;
 import java.sql.Date;
@@ -309,8 +310,8 @@ public class StudentDAO extends AbstractStudentDAO {
     }
 
     @Override
-    public void getMarks(Student student, ClassYearSemester classyearsemester) {
-        List<Mark> marks = new ArrayList<>();
+    public void getStudentCourses(Student student, ClassYearSemester classyearsemester) {
+        List<StudentCourse> courses = new ArrayList<>();
         String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.is_marked from student as s inner join learning as l on s.student_code = l.student_code\n"
                 + "inner join mark as m on l.student_code = m.student_code AND m.class_code = l.class_code AND m.year = l.year\n"
                 + "AND m.semester = l.semester "
@@ -326,22 +327,28 @@ public class StudentDAO extends AbstractStudentDAO {
             ResultSet rs = prepare_stmt.executeQuery();
             Mark mark;
             Course course;
+            StudentCourse studentcourse = new StudentCourse();
+            studentcourse.setCourse(new Course());
             while (rs.next()) {
+                if (! rs.getString("course_code").equals(studentcourse.getCourse().getCourseCode()) ) {
+                    studentcourse = new StudentCourse();
+                    course = new Course();
+                    course.setCourseCode(rs.getString("course_code"));
+                    course.setIsMarked(rs.getBoolean("is_marked"));
+                    studentcourse.setStudent(student);
+                    studentcourse.setCourse(course);
+                    courses.add(studentcourse);
+                }
                 mark = new Mark();
-                course = new Course();
-                course.setCourseCode(rs.getString("course_code"));
-                course.setIsMarked(rs.getBoolean("is_marked"));
-                mark.setStudent(student);
-                mark.setCourse(course);
                 mark.setNo(rs.getInt("no"));
                 mark.setExam_type(rs.getInt("exam_type"));
-                mark.setMark(rs.getDouble("mark"));
-                marks.add(mark);
+                mark.setScore(rs.getDouble("mark"));
+                studentcourse.getMarks().add(mark);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        student.setMarks(marks);
+        student.setStudentcourses(courses);
     }
 
     @Override

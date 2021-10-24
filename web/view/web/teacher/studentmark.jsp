@@ -54,11 +54,14 @@
                 }
             }
 
-            function doEdit(markindex) {
+            function doEdit(str) {
+                var str_split = str.split(" ");
                 var classindex = $("#classindex").val();
                 var studentindex = $("#studentindex").val();
+                var studentcourseindex = str_split[0];
+                var markindex = str_split[1];
                 window.location = "/QuangTrungSchool/student-mark-update?classindex=" + classindex + "&studentindex=" + studentindex
-                        + "&markindex=" + markindex;
+                        + "&markindex=" + markindex + "&studentcourseindex=" +studentcourseindex;
             }
 
             function doDelete(no) {
@@ -67,7 +70,7 @@
                 var studentindex = $("#studentindex").val();
                 if (checked) {
                     window.location = '/QuangTrungSchool/student-mark-delete?no=' + no +
-                    "&classindex="+ classindex + "&studentindex=" + studentindex;
+                            "&classindex=" + classindex + "&studentindex=" + studentindex;
                 }
             }
         </script>
@@ -75,7 +78,7 @@
     <body onload="inputMark('mark')"> 
         <jsp:include page="header.jsp"></jsp:include>
             <form action="/QuangTrungSchool/student-mark" method="POST">
-            <input type="hidden" name="classindex" value="${requestScope.classindex}" id="classindex">
+                <input type="hidden" name="classindex" value="${requestScope.classindex}" id="classindex">
             <input type="hidden" name="studentindex" value="${requestScope.studentindex}" id="studentindex">
 
             <table class="table table-bordered table-striped">
@@ -114,37 +117,42 @@
                 <th></th>
             </tr>
             <h2>Student Marks</h2>
-            <c:set var="stt" value="1"></c:set>
-            <c:forEach items="${requestScope.student.marks}" var="mark">
-                <tr>
-                    <td>${mark.no}</td>
-                    <td>${mark.course.courseCode}</td>
-                    <td>${mark.exam_type}</td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${mark.mark eq -1}">
-                                <span id="pass"> Pass </span>
-                            </c:when>
-                            <c:when test="${mark.mark eq -2}">
-                                <span id="notpass">  Not Pass </span>
-                            </c:when>    
-                            <c:otherwise>
-                                ${mark.mark}
-                            </c:otherwise>    
-                        </c:choose>
-                    </td>
-                    <td>
-                        <button class="btn btn-primary" onclick="doEdit(this.value)" value="${stt}">
-                            Edit
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger" onclick="doDelete(this.value)" value="${mark.no}">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-                <c:set var="stt" value="${stt + 1}"></c:set>
+            <c:set value="1" var="studentcourseindex"></c:set>
+            <c:forEach items="${requestScope.student.studentcourses}" var="studentcourse">
+                <c:forEach items="${studentcourse.marks}" var="mark">
+                    <c:set value="1" var="markindex"></c:set>
+                        <tr>
+                            <td>${mark.no}</td>
+                        <td>${studentcourse.course.courseCode}</td>
+                        <td>${mark.exam_type}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${mark.score eq -1}">
+                                    <span id="pass"> Pass </span>
+                                </c:when>
+                                <c:when test="${mark.score eq -2}">
+                                    <span id="notpass">  Not Pass </span>
+                                </c:when>    
+                                <c:otherwise>
+                                    ${mark.score}
+                                </c:otherwise>    
+                            </c:choose>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" onclick="doEdit(this.value)" 
+                                    value="${''.concat(studentcourseindex).concat(' ').concat(markindex)}">
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="doDelete(this.value)" value="${mark.no}">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <c:set value="${markindex + 1}" var="markindex"></c:set>
+                </c:forEach>
+                <c:set value="${studentcourseindex + 1}" var="studentcourseindex"></c:set>    
             </c:forEach>
 
         </table>

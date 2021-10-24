@@ -6,6 +6,7 @@
 package DAO;
 
 import Model.Mark;
+import Model.StudentCourse;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 public class MarkDAO extends AbstractMarkDAO {
 
     @Override
-    public void insert(Mark mark) {
+    public void insert(StudentCourse studentcourse,Mark mark) {
         String sql = "INSERT INTO [dbo].[mark]\n"
                 + "           ([student_code]\n"
                 + "           ,[exam_type]\n"
@@ -30,13 +31,13 @@ public class MarkDAO extends AbstractMarkDAO {
                 + "  VALUES(?,?,?,?,?,?,?)  ";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, mark.getStudent().getStudentCode());
+            prepare_stmt.setString(1, studentcourse.getStudent().getStudentCode());
             prepare_stmt.setInt(2, mark.getExam_type());
-            prepare_stmt.setDouble(3, mark.getMark());
+            prepare_stmt.setDouble(3, mark.getScore());
             prepare_stmt.setString(4, mark.getClassyearsemester().getClassroom().getClassCode());
             prepare_stmt.setInt(5, mark.getClassyearsemester().getYear());
             prepare_stmt.setInt(6, mark.getClassyearsemester().getSemester());
-            prepare_stmt.setString(7, mark.getCourse().getCourseCode());
+            prepare_stmt.setString(7, studentcourse.getCourse().getCourseCode());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,7 +49,7 @@ public class MarkDAO extends AbstractMarkDAO {
         String sql = "UPDATE mark SET mark = ? WHERE no = ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setDouble(1, mark.getMark());
+            prepare_stmt.setDouble(1, mark.getScore());
             prepare_stmt.setInt(2, mark.getNo());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
