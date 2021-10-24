@@ -43,6 +43,16 @@
                         <span class="glyphicon glyphicon-plus"></span> Báo cáo điểm danh
                     </a>
                 </li>
+                <li class="list-group-item">
+                    <a href="/QuangTrungSchool/student-class-liststudent">
+                        <span class="glyphicon glyphicon-plus"></span> Danh Sách Lớp
+                    </a>
+                </li>
+                <li class="list-group-item">
+                    <a href="/QuangTrungSchool/student-class-liststudent">
+                        <span class="glyphicon glyphicon-plus"></span> Báo cáo điểm
+                    </a>
+                </li>
             </ul>
         </section>
         </div>

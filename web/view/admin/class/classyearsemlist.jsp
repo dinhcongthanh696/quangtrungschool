@@ -143,8 +143,7 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="/QuangTrungSchool/admin-classyearsemester-schedule?
-                                   classCode=${cys.classroom.classCode}&year=${cys.year}&semester=${cys.semester}&startDate=${cys.startDate}&endDate=${cys.endDate}">
+                                <a href="/QuangTrungSchool/admin-classyearsemester-schedule?classCode=${cys.classroom.classCode}&year=${cys.year}&semester=${cys.semester}&startDate=${cys.startDate}&endDate=${cys.endDate}">
                                     Edit
                                 </a>
                             </td>

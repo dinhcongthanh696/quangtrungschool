@@ -144,6 +144,7 @@ public class ScheduleDAO extends AbstractScheduleDAO {
             ResultSet rs = prepare_stmt.executeQuery();
             Student student;
             StudentAttendance studentAttendance;
+            Course course;
             schedule.setStudentattendances(new ArrayList<>());
             while (rs.next()) {
                 schedule.setActive(rs.getInt("active"));
