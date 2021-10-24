@@ -9,6 +9,7 @@ import Model.Account;
 import Model.ClassYearSemester;
 import Model.Course;
 import Model.Student;
+import Model.Week;
 import java.util.List;
 
 /**
@@ -36,5 +37,7 @@ public abstract class AbstractStudentDAO extends BaseDAO {
     public abstract Student getByUsername(Account account);
     
     public abstract void getStudentAttendance(Student student,ClassYearSemester classyearsemester,Course course);
+    
+    public abstract void getStudentAttendance(Student student,Week week);
     
 }

@@ -17,10 +17,13 @@ import Model.Schedule;
 import Model.Student;
 import Model.StudentAttendance;
 import Model.Teacher;
+import Model.Week;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -434,7 +437,7 @@ public class StudentDAO extends AbstractStudentDAO {
             ClassRoom classroom;
             Teacher teacher;
             ResultSet rs = prepare_stmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 studentAttendance = new StudentAttendance();
                 schedule = new Schedule();
                 teacher = new Teacher();
@@ -443,18 +446,76 @@ public class StudentDAO extends AbstractStudentDAO {
                 schedule.setCourse(course);
                 schedule.setDate(rs.getDate("date"));
                 schedule.setAttendance(rs.getString("attendance"));
-                if(schedule.getAttendance() == null){
+                if (schedule.getAttendance() == null) {
                     studentAttendance.setStatus(0);   //REPERSENT FOR NOT YET
-                }else if(schedule.getAttendance().contains(student.getStudentCode())){
+                } else if (schedule.getAttendance().contains(student.getStudentCode())) {
                     studentAttendance.setStatus(-1);  // ABSENT
-                }else{
+                } else {
                     studentAttendance.setStatus(1);   // ATTENDED
                 }
-                
+
                 schedule.setTeacher(teacher);
                 schedule.setSlot(rs.getInt("slot"));
                 studentAttendance.setSchedule(schedule);
                 studentAttendances.add(studentAttendance);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student.setStudentAttendances(studentAttendances);
+    }
+
+    @Override
+    public void getStudentAttendance(Student student, Week week) {
+        List<StudentAttendance> studentAttendances = new ArrayList<>();
+        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+        String sql = "select sche.class_code,sche.course_code,sche.date,sche.slot,sche.teacher_code,sche.attendance from student as s \n"
+                + "inner join learning as l on s.student_code = l.student_code\n"
+                + "inner join classyearsemester as cys on l.class_code = cys.class_code AND l.semester = cys.semester AND l.year = cys.year\n"
+                + "inner join schedule as sche on cys.class_code = sche.class_code AND cys.semester = sche.semester AND \n"
+                + "sche.date >= cys.stat_date AND sche.date <= cys.end_date "
+                + "WHERE s.student_code = ? AND sche.date >= ? AND sche.date <= ?";
+        try {
+            PreparedStatement prepapre_stmt = connection.prepareStatement(sql);
+            prepapre_stmt.setString(1, student.getStudentCode());
+            try {
+                Date first_day_of_week = new java.sql.Date(formatterDate.parse((String) week.getDays().get(0)[0]).getTime());
+                Date last_day_of_week = new java.sql.Date(formatterDate.parse((String) week.getDays().get(week.getDays().size() - 1)[0]).getTime());
+                prepapre_stmt.setDate(2, first_day_of_week);
+                prepapre_stmt.setDate(3, last_day_of_week);
+                ResultSet rs = prepapre_stmt.executeQuery();
+                StudentAttendance stuAttendance;
+                Schedule schedule;
+                ClassRoom classroom;
+                Teacher teacher;
+                while (rs.next()) {
+                    schedule = new Schedule();
+                    schedule.setDate(rs.getDate("date"));
+                    classroom = new ClassRoom();
+                    classroom.setClassCode(rs.getString("class_code"));
+                    schedule.setClassroom(classroom);
+                    teacher = new Teacher();
+                    teacher.setTeacherCode(rs.getString("teacher_code"));
+                    schedule.setTeacher(teacher);
+                    schedule.setSlot(rs.getInt("slot"));
+                    schedule.setAttendance(rs.getString("attendance"));
+                    Course course = new Course();
+                    course.setCourseCode(rs.getString("course_code"));
+                    schedule.setCourse(course);
+                    stuAttendance = new StudentAttendance();
+                    stuAttendance.setSchedule(schedule);
+                    if (schedule.getAttendance() == null) {
+                        stuAttendance.setStatus(0);   //REPERSENT FOR NOT YET
+                    } else if (schedule.getAttendance().contains(student.getStudentCode())) {
+                        stuAttendance.setStatus(-1);  // ABSENT
+                    } else {
+                        stuAttendance.setStatus(1);   // ATTENDED
+                    }
+                    studentAttendances.add(stuAttendance);
+                }
+            } catch (ParseException ex) {
+                System.out.println("Can not parse");
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);

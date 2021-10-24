@@ -19,5 +19,5 @@ public abstract class AbstractScheduleDAO extends BaseDAO{
     public abstract void delete(Schedule schedule);
     public abstract void updateTeacher(Schedule schedule);
     public abstract void updateAttendance(Schedule schedule);
-    public abstract void getById(Schedule schedule);
+    public abstract void getAttendances(Schedule schedule);
 }

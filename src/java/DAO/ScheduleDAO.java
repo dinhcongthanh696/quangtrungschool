@@ -131,7 +131,7 @@ public class ScheduleDAO extends AbstractScheduleDAO {
     }
 
     @Override
-    public void getById(Schedule schedule) {
+    public void getAttendances(Schedule schedule) {
         String sql = "SELECT * FROM schedule as sche left join learning as l on sche.class_code = l.class_code\n"
                 + "AND sche.semester = l.semester AND DATEPART(year,sche.date) = l.year LEFT JOIN student as s ON "
                 + "l.student_code = s.student_code "
