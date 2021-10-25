@@ -9,10 +9,10 @@ import DAO.AbstractClassYearSemesterDAO;
 import DAO.AbstractStudentDAO;
 import DAO.ClassYearSemesterDAO;
 import DAO.StudentDAO;
+import Login.BaseAuthorization;
 import Model.ClassYearSemester;
 import Model.Student;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "ClassListStudentController", urlPatterns = {"/student-class-liststudent"})
-public class ClassListStudentController extends HttpServlet {
+public class ClassListStudentController extends BaseAuthorization {
     private final AbstractStudentDAO studentDAO;
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
     
@@ -34,7 +34,7 @@ public class ClassListStudentController extends HttpServlet {
         classyearsemesterDAO = new ClassYearSemesterDAO();
     }
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
@@ -45,7 +45,7 @@ public class ClassListStudentController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int classindex = Integer.parseInt(request.getParameter("classindex"));
         HttpSession session = request.getSession();

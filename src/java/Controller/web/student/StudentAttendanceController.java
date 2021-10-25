@@ -7,6 +7,7 @@ package Controller.web.student;
 
 import DAO.AbstractStudentDAO;
 import DAO.StudentDAO;
+import Login.BaseAuthorization;
 import Model.ClassYearSemester;
 import Model.Course;
 import Model.Student;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "StudentClassListController", urlPatterns = {"/student-attendance"})
-public class StudentAttendanceController extends HttpServlet {
+public class StudentAttendanceController extends BaseAuthorization {
     private final AbstractStudentDAO studentDAO;
     
     public StudentAttendanceController(){
@@ -34,7 +35,7 @@ public class StudentAttendanceController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
@@ -45,7 +46,7 @@ public class StudentAttendanceController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");

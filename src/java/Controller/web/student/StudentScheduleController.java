@@ -7,11 +7,11 @@ package Controller.web.student;
 
 import DAO.AbstractStudentDAO;
 import DAO.StudentDAO;
+import Login.BaseAuthorization;
 import Model.Student;
 import Model.Week;
 import Model.Year;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "StudentScheduleController", urlPatterns = {"/student-schedule"})
-public class StudentScheduleController extends HttpServlet {
+public class StudentScheduleController extends BaseAuthorization {
     private final AbstractStudentDAO studentDAO;
     
     public StudentScheduleController (){
@@ -115,7 +115,7 @@ public class StudentScheduleController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -129,7 +129,7 @@ public class StudentScheduleController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
