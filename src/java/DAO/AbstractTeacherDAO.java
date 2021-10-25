@@ -7,6 +7,7 @@ package DAO;
 
 import Model.Account;
 import Model.Teacher;
+import Model.Week;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,6 +26,7 @@ public abstract class AbstractTeacherDAO extends BaseDAO{
     public abstract Teacher getById(String teacherCode);
     public abstract Teacher getByUsername(Account account);
     public abstract void getSchedules(Teacher teacher);
+    public abstract void getSchedules(Teacher teacher,Week week);
     public abstract void insert(Teacher teacher);
     public abstract List<Teacher> search(String query,int offset,int fetch);
     public abstract List<Teacher> getFreeTeacher(Date date,int slot);

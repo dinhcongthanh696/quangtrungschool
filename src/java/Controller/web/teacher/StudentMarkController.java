@@ -66,7 +66,7 @@ public class StudentMarkController extends BaseAuthorization {
     public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
-        int classindex = Integer.parseInt(request.getParameter("classindex"));   // remove
+        int classindex = Integer.parseInt(request.getParameter("classindex"));
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
         ClassYearSemester classyearsemester = teacher.getClasses().get(classindex - 1);

@@ -88,16 +88,7 @@ public class TeacherScheduleController extends BaseAuthorization {
         }
     }
     
-    public int getScheduleIndex(Teacher teacher  , Week week){
-        Calendar calendar = Calendar.getInstance();
-        for(int i = 0 ; i < teacher.getSchedules().size() ; i++){
-            calendar.setTime(teacher.getSchedules().get(i).getDate());
-            if(calendar.get(Calendar.WEEK_OF_YEAR) == week.getWeekNumber()){
-                return i;
-            }
-        }
-        return -1;
-    }
+
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -112,13 +103,11 @@ public class TeacherScheduleController extends BaseAuthorization {
         Week currentWeek = year.getWeeks().get(weekNumber - 1);
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
-        if(teacher.getSchedules() == null){
-            teacherDAO.getSchedules(teacher);
-        }
-        int scheduleindex = getScheduleIndex(teacher, currentWeek);
+        teacherDAO.getSchedules(teacher, currentWeek);
+    //    int scheduleindex = getScheduleIndex(teacher, currentWeek); remove
         request.setAttribute("year", year);
         request.setAttribute("week", currentWeek);
-        request.setAttribute("scheduleindex", scheduleindex);
+    //    request.setAttribute("scheduleindex", scheduleindex);    remove
         request.getRequestDispatcher("view/web/teacher/teacherschedule.jsp").forward(request, response);
     }
 

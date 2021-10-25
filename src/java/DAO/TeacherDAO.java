@@ -11,11 +11,15 @@ import Model.ClassYearSemester;
 import Model.Course;
 import Model.Schedule;
 import Model.Teacher;
+import Model.Week;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -382,6 +386,49 @@ public class TeacherDAO extends AbstractTeacherDAO {
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getTeacherCode());
+            ResultSet rs = prepare_stmt.executeQuery();
+            while (rs.next()) {
+                    schedule = new Schedule();
+                    classroom = new ClassRoom();
+                    course = new Course();
+                    classroom.setClassCode(rs.getString("class_code"));
+                    course.setCourseCode(rs.getString("course_code"));
+                    schedule.setClassroom(classroom);
+                    schedule.setCourse(course);
+                    schedule.setActive(rs.getInt("active"));
+                    schedule.setDate(rs.getDate("date"));
+                    schedule.setSlot(rs.getInt("slot"));
+                    schedules.add(schedule);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        teacher.setSchedules(schedules);
+    }
+
+    @Override
+    public void getSchedules(Teacher teacher, Week week) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        List<Schedule> schedules = new ArrayList<>();
+        Schedule schedule;
+        ClassRoom classroom;
+        Course course;
+        String sql = "SELECT * FROM teacher "
+                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
+                + " WHERE teacher.teacher_code = ? AND schedule.date >= ? AND schedule.date <= ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, teacher.getTeacherCode());
+            Calendar first_day_of_week = Calendar.getInstance();
+            Calendar last_day_of_week = Calendar.getInstance();
+            try {
+                first_day_of_week.setTime(formatter.parse((String) week.getDays().get(0)[0]));
+                last_day_of_week.setTime(formatter.parse((String) week.getDays().get(week.getDays().size() - 1)[0]));
+            } catch (ParseException ex) {
+                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            prepare_stmt.setDate(2, new java.sql.Date(first_day_of_week.getTime().getTime()));
+            prepare_stmt.setDate(3, new java.sql.Date(last_day_of_week.getTime().getTime()));
             ResultSet rs = prepare_stmt.executeQuery();
             while (rs.next()) {
                     schedule = new Schedule();

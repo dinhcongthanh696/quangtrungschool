@@ -72,7 +72,7 @@
                 </c:forEach>
             </tr>
 
-            <c:set var="scheduleindex" value="${requestScope.scheduleindex}"></c:set>
+            <c:set var="scheduleindex" value="0"></c:set>
 
             <c:forEach begin="1" end="6" var="slot">
                 <tr>
