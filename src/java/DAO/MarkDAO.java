@@ -8,6 +8,7 @@ package DAO;
 import Model.Mark;
 import Model.StudentCourse;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,8 @@ import java.util.logging.Logger;
 public class MarkDAO extends AbstractMarkDAO {
 
     @Override
-    public void insert(StudentCourse studentcourse,Mark mark) {
+    public int insert(StudentCourse studentcourse,Mark mark) {
+        int id = 0;
         String sql = "INSERT INTO [dbo].[mark]\n"
                 + "           ([student_code]\n"
                 + "           ,[exam_type]\n"
@@ -30,6 +32,7 @@ public class MarkDAO extends AbstractMarkDAO {
                 + "           ,[course_code]) "
                 + "  VALUES(?,?,?,?,?,?,?)  ";
         try {
+            connection.setAutoCommit(false);
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, studentcourse.getStudent().getStudentCode());
             prepare_stmt.setInt(2, mark.getExam_type());
@@ -39,9 +42,28 @@ public class MarkDAO extends AbstractMarkDAO {
             prepare_stmt.setInt(6, mark.getClassyearsemester().getSemester());
             prepare_stmt.setString(7, studentcourse.getCourse().getCourseCode());
             prepare_stmt.executeUpdate();
+            sql = "SELECT @@IDENTITY as id";
+            prepare_stmt = connection.prepareStatement(sql);
+            ResultSet rs = prepare_stmt.executeQuery();
+            if(rs.next()){
+                id = rs.getInt("id");
+            }
+            connection.commit();
         } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(MarkDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        return id;
     }
 
     @Override

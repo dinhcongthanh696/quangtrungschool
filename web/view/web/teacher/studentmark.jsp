@@ -47,7 +47,7 @@
                             );
                 } else {
                     $("#" + container).append(
-                            "<input type='hidden' name='type' value='0'>"
+                            "<input type='hidden' name='type' value='0' id='type'>"
                             + "<input type='radio' name='mark' value='-1' id='pass'> <label for='pass'>Pass</label> "
                             + "<input type='radio' name='mark' value='-2' id='notpass'> <label for='notpass'>Not pass </label>"
                             );
@@ -61,7 +61,7 @@
                 var studentcourseindex = str_split[0];
                 var markindex = str_split[1];
                 window.location = "/QuangTrungSchool/student-mark-update?classindex=" + classindex + "&studentindex=" + studentindex
-                        + "&markindex=" + markindex + "&studentcourseindex=" +studentcourseindex;
+                        + "&markindex=" + markindex + "&studentcourseindex=" + studentcourseindex;
             }
 
             function doDelete(no) {
@@ -73,39 +73,90 @@
                             "&classindex=" + classindex + "&studentindex=" + studentindex;
                 }
             }
+
+            function doInsert() {
+                var classindex = $("#classindex").val();
+                var studentIndex = $("#studentindex").val();
+                var course = $("#course").val();
+                var courseCode = course.split(" ")[0];
+                var type = $("#type").val();
+                var mark = 0;
+                if (type == 0) {
+                    mark = $("input[type='radio']:checked").val();
+                } else {
+                    mark = $("input[name='mark']").val();
+                }
+                $.ajax({
+                    url: "/QuangTrungSchool/student-mark",
+                    type: 'POST',
+                    data: {
+                        studentindex: studentIndex,
+                        courseCode : courseCode,
+                        type: type,
+                        mark: mark,
+                        classindex : classindex
+                    },
+                    success: function (response) {
+                        var response_split = response.split(" ");
+                        var studentcourseindex = response_split[0];
+                        var no = response_split[1];
+                        var markindex = response_split[2];
+                        var markColumn = "";
+                        if(mark == -1){
+                            markColumn += "<span id='pass'> Pass </span>"
+                        }else if(mark == -2){
+                            markColumn += "<span id='notpass'> Not Pass </span>"
+                        }else{
+                            markColumn += mark;
+                        }
+                        $(".table-bordered").append(
+                          "<tr>" 
+                          + "<td> " +   no     +"</td>"
+                          + "<td> " +   courseCode     +"</td>"  
+                          + "<td> " +   type     +"</td>"
+                          + "<td> " +   markColumn     +"</td>"
+                          + "<td> <button class='btn btn-primary' onclick='doEdit(this.value)'"
+                          +  " value='"+studentcourseindex+" "+markindex+"'> Edit </button> "
+                          +"</td>"
+                          + "<td> <button class='btn btn-danger' onclick='doDelete(this.value)'"
+                          +  " value=' "+no+" '> Delete </button> "
+                          +"</td>"
+                          + "</tr>"         
+                        );
+                    }
+                });
+            }
         </script>
     </head>
     <body onload="inputMark('mark')"> 
         <jsp:include page="header.jsp"></jsp:include>
-            <form action="/QuangTrungSchool/student-mark" method="POST">
-                <input type="hidden" name="classindex" value="${requestScope.classindex}" id="classindex">
-            <input type="hidden" name="studentindex" value="${requestScope.studentindex}" id="studentindex">
+        <input type="hidden" name="classindex" value="${requestScope.classindex}" id="classindex">
+        <input type="hidden" name="studentindex" value="${requestScope.studentindex}" id="studentindex">
 
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>Student Code</th>
-                    <th>Full Name</th>
-                    <th>Class</th>
-                    <th>Year</th>
-                    <th>Semester</th>
-                </tr>
-                <tr>
-                    <td>${requestScope.student.studentCode}</td>
-                    <td>${requestScope.student.fullname}</td>
-                    <td>${requestScope.class.classroom.classCode}</td>
-                    <td>${requestScope.class.year}</td>
-                    <td>${requestScope.class.semester}</td>
-                </tr>
-            </table>
-            <label for="course">Course : </label>
-            <select name="course" id="course" onchange="inputMark('mark')">
-                <c:forEach items="${requestScope.class.courses}" var="course">
-                    <option value="${course.courseCode.concat(' ').concat(course.isMarked)}">${course.courseName}</option>
-                </c:forEach>
-            </select>
-            <div id="mark"></div>
-            <button class="btn btn-primary">Save changes</button>
-        </form>
+        <table class="table table-striped">
+            <tr>
+                <th>Student Code</th>
+                <th>Full Name</th>
+                <th>Class</th>
+                <th>Year</th>
+                <th>Semester</th>
+            </tr>
+            <tr>
+                <td>${requestScope.student.studentCode}</td>
+                <td>${requestScope.student.fullname}</td>
+                <td>${requestScope.class.classroom.classCode}</td>
+                <td>${requestScope.class.year}</td>
+                <td>${requestScope.class.semester}</td>
+            </tr>
+        </table>
+        <label for="course">Course : </label>
+        <select name="course" id="course" onchange="inputMark('mark')">
+            <c:forEach items="${requestScope.class.courses}" var="course">
+                <option value="${course.courseCode.concat(' ').concat(course.isMarked)}">${course.courseName}</option>
+            </c:forEach>
+        </select>
+        <div id="mark"></div>
+        <button class="btn btn-primary" onclick="doInsert()">Save changes</button>
 
         <table class="table table-bordered">
             <tr>
@@ -121,8 +172,8 @@
             <c:forEach items="${requestScope.student.studentcourses}" var="studentcourse">
                 <c:set value="1" var="markindex"></c:set>
                 <c:forEach items="${studentcourse.marks}" var="mark">
-                        <tr>
-                            <td>${mark.no}</td>
+                    <tr>
+                        <td>${mark.no}</td>
                         <td>${studentcourse.course.courseCode}</td>
                         <td>${mark.exam_type}</td>
                         <td>

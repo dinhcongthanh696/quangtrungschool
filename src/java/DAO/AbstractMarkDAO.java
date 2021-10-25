@@ -13,7 +13,7 @@ import Model.StudentCourse;
  * @author My Computer
  */
 public abstract class AbstractMarkDAO extends BaseDAO{
-    public abstract void insert(StudentCourse studentcourse,Mark mark);
+    public abstract int insert(StudentCourse studentcourse,Mark mark);
     public abstract void update(Mark mark);
     public abstract void delete(Mark mark);
 }

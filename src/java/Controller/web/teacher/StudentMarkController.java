@@ -66,7 +66,7 @@ public class StudentMarkController extends BaseAuthorization {
     public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
-        int classindex = Integer.parseInt(request.getParameter("classindex"));
+        int classindex = Integer.parseInt(request.getParameter("classindex"));   // remove
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
         ClassYearSemester classyearsemester = teacher.getClasses().get(classindex - 1);
@@ -74,18 +74,31 @@ public class StudentMarkController extends BaseAuthorization {
 
         int type = Integer.parseInt(request.getParameter("type"));
         double score = Double.parseDouble(request.getParameter("mark"));
-        String raw_course = request.getParameter("course");
-        String courseCode = raw_course.split(" ")[0];
+        String courseCode = request.getParameter("courseCode");
+        StudentCourse studentCourse = getStudentCourse(student, courseCode);
+        Mark mark = new Mark(0, classyearsemester, score, type);
+        int markNo = markDAO.insert(studentCourse, mark);
+        if(markNo != 0){
+            mark.setNo(markNo);
+            studentCourse.getMarks().add(mark);
+        }
+        response.getWriter().print( (student.getStudentcourses().indexOf(studentCourse) + 1) + " " + mark.getNo() + " "+
+            (studentCourse.getMarks().indexOf(mark) + 1)    );
+    }
+    
+    public StudentCourse getStudentCourse(Student student,String courseCode){
+        for(StudentCourse studentCourse : student.getStudentcourses()){
+            if(studentCourse.getCourse().getCourseCode().equals(courseCode)){
+                return studentCourse;
+            }
+        }
         Course course = new Course();
         course.setCourseCode(courseCode);
-
-        StudentCourse studentCourse = new StudentCourse();
-        studentCourse.setStudent(student);
-        studentCourse.setCourse(course);
-        Mark mark = new Mark(0, classyearsemester, score, type);
-        markDAO.insert(studentCourse, mark);
-        response.sendRedirect("class-student-list?index=" + classindex);
-
+        StudentCourse newStudentCourse = new StudentCourse();
+        newStudentCourse.setCourse(course);
+        newStudentCourse.setStudent(student);
+        student.getStudentcourses().add(newStudentCourse);
+        return newStudentCourse;
     }
 
 }
