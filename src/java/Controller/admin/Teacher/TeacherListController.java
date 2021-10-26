@@ -24,72 +24,67 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "TeacherListController", urlPatterns = {"/admin-teacher-list"})
 public class TeacherListController extends BaseAuthorization {
+
     private final AbstractTeacherDAO teacherDAO;
-    private final int TEACHERPERPAGE = 10;
-    public TeacherListController(){
+    private int TEACHERPERPAGE = 10;
+
+    public TeacherListController() {
         teacherDAO = new TeacherDAO();
     }
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+
+
+    @Override
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int pageId =  (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
+        int pageId = (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
         String query = request.getParameter("query");
-        int totalTeachers = teacherDAO.getAll().size();
-        List<Teacher> searchedTeachers = new ArrayList<>();
-        if(totalTeachers != 0){
-            searchedTeachers = teacherDAO.search(query, 0, totalTeachers);
+        String raw_teacherperpage = request.getParameter("teacherperpage");
+        if(raw_teacherperpage != null){
+            TEACHERPERPAGE = Integer.parseInt(raw_teacherperpage);
         }
-        int totalTeachersSearched = searchedTeachers.size();
-        int pageRemain = ( (totalTeachersSearched % TEACHERPERPAGE) > 0 ) ? 1 : 0  ;
-        int pageNeeded = (totalTeachersSearched / TEACHERPERPAGE) + pageRemain;
-        boolean isOverPaged = pageId > pageNeeded;
-        if(isOverPaged){
-            pageId = 1;
+        int pageNeeded = 1;
+        int totalSearchedTeachers = 0;
+        if (query != null && !query.isEmpty()) {
+            totalSearchedTeachers = Integer.parseInt(request.getParameter("totalsearchedteachers"));
+            int pageRemain = ((totalSearchedTeachers % TEACHERPERPAGE) > 0) ? 1 : 0;
+            pageNeeded = (totalSearchedTeachers / TEACHERPERPAGE) + pageRemain;
+            boolean isOverPaged = pageId > pageNeeded;
+            if (isOverPaged) {
+                pageId = 1;
+            }
+            int offset = (pageId - 1) * TEACHERPERPAGE;
+            int fetch = TEACHERPERPAGE;
+            List<Teacher> searchedTeachers = teacherDAO.search(query, offset, fetch);
+            request.setAttribute("teachers", searchedTeachers);
         }
+        request.setAttribute("totalPage", pageNeeded);
+        request.setAttribute("pageId", pageId);
+        request.setAttribute("query", query);
+        request.setAttribute("teacherperpage", TEACHERPERPAGE);
+        request.setAttribute("totalsearchedteachers", totalSearchedTeachers);
+        request.getRequestDispatcher("view/admin/teacher/teacherlist.jsp").forward(request, response);
+    }
+
+    @Override
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int pageId = 1;
+        String query = request.getParameter("query");
+        int totalSearchedTeachers = teacherDAO.getTotalSearchedTeachers(query);
+        int pageRemain = ( (totalSearchedTeachers % TEACHERPERPAGE) > 0 ) ? 1 : 0;
+        int pageNeeded = (totalSearchedTeachers / TEACHERPERPAGE) + pageRemain;
+        int offset = 0;
+        int fetch = TEACHERPERPAGE;
+        List<Teacher> searchedTeachers = teacherDAO.search(query, offset, fetch);
         request.setAttribute("teachers", searchedTeachers);
         request.setAttribute("totalPage", pageNeeded);
         request.setAttribute("pageId", pageId);
         request.setAttribute("query", query);
+        request.setAttribute("totalsearchedteachers", totalSearchedTeachers);
+        request.setAttribute("teacherperpage", TEACHERPERPAGE);
         request.getRequestDispatcher("view/admin/teacher/teacherlist.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    public void processGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    public void processPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

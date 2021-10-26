@@ -449,4 +449,59 @@ public class TeacherDAO extends AbstractTeacherDAO {
         teacher.setSchedules(schedules);
     }
 
+    @Override
+    public int getTotalTeachers() {
+        String sql = "SELECT COUNT(*) as totalteachers FROM teacher";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            ResultSet rs = prepare_stmt.executeQuery();
+            if(rs.next()){
+                return rs.getInt("totalteachers");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    @Override
+    public int getTotalSearchedTeachers(String query) {
+        int totalSearchedTeachers = 0;
+        String sql = "SELECT * FROM teacher WHERE ";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        Teacher teacher;
+        Account account;
+        try {
+            Date date = Date.valueOf(query);
+            sql += " teacher_dob = ? ORDER BY teacher_code OFFSET ? rows FETCH next ? rows only";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setDate(1, date);
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {  // CODE TO ADD NEW TEACHER WITH THEIR ACCOUNT
+                    totalSearchedTeachers++;
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IllegalArgumentException ex) {
+            sql += " teacher_code LIKE ? OR teacher_address LIKE ? OR teacher_email LIKE ? OR "
+                    + "teacher_fullname LIKE ? OR teacher_phone LIKE ? OR teacher.username LIKE ? ";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                for (int i = 1; i <= 6; i++) {
+                    prepare_stmt.setString(i, "%" + query + "%");
+                }
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {   // CODE TO ADD NEW TEACHER WITH THEIR ACCOUNT
+                    totalSearchedTeachers++;
+                }
+            } catch (SQLException ex1) {
+                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return totalSearchedTeachers;
+    }
+
 }

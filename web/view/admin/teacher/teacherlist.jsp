@@ -33,8 +33,10 @@
             }
         </style>
         <script>
+            var gap = 2;
+            
             function activePage() {
-                var pageId = $(".right input[type='hidden']").val();
+                var pageId = $("#curentPage").val();
                 $("#" + pageId).css("background-color", "blue");
             }
 
@@ -58,15 +60,71 @@
                     $("#" + teacherCode).css("display", "none");
                 }
             }
+            
+            function paging(){
+                var currentPage = parseInt($("#curentPage").val());
+                var totalPage = $("#totalPage").val();
+                var query = $("#query").val();
+                var totalSearchedTeachers = $("#totalSearchedTeachers").val();
+                var teacherperpage = $("#teacherperpage").val();
+                
+                if(currentPage - gap > 1){
+                    $("#paging").append(
+                        "<a id='1' href=/QuangTrungSchool/admin-teacher-list?query="+query
+                        +"&pageId=1&totalsearchedteachers="+ totalSearchedTeachers +"&teacherperpage="+ teacherperpage +"> 1 </a>"
+                         );
+                }
+                for(let i = currentPage - gap ; i <= currentPage ; i++){
+                    if(i >= 1){
+                        $("#paging").append(
+                          "<a id='"+ i +"' href=/QuangTrungSchool/admin-teacher-list?query="+query
+                            +"&pageId="+i+"&totalsearchedteachers="+ totalSearchedTeachers +"&teacherperpage="+ teacherperpage +">"+ i +"</a>"      
+                        );
+                    }
+                }
+                
+                for(let i = currentPage + 1 ; i <= currentPage + gap ; i++){
+                    if(i <= totalPage){
+                        $("#paging").append(
+                          "<a id='"+ i +"' href=/QuangTrungSchool/admin-teacher-list?query="+query
+                            +"&pageId="+i+"&totalsearchedteachers="+ totalSearchedTeachers +"&teacherperpage="+ teacherperpage +">"+ i +"</a>"      
+                        );
+                    }
+                }
+                
+                if(currentPage + gap < totalPage){
+                    $("#paging").append(
+                        "<a id='"+ totalPage +"' href=/QuangTrungSchool/admin-teacher-list?query="+query
+                        +"&pageId="+ totalPage +"&totalsearchedteachers="+ totalSearchedTeachers +"&teacherperpage="+ teacherperpage +"> "+ totalPage +" </a>"
+                            );
+                }
+            }
+            
+            function changePerPage() {
+                var teacherperpage = $("#teacherperpage").val();
+                var query = $("#query").val();
+                var totalsearchedteachers = $("#totalSearchedTeachers").val();
+                window.location = "/QuangTrungSchool/admin-teacher-list?"
+                        + "query=" + query + "&totalsearchedteachers=" + totalsearchedteachers + "&teacherperpage=" + teacherperpage;
+            }
         </script>
     </head>
-    <body onload="activePage()">
+    <body onload="paging();activePage()">
+        <input type="hidden" value="${requestScope.pageId}" id="curentPage">
+        <input type="hidden" value="${requestScope.totalPage}" id="totalPage">
+        <input type="hidden" value="${requestScope.totalsearchedteachers}" id="totalSearchedTeachers">
+        
         <jsp:include page="../header.jsp"></jsp:include>
             <section class="right">
                 <h2>Teacher List</h2>
+                <label for="teacherperpage" class="form-label">Teacher Per Page : </label>
+                <select id="teacherperpage" onchange="changePerPage()" class="form-select">
+                <c:forEach begin="1" end="${requestScope.totalsearchedteachers}" var="number">
+                    <option value="${number}" ${number eq requestScope.teacherperpage ? "selected='selected'" : ""}>${number}</option>
+                </c:forEach> 
+                </select>
                 <form action="/QuangTrungSchool/admin-teacher-list" method="POST">
                     <label for="query">Search: </label>
-                    <input type="hidden" value="${requestScope.pageId}">
                 <input type="text" class="form-control" id="query" name="query" value="${requestScope.query}" placeholder="Search..."><br/>
                 <button type="submit" class="btn btn-primary">Search</button>
                 </form>
@@ -100,11 +158,8 @@
                     </tr>
                 </c:forEach>
             </table>
-            <div>
+            <div id="paging">
                 <h2>Pages</h2>
-                <c:forEach begin="1" end="${requestScope.totalPage}" var="page">
-                    <a id="${page}" href="/QuangTrungSchool/admin-teacher-list?pageId=${page}&query=${requestScope.query}">${page}</a>
-                </c:forEach>
             </div>
         </section>
         <jsp:include page="../footer.jsp"></jsp:include>

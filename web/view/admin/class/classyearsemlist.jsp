@@ -105,7 +105,7 @@
             <h2>Classes By Year Semester List</h2>
             <label for="classperpage">Class Per Page : </label>
             <select id="classperpage" name="classperpage" onchange="changePerPage()">
-                <c:forEach begin="0" end="${empty requestScope.totalsearchedclasses ? 0 : requestScope.totalsearchedclasses}" var="num">
+                <c:forEach begin="1" end="${requestScope.totalsearchedclasses}" var="num">
                     <option value="${num}" ${ (num eq requestScope.classperpage ) ? "selected='selected'" : "" }>${num}</option>
                 </c:forEach>
             </select>
