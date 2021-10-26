@@ -69,8 +69,18 @@
                 var classindex = $("#classindex").val();
                 var studentindex = $("#studentindex").val();
                 if (checked) {
-                    window.location = '/QuangTrungSchool/student-mark-delete?no=' + no +
-                            "&classindex=" + classindex + "&studentindex=" + studentindex;
+                    $.ajax({
+                       url : "/QuangTrungSchool/student-mark-delete",
+                       type : 'POST',
+                       data : {
+                           no : no,
+                           classindex : classindex,
+                           studentindex : studentindex
+                       },
+                       success : function(){
+                           $("#"+no).css("display","none");
+                       }
+                    });
                 }
             }
 
@@ -172,7 +182,7 @@
             <c:forEach items="${requestScope.student.studentcourses}" var="studentcourse">
                 <c:set value="1" var="markindex"></c:set>
                 <c:forEach items="${studentcourse.marks}" var="mark">
-                    <tr>
+                    <tr id="${mark.no}">
                         <td>${mark.no}</td>
                         <td>${studentcourse.course.courseCode}</td>
                         <td>${mark.exam_type}</td>

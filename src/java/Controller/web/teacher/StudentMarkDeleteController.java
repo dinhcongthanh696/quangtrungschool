@@ -35,7 +35,6 @@ public class StudentMarkDeleteController extends BaseAuthorization {
         markDAO.delete(mark);
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         int classindex = Integer.parseInt(request.getParameter("classindex"));
-        response.sendRedirect("student-mark?classindex="+classindex+"&studentindex="+studentindex);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
