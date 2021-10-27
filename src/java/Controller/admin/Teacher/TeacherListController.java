@@ -39,7 +39,7 @@ public class TeacherListController extends BaseAuthorization {
         int pageId = (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
         String query = request.getParameter("query");
         String raw_teacherperpage = request.getParameter("teacherperpage");
-        if(raw_teacherperpage != null){
+        if(raw_teacherperpage != null && !raw_teacherperpage.isEmpty()){
             TEACHERPERPAGE = Integer.parseInt(raw_teacherperpage);
         }
         int pageNeeded = 1;

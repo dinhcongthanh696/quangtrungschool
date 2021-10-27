@@ -39,7 +39,7 @@ public class ClassYearSemesterListController extends BaseAuthorization {
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String raw_classperpage = request.getParameter("classperpage");
-        if(raw_classperpage != null){
+        if(raw_classperpage != null && !raw_classperpage.isEmpty()){
             CLASSPERPAGE = Integer.parseInt(raw_classperpage);
         } 
         String query = request.getParameter("query");

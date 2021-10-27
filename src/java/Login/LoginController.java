@@ -37,7 +37,7 @@ public class LoginController extends HttpServlet {
     private final AbstractAccountDAO accountDAO;
     private final AbstractGroupDAO groupDAO;
     private final AbstractTeacherDAO teacherDAO;
-    private final AbstractStudentDAO  studentDAO;
+    private final AbstractStudentDAO studentDAO;
     private final int COOKIETIMEOUT = 7 * 24 * 3600;
 
     public LoginController() {
@@ -46,11 +46,13 @@ public class LoginController extends HttpServlet {
         teacherDAO = new TeacherDAO();
         studentDAO = new StudentDAO();
     }
-    
-    public Cookie getCookie(String name,Cookie[] cookies){
-        if(cookies == null) return null;
-        for(Cookie cookie : cookies){
-            if(cookie.getName().equals(name)){
+
+    public Cookie getCookie(String name, Cookie[] cookies) {
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(name)) {
                 return cookie;
             }
         }
@@ -64,13 +66,13 @@ public class LoginController extends HttpServlet {
         Account account;
         Cookie[] cookies = request.getCookies();
         Cookie cookieUsername = getCookie("username", cookies);
-        if(cookieUsername != null){
+        if (cookieUsername != null) {
             account = accountDAO.getById(cookieUsername.getValue());
             Cookie cookieRole = getCookie("roleNumber", cookies);
             account.setRoleNumber(Integer.parseInt(cookieRole.getValue()));
             session.setAttribute("account", account);
         }
-        
+
         account = (Account) session.getAttribute("account");
         if (account != null) {
             String url = "";
@@ -85,8 +87,6 @@ public class LoginController extends HttpServlet {
                     Teacher teacher = teacherDAO.getByUsername(account);
                     session.setAttribute("teacher", teacher);
                     break;
-                case 3:
-                    break;
                 case 4:
                     url = "admin-home";
                     break;
@@ -96,7 +96,7 @@ public class LoginController extends HttpServlet {
             List<Group> groups = groupDAO.getAll();
             request.setAttribute("groups", groups);
             request.getRequestDispatcher("view/login.jsp").forward(request, response);
-        } 
+        }
     }
 
     public boolean isAccepted(Account account, int roleNumber) {
@@ -111,6 +111,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String url = "";
         String username = request.getParameter("username");
         Account account = accountDAO.getById(username);
         if (account != null) {
@@ -121,9 +122,20 @@ public class LoginController extends HttpServlet {
                     HttpSession session = request.getSession();
                     account.setRoleNumber(roleNumber);
                     session.setAttribute("account", account);
-                    if(request.getParameter("remember") != null){
-                        Cookie cookieUsername = new Cookie("username",username);
-                        Cookie cookieRole = new Cookie("roleNumber",account.getRoleNumber() + "");
+                    switch (account.getRoleNumber()) {
+                        case 1:
+                            url = "web-student-home";
+                            break;
+                        case 2:
+                            url = "teacher-home";
+                            break;
+                        case 4:
+                            url = "admin-home";
+                            break;
+                    }
+                    if (request.getParameter("remember") != null) {
+                        Cookie cookieUsername = new Cookie("username", username);
+                        Cookie cookieRole = new Cookie("roleNumber", account.getRoleNumber() + "");
                         cookieUsername.setMaxAge(COOKIETIMEOUT);
                         cookieRole.setMaxAge(COOKIETIMEOUT);
                         response.addCookie(cookieUsername);
@@ -132,7 +144,8 @@ public class LoginController extends HttpServlet {
                 }
             }
         }
-        doGet(request, response);
+        
+        response.getWriter().print(url);
     }
 
 }
