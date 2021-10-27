@@ -137,7 +137,7 @@
                               <a href="/QuangTrungSchool/admin-student-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>  Student</a>
                               <a href="/QuangTrungSchool/admin-teacher-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>  Teacher</a>
                               <a href="/QuangTrungSchool/admin-classyearsemester-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>Class Year Semester</a>
-                              
+                              <a href="/QuangTrungSchool/admin-news-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>News</a>
                         </ul>
                     </div>
                 </li>

@@ -27,6 +27,11 @@ public class News {
         this.account = account;
     }
 
+    public News() {
+    }
+    
+    
+
     public List<GroupNews> getGroupnews() {
         return groupnews;
     }

@@ -5,11 +5,15 @@
  */
 package DAO;
 
+import Model.Account;
 import Model.GroupNews;
 import Model.News;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author My Computer
  */
-public class NewsDAO extends AbstractNewsDAO{
+public class NewsDAO extends AbstractNewsDAO {
 
     @Override
     public void insert(News news) {
@@ -34,12 +38,11 @@ public class NewsDAO extends AbstractNewsDAO{
             prepare_stmt = connection.prepareStatement(sql);
             ResultSet rs = prepare_stmt.executeQuery();
             int no = 0;
-            if(rs.next()){
+            if (rs.next()) {
                 no = rs.getInt("no");
             }
             sql = "INSERT INTO groupnews VALUES(?,?)";
-            System.out.println(news.getGroupnews() == null);
-            for(GroupNews grnews : news.getGroupnews()){
+            for (GroupNews grnews : news.getGroupnews()) {
                 prepare_stmt = connection.prepareStatement(sql);
                 prepare_stmt.setInt(1, grnews.getGroup().getGid());
                 prepare_stmt.setInt(2, no);
@@ -53,7 +56,7 @@ public class NewsDAO extends AbstractNewsDAO{
                 Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex1);
             }
             Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally{
+        } finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException ex) {
@@ -61,5 +64,102 @@ public class NewsDAO extends AbstractNewsDAO{
             }
         }
     }
-    
+
+    @Override
+    public int getTotalNews(String query) {
+        String sql = "SELECT COUNT(*) as totalsearchednews FROM news WHERE ";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        int totalSearchedNews = 0;
+        try {
+            Date postedDate = Date.valueOf(query);
+            sql += "posted_date = ?";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setDate(1, postedDate);
+                rs = prepare_stmt.executeQuery();
+                if (rs.next()) {
+                    totalSearchedNews = rs.getInt("totalsearchednews");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IllegalArgumentException ex) {
+            sql += "title LIKE ? or content LIKE ? or constructor LIKE ?";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                for (int i = 1; i <= 3; i++) {
+                    prepare_stmt.setString(i,"%" +query+ "%");
+                }
+                rs = prepare_stmt.executeQuery();
+                if (rs.next()) {
+                    totalSearchedNews = rs.getInt("totalsearchednews");
+                }
+            } catch (SQLException ex1) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return totalSearchedNews;
+    }
+
+    @Override
+    public List<News> search(String query, int offset, int limit) {
+        List<News> piecesOfNews = new ArrayList<>();
+        String sql = "SELECT * FROM news WHERE ";
+        PreparedStatement prepare_stmt;
+        ResultSet rs;
+        News news;
+        Account account;
+        try {
+            Date postedDate = Date.valueOf(query);
+            sql += "posted_date = ?  ORDER BY posted_date desc  OFFSET ? rows FETCH next ? rows only ";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setDate(1, postedDate);
+                prepare_stmt.setInt(2, offset);
+                prepare_stmt.setInt(3, limit);
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {
+                    news = new News();
+                    news.setNo(rs.getInt("no"));
+                    news.setTitle(rs.getString("title"));
+                    news.setContent(rs.getString("content"));
+                    news.setPostedDate(rs.getDate("posted_date"));
+                    account = new Account();
+                    account.setUsername(rs.getString("constructor"));
+                    news.setAccount(account);
+                    piecesOfNews.add(news);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IllegalArgumentException ex) {
+            sql += "title LIKE ? or content LIKE ? or constructor LIKE ?  ORDER BY posted_date desc "
+                    + "OFFSET ? rows FETCH next ? rows only";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                for (int i = 1; i <= 3; i++) {
+                    prepare_stmt.setString(i, "%"+query+"%");
+                }
+                prepare_stmt.setInt(4, offset);
+                prepare_stmt.setInt(5, limit);
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {
+                    news = new News();
+                    news.setNo(rs.getInt("no"));
+                    news.setTitle(rs.getString("title"));
+                    news.setContent(rs.getString("content"));
+                    news.setPostedDate(rs.getDate("posted_date"));
+                    account = new Account();
+                    account.setUsername(rs.getString("constructor"));
+                    news.setAccount(account);
+                    piecesOfNews.add(news);
+                }
+            } catch (SQLException ex1) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return piecesOfNews;
+    }
+
 }

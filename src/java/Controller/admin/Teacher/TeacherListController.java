@@ -48,6 +48,7 @@ public class TeacherListController extends BaseAuthorization {
             totalSearchedTeachers = Integer.parseInt(request.getParameter("totalsearchedteachers"));
             int pageRemain = ((totalSearchedTeachers % TEACHERPERPAGE) > 0) ? 1 : 0;
             pageNeeded = (totalSearchedTeachers / TEACHERPERPAGE) + pageRemain;
+            if(pageNeeded == 0) pageNeeded = 1; // at least 1 page is displayed
             boolean isOverPaged = pageId > pageNeeded;
             if (isOverPaged) {
                 pageId = 1;

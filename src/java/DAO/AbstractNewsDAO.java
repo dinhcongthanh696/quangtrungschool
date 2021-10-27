@@ -6,6 +6,7 @@
 package DAO;
 
 import Model.News;
+import java.util.List;
 
 /**
  *
@@ -13,5 +14,6 @@ import Model.News;
  */
 public abstract class AbstractNewsDAO extends BaseDAO{
     public abstract void insert(News news);
-    
+    public abstract int getTotalNews(String query);
+    public abstract List<News> search(String query,int offset,int limit);
 }
