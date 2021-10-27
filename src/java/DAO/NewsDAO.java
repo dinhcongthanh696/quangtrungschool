@@ -89,7 +89,7 @@ public class NewsDAO extends AbstractNewsDAO {
             try {
                 prepare_stmt = connection.prepareStatement(sql);
                 for (int i = 1; i <= 3; i++) {
-                    prepare_stmt.setString(i,"%" +query+ "%");
+                    prepare_stmt.setString(i, "%" + query + "%");
                 }
                 rs = prepare_stmt.executeQuery();
                 if (rs.next()) {
@@ -139,7 +139,7 @@ public class NewsDAO extends AbstractNewsDAO {
             try {
                 prepare_stmt = connection.prepareStatement(sql);
                 for (int i = 1; i <= 3; i++) {
-                    prepare_stmt.setString(i, "%"+query+"%");
+                    prepare_stmt.setString(i, "%" + query + "%");
                 }
                 prepare_stmt.setInt(4, offset);
                 prepare_stmt.setInt(5, limit);
@@ -161,5 +161,75 @@ public class NewsDAO extends AbstractNewsDAO {
         }
         return piecesOfNews;
     }
+
+    @Override
+    public News getById(int no) {
+        String sql = "SELECT * FROM news WHERE no = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setInt(1, no);
+            ResultSet rs = prepare_stmt.executeQuery();
+            if (rs.next()) {
+                News news = new News();
+                Account account = new Account();
+                news.setNo(rs.getInt("no"));
+                news.setTitle(rs.getString("title"));
+                news.setContent(rs.getString("content"));
+                news.setPostedDate(rs.getDate("posted_date"));
+                account.setUsername(rs.getString("constructor"));
+                news.setAccount(account);
+                return news;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public void update(News news) {
+        String sql = "UPDATE news SET title = ?,content = ? WHERE no = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, news.getTitle());
+            prepare_stmt.setString(2, news.getContent());
+            prepare_stmt.setInt(3, news.getNo());
+            prepare_stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
+    @Override
+    public void delete(int no) {
+        String sql = "DELETE FROM groupnews WHERE no = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            connection.setAutoCommit(false);
+            prepare_stmt.setInt(1, no);
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM news WHERE no = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setInt(1, no);
+            prepare_stmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
 
 }
