@@ -144,7 +144,6 @@ public class LoginController extends HttpServlet {
                 }
             }
         }
-        
         response.getWriter().print(url);
     }
 
