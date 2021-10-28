@@ -30,10 +30,11 @@
             }
         </style>
         <script>
-            function inputMark(container) {
-                var isMarked = $("#course").val().split(" ")[1];
+            function changeTypeMark(container) {
+                var type = $("#course").val().split(" ")[1];
                 $("#" + container).empty();
-                if (isMarked === 'true') {
+                var scored = 2;
+                if (type == scored) {
                     $("#" + container).append(
                             "<label for='type'> Type : </label> "
                             + "<select name='type' id='type' > "
@@ -138,7 +139,7 @@
             }
         </script>
     </head>
-    <body onload="inputMark('mark')"> 
+    <body onload="changeTypeMark('mark')"> 
         <jsp:include page="header.jsp"></jsp:include>
         <input type="hidden" name="classindex" value="${requestScope.classindex}" id="classindex">
         <input type="hidden" name="studentindex" value="${requestScope.studentindex}" id="studentindex">
@@ -160,9 +161,9 @@
             </tr>
         </table>
         <label for="course">Course : </label>
-        <select name="course" id="course" onchange="inputMark('mark')">
+        <select name="course" id="course" onchange="changeTypeMark('mark')">
             <c:forEach items="${requestScope.class.courses}" var="course">
-                <option value="${course.courseCode.concat(' ').concat(course.isMarked)}">${course.courseName}</option>
+                <option value="${course.courseCode.concat(' ').concat(course.type)}">${course.courseName}</option>
             </c:forEach>
         </select>
         <div id="mark"></div>

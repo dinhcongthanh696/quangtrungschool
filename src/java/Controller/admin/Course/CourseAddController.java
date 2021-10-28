@@ -1,0 +1,48 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Controller.admin.Course;
+
+import DAO.AbstractCourseDAO;
+import DAO.CourseDAO;
+import Model.Course;
+import com.google.gson.Gson;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author My Computer
+ */
+@WebServlet(name = "CourseAddController", urlPatterns = {"/admin-course-add"})
+public class CourseAddController extends HttpServlet {
+    public final AbstractCourseDAO courseDAO;
+
+    public CourseAddController(){
+        courseDAO = new CourseDAO();
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("view/admin/course/courseadd.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String courseCode = request.getParameter("courseCode");
+        String courseName = request.getParameter("courseName");
+        int type = Integer.parseInt(request.getParameter("type"));
+        Course course = new Course(courseCode, courseName, type);
+        courseDAO.insert(course);
+    }
+}

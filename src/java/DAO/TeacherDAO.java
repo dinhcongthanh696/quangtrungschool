@@ -414,7 +414,8 @@ public class TeacherDAO extends AbstractTeacherDAO {
         ClassRoom classroom;
         Course course;
         String sql = "SELECT * FROM teacher "
-                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
+                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code OR schedule.teacher_code IS NULL "
+                + " INNER JOIN course ON schedule.course_code = course.course_code "
                 + " WHERE teacher.teacher_code = ? AND schedule.date >= ? AND schedule.date <= ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
@@ -436,6 +437,8 @@ public class TeacherDAO extends AbstractTeacherDAO {
                     course = new Course();
                     classroom.setClassCode(rs.getString("class_code"));
                     course.setCourseCode(rs.getString("course_code"));
+                    course.setCourseName(rs.getString("course_name"));
+                    course.setType(rs.getInt("type"));
                     schedule.setClassroom(classroom);
                     schedule.setCourse(course);
                     schedule.setActive(rs.getInt("active"));

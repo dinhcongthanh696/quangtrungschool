@@ -35,7 +35,7 @@
             }
 
             function takeAttendance(scheduleindex) {
-                window.location = "/QuangTrungSchool/teacher-schedule-attendance?scheduleindex="+scheduleindex;
+                window.location = "/QuangTrungSchool/teacher-schedule-attendance?scheduleindex=" + scheduleindex;
             }
         </script>
     </head>
@@ -85,6 +85,7 @@
                                     <td>   
                                         Class : <span> ${schedule.classroom.classCode} </span> <br/>
                                     Course : <span> ${schedule.course.courseCode} </span><br/>
+
                                     <c:choose>
                                         <c:when test="${schedule.active eq 0}">
                                             <span>Not Yet</span>
@@ -93,10 +94,12 @@
                                             <span>Closed</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <button class="btn btn-success" onclick="takeAttendance(this.value)" 
-                                                    value="${scheduleindex}">
-                                                Edit attendance
-                                            </button>
+                                            <c:if test="${schedule.course.type != 0}"> <!-- 0 REPERSENT FOR OTHERS ACTIVIETES-->
+                                                <button class="btn btn-success" onclick="takeAttendance(this.value)" 
+                                                        value="${scheduleindex}">
+                                                    Edit attendance
+                                                </button>
+                                            </c:if>
                                         </c:otherwise>    
                                     </c:choose>
                                 </td>

@@ -42,7 +42,8 @@ public class StudentClassMarkController extends BaseAuthorization {
         for (StudentCourse studentCourse : student.getStudentcourses()) {
             double totalCourseScore = 0;
             int totalExamType = 0;
-            if (studentCourse.getCourse().isIsMarked()) {
+            int markedCourse = 2;
+            if (studentCourse.getCourse().getType() == markedCourse) {
                 totalCourseMarked++;
             }
             for (Mark mark : studentCourse.getMarks()) {
@@ -86,9 +87,8 @@ public class StudentClassMarkController extends BaseAuthorization {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
-        if(student.getClasses() == null){
-            studentDAO.getClasses(student);
-        }
+        int activitiesExcept = 0;
+        studentDAO.getClassesCourses(student,activitiesExcept);
         request.getRequestDispatcher("view/web/student/studentmark.jsp").forward(request, response);
     }
 

@@ -32,6 +32,7 @@ public class CourseDAO extends AbstractCourseDAO {
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
                 course.setCourseName(rs.getString("course_name"));
+                course.setType(rs.getInt("type"));
                 courses.add(course);
             }
         } catch (SQLException ex) {
@@ -41,32 +42,19 @@ public class CourseDAO extends AbstractCourseDAO {
     }
 
     @Override
-    public List<Course> getUntakenCourse(String classCode, int year, int semester) {
-        List<Course> courses = new ArrayList<>();
-        String sql = "select * from course as c \n"
-                + "WHERE c.course_code NOT IN\n"
-                + "(\n"
-                + "	SELECT clc.course_code\n"
-                + "	FROM classcourse as clc\n"
-                + "	WHERE clc.class_code = ? AND clc.year = ? AND clc.semester = ?\n"
-                + ")";
+    public void insert(Course course) {
+        String sql = "INSERT INTO course VALUES(?,?,?)";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, classCode);
-            prepare_stmt.setInt(2, year);
-            prepare_stmt.setInt(3, semester);
-            ResultSet rs = prepare_stmt.executeQuery();
-            Course course;
-            while (rs.next()) {
-                course = new Course();
-                course.setCourseCode(rs.getString("course_code"));
-                course.setCourseName(rs.getString("course_name"));
-                courses.add(course);
-            }
+            prepare_stmt.setString(1, course.getCourseCode());
+            prepare_stmt.setString(2, course.getCourseName());
+            prepare_stmt.setInt(3, course.getType());
+            prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(CourseDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return courses;
+        
     }
+
 
 }

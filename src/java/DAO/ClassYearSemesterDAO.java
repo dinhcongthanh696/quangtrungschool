@@ -269,13 +269,13 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
     @Override
     public void getCourses(ClassYearSemester classroom) {
         List<Course> courses = new ArrayList<>();
-        String sql = "select cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.is_marked\n"
+        String sql = "select cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.type \n"
                 + "from classyearsemester as cys inner join schedule as sch ON\n"
                 + "cys.class_code = sch.class_code AND cys.semester = sch.semester AND\n"
                 + "sch.date >= cys.stat_date AND sch.date <= cys.end_date inner join course as c\n"
                 + "on sch.course_code = c.course_code\n"
                 + "WHERE cys.class_code = ? AND cys.year = ? AND cys.semester = ? "
-                + "GROUP BY cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.is_marked";
+                + "GROUP BY cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.type ";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, classroom.getClassroom().getClassCode());
@@ -287,7 +287,7 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
                 course.setCourseName(rs.getString("course_name"));
-                course.setIsMarked(rs.getBoolean("is_marked"));
+                course.setType(rs.getInt("type"));
                 courses.add(course);
             }
         } catch (SQLException ex) {
@@ -328,6 +328,37 @@ public class ClassYearSemesterDAO extends AbstractClassYearSemesterDAO {
             }
         }
         return 0;
+    }
+
+    @Override
+    public void getCourses(ClassYearSemester classroom, int except) {
+        List<Course> courses = new ArrayList<>();
+        String sql = "select cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.type \n"
+                + "from classyearsemester as cys inner join schedule as sch ON\n"
+                + "cys.class_code = sch.class_code AND cys.semester = sch.semester AND\n"
+                + "sch.date >= cys.stat_date AND sch.date <= cys.end_date inner join course as c\n"
+                + "on sch.course_code = c.course_code\n"
+                + "WHERE cys.class_code = ? AND cys.year = ? AND cys.semester = ? AND c.type != ? "
+                + "GROUP BY cys.class_code,cys.year,cys.semester,c.course_code,c.course_name,c.type ";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, classroom.getClassroom().getClassCode());
+            prepare_stmt.setInt(2, classroom.getYear());
+            prepare_stmt.setInt(3, classroom.getSemester());
+            prepare_stmt.setInt(4, except);
+            ResultSet rs = prepare_stmt.executeQuery();
+            Course course;
+            while (rs.next()) {
+                course = new Course();
+                course.setCourseCode(rs.getString("course_code"));
+                course.setCourseName(rs.getString("course_name"));
+                course.setType(rs.getInt("type"));
+                courses.add(course);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassYearSemesterDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        classroom.setCourses(courses);
     }
     
     

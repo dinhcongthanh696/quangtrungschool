@@ -7,6 +7,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/js/functions.js</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/footer.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Mark.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Course/CourseCheckAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/WEB-INF/applicationContext.xml</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/img/hangcay.jpg</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/ClassYearSemester.java</file>
@@ -34,6 +35,8 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/GroupDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/teacher/ScheduleAttendanceController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/header.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/newsdetail.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/course/courseadd.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Student/StudentListController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ClassYearSemesterListController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/studentschedule.jsp</file>
@@ -47,6 +50,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/ClassYearSemesterDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractLearningDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/teacher/TeacherMainClassListController.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/newsdetail.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractClassRoomDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractTeacherDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ClassYearSemesterCheckController.java</file>
@@ -60,6 +64,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Teacher/TeacherCheckAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Group.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/teacherschedule.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Course/CourseAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/news/newslist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/studentdetail.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractScheduleDAO.java</file>
@@ -86,10 +91,12 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/student/studentupdate.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/classstudentlist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/redirect.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/teacher/TeacherNewsDetailController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/NewsDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/header.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/footer.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/studentmark.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/student/StudentNewsDetailController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/class/classyearsemlist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/HomeController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/GroupNews.java</file>

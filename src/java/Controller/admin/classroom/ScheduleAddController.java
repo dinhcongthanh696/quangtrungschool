@@ -70,7 +70,7 @@ public class ScheduleAddController extends BaseAuthorization {
         int year = Integer.parseInt(request.getParameter("year"));
         String raw_classCode = request.getParameter("classCode");
         String raw_courseCode = request.getParameter("course");
-        String raw_teacherCode = request.getParameter("teacher");
+        String raw_teacherCode = (request.getParameter("teacher").isEmpty()) ? null : request.getParameter("teacher");
         String raw_startDate = request.getParameter("startDate");
         String raw_endDate = request.getParameter("endDate");
 

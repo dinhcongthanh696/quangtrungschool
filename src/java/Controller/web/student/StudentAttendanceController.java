@@ -39,9 +39,8 @@ public class StudentAttendanceController extends BaseAuthorization {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
-        if(student.getClasses() == null){
-            studentDAO.getClasses(student);
-        }
+        int activitiesExcept = 0;
+        studentDAO.getClassesCourses(student,activitiesExcept);
         request.getRequestDispatcher("view/web/student/studentattendance.jsp").forward(request, response);
     }
 

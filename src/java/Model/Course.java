@@ -12,7 +12,16 @@ package Model;
 public class Course {
     private String courseCode;
     private String courseName;
-    private boolean isMarked;
+    private int type;
+
+    public Course(String courseCode, String courseName, int type) {
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.type = type;
+    }
+
+    public Course() {
+    }
     
 
     public String getCourseCode() {
@@ -31,12 +40,12 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public boolean isIsMarked() {
-        return isMarked;
+    public int getType() {
+        return type;
     }
 
-    public void setIsMarked(boolean isMarked) {
-        this.isMarked = isMarked;
+    public void setType(int type) {
+        this.type = type;
     }
     
     

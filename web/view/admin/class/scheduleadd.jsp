@@ -38,6 +38,7 @@
                 </select> <br/>
                 <label for="teacher">Teacher : </label>
                 <select name="teacher" id="teacher" class="form-select">
+                    <option value="">All</option>
                     <c:forEach items="${requestScope.teachers}" var="teacher">
                         <option value="${teacher.teacherCode}">${teacher.account.username}</option>
                     </c:forEach>

@@ -93,9 +93,12 @@ public class AccountDAO extends AbstractAccountDAO {
             prepare_stmt.setString(1, account.getUsername());
             ResultSet rs = prepare_stmt.executeQuery();
             News news;
+            Account constructor;
             while(rs.next()){
                 news = new News();
-                news.setAccount(account);
+                constructor = new Account();
+                constructor.setUsername(rs.getString("constructor"));
+                news.setAccount(constructor);
                 news.setContent(rs.getString("content"));
                 news.setNo(rs.getInt("no"));
                 news.setTitle(rs.getString("title"));

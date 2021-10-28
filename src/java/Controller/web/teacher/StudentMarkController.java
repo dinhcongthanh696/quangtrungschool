@@ -51,7 +51,8 @@ public class StudentMarkController extends BaseAuthorization {
         Teacher teacher = (Teacher) session.getAttribute("teacher");
         int classindex = Integer.parseInt(request.getParameter("classindex"));
         ClassYearSemester classroom = teacher.getClasses().get(classindex - 1);
-        classyearsemesterDAO.getCourses(classroom);
+        int activitiesExcept = 0;
+        classyearsemesterDAO.getCourses(classroom,activitiesExcept);
         int studentindex = Integer.parseInt(request.getParameter("studentindex"));
         Student student = classroom.getStudents().get(studentindex - 1);
         studentDAO.getStudentCourses(student, classroom);

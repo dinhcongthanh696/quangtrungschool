@@ -38,9 +38,7 @@ public class ClassListStudentController extends BaseAuthorization {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
-        if(student.getClasses() == null){
-            studentDAO.getClasses(student);
-        }
+        studentDAO.getClasses(student);
         request.getRequestDispatcher("view/web/student/classstudentlist.jsp").forward(request, response);
     }
 

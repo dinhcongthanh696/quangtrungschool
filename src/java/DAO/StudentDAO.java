@@ -312,7 +312,7 @@ public class StudentDAO extends AbstractStudentDAO {
     @Override
     public void getStudentCourses(Student student, ClassYearSemester classyearsemester) {
         List<StudentCourse> courses = new ArrayList<>();
-        String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.is_marked from student as s inner join learning as l on s.student_code = l.student_code\n"
+        String sql = "select m.no,m.course_code,m.exam_type,m.mark,c.type from student as s inner join learning as l on s.student_code = l.student_code\n"
                 + "inner join mark as m on l.student_code = m.student_code AND m.class_code = l.class_code AND m.year = l.year\n"
                 + "AND m.semester = l.semester "
                 + "INNER JOIN course as c ON m.course_code = c.course_code "
@@ -330,11 +330,11 @@ public class StudentDAO extends AbstractStudentDAO {
             StudentCourse studentcourse = new StudentCourse();
             studentcourse.setCourse(new Course());
             while (rs.next()) {
-                if (! rs.getString("course_code").equals(studentcourse.getCourse().getCourseCode()) ) {
+                if (!rs.getString("course_code").equals(studentcourse.getCourse().getCourseCode())) {
                     studentcourse = new StudentCourse();
                     course = new Course();
                     course.setCourseCode(rs.getString("course_code"));
-                    course.setIsMarked(rs.getBoolean("is_marked"));
+                    course.setType(rs.getInt("type"));
                     studentcourse.setStudent(student);
                     studentcourse.setCourse(course);
                     courses.add(studentcourse);
@@ -380,7 +380,7 @@ public class StudentDAO extends AbstractStudentDAO {
     }
 
     @Override
-    public void getClasses(Student student) {
+    public void getClassesCourses(Student student, int except) {
         List<ClassYearSemester> classes = new ArrayList<>();
         String sql = "SELECT cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code FROM student as s "
                 + "inner join learning as l\n"
@@ -388,11 +388,13 @@ public class StudentDAO extends AbstractStudentDAO {
                 + "on l.semester = cys.semester AND l.year = cys.year AND l.class_code = cys.class_code\n"
                 + "inner join schedule as sche on sche.date >= cys.stat_date AND sche.date <= cys.end_date AND \n"
                 + "sche.semester = cys.semester AND sche.class_code = cys.class_code\n"
-                + "WHERE s.student_code = ? "
+                + "inner join course as c on sche.course_code = c.course_code "
+                + "WHERE s.student_code = ? AND c.type != ? "
                 + " GROUP BY cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getStudentCode());
+            prepare_stmt.setInt(2, except);
             ResultSet rs = prepare_stmt.executeQuery();
             ClassYearSemester classyearsemester = new ClassYearSemester();
             ClassRoom classroom;
@@ -528,6 +530,40 @@ public class StudentDAO extends AbstractStudentDAO {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         student.setStudentAttendances(studentAttendances);
+    }
+
+    @Override
+    public void getClasses(Student student) {
+        List<ClassYearSemester> classes = new ArrayList<>();
+        String sql = "SELECT * FROM student as s inner join learning as l on s.student_code = l.student_code "
+                + " inner join classyearsemester as cys on l.year = cys.year AND l.semester = cys.semester AND "
+                + "l.class_code = cys.class_code "
+                + "WHERE s.student_code = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, student.getStudentCode());
+            ResultSet rs = prepare_stmt.executeQuery();
+            ClassYearSemester classyearsemester;
+            Teacher teacher;
+            ClassRoom classroom;
+            while (rs.next()) {
+                classyearsemester = new ClassYearSemester();
+                classroom = new ClassRoom();
+                teacher = new Teacher();
+                teacher.setTeacherCode(rs.getString("homeroom_teacher"));
+                classroom.setClassCode(rs.getString("class_code"));
+                classyearsemester.setClassroom(classroom);
+                classyearsemester.setHomeroomTeacher(teacher);
+                classyearsemester.setStartDate(rs.getDate("stat_date"));
+                classyearsemester.setEndDate(rs.getDate("end_date"));
+                classyearsemester.setYear(rs.getInt("year"));
+                classyearsemester.setSemester(rs.getInt("semester"));
+                classes.add(classyearsemester);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        student.setClasses(classes);
     }
 
 }

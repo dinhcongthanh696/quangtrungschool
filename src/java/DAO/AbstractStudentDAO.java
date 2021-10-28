@@ -32,6 +32,8 @@ public abstract class AbstractStudentDAO extends BaseDAO {
     
     public abstract void getStudentCourses(Student student,ClassYearSemester classyearsemester);
     
+    public abstract void getClassesCourses(Student student,int except);
+    
     public abstract void getClasses(Student student);
     
     public abstract Student getByUsername(Account account);

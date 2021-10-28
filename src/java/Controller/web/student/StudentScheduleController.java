@@ -48,7 +48,6 @@ public class StudentScheduleController extends BaseAuthorization {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
         studentDAO.getStudentAttendance(student, currentWeek);
-        
         request.setAttribute("year", year);
         request.setAttribute("week", currentWeek);
         request.getRequestDispatcher("view/web/student/studentschedule.jsp").forward(request, response);

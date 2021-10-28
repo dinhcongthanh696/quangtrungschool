@@ -14,5 +14,5 @@ import java.util.List;
  */
 public abstract class AbstractCourseDAO extends BaseDAO{
     public abstract List<Course> getAll();
-    public abstract List<Course> getUntakenCourse(String classCode,int year,int semester);
+    public abstract void insert(Course course);
 }
