@@ -8,6 +8,7 @@ package DAO;
 import Model.Account;
 import Model.Feature;
 import Model.Group;
+import Model.News;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -77,6 +78,34 @@ public class AccountDAO extends AbstractAccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return account;
+    }
+
+    @Override
+    public void getGroupOfNews(Account account) {
+        String sql = "SELECT DISTINCT TOP 5 n.no,n.title,n.content,n.posted_date,n.constructor "
+                + " FROM account as a inner join groupaccount as gc on a.username = gc.username "
+                + " inner join groupnews as gn on gc.gid = gn.gid inner join news as n on gn.no = n.no "
+                + " WHERE a.username = ?"
+                + " order by posted_date desc";
+        List<News> group_of_news = new ArrayList<>();
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, account.getUsername());
+            ResultSet rs = prepare_stmt.executeQuery();
+            News news;
+            while(rs.next()){
+                news = new News();
+                news.setAccount(account);
+                news.setContent(rs.getString("content"));
+                news.setNo(rs.getInt("no"));
+                news.setTitle(rs.getString("title"));
+                news.setPostedDate(rs.getDate("posted_date"));
+                group_of_news.add(news);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        account.setGroup_of_news(group_of_news);
     }
 
 }

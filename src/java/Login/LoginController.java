@@ -63,17 +63,16 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account account;
+        Account account  = (Account) session.getAttribute("account");
         Cookie[] cookies = request.getCookies();
         Cookie cookieUsername = getCookie("username", cookies);
-        if (cookieUsername != null) {
+        if (cookieUsername != null && account == null) {
             account = accountDAO.getById(cookieUsername.getValue());
             Cookie cookieRole = getCookie("roleNumber", cookies);
             account.setRoleNumber(Integer.parseInt(cookieRole.getValue()));
             session.setAttribute("account", account);
         }
 
-        account = (Account) session.getAttribute("account");
         if (account != null) {
             String url = "";
             switch (account.getRoleNumber()) {
@@ -133,7 +132,7 @@ public class LoginController extends HttpServlet {
                             url = "admin-home";
                             break;
                     }
-                    if (request.getParameter("remember") != null) {
+                    if (!request.getParameter("remember").isEmpty()) {
                         Cookie cookieUsername = new Cookie("username", username);
                         Cookie cookieRole = new Cookie("roleNumber", account.getRoleNumber() + "");
                         cookieUsername.setMaxAge(COOKIETIMEOUT);

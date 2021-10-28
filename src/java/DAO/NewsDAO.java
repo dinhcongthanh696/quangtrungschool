@@ -229,6 +229,33 @@ public class NewsDAO extends AbstractNewsDAO {
             }
         }
     }
+
+    @Override
+    public News getById(int no, Account account) {
+        String sql = "SELECT n.no,n.title,n.content,n.posted_date,n.constructor "
+                + " FROM account as a inner join groupaccount as gc on a.username = gc.username "
+                + " inner join groupnews as gn on gc.gid = gn.gid inner join news as n on gn.no = n.no "
+                + " WHERE a.username = ? AND n.no = ?" ;
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, account.getUsername());
+            prepare_stmt.setInt(2, no);
+            ResultSet rs = prepare_stmt.executeQuery();
+            News news;
+            if(rs.next()){
+                news = new News();
+                news.setAccount(account);
+                news.setContent(rs.getString("content"));
+                news.setNo(rs.getInt("no"));
+                news.setTitle(rs.getString("title"));
+                news.setPostedDate(rs.getDate("posted_date"));
+                return news;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
     
 

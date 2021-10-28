@@ -5,7 +5,12 @@
  */
 package Controller.web.student;
 
+import DAO.AbstractAccountDAO;
+import DAO.AbstractNewsDAO;
+import DAO.AccountDAO;
+import DAO.NewsDAO;
 import Login.BaseAuthorization;
+import Model.Account;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,7 +26,13 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "WebHomeController", urlPatterns = {"/web-student-home"})
 public class HomeController extends BaseAuthorization {
-
+    private final AbstractNewsDAO newsDAO;
+    private final AbstractAccountDAO accountDAO;
+    public HomeController(){
+        newsDAO = new NewsDAO();
+        accountDAO = new AccountDAO();
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -37,6 +48,9 @@ public class HomeController extends BaseAuthorization {
             response.sendRedirect("login");
             return;
         }
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        accountDAO.getGroupOfNews(account);
         request.getRequestDispatcher("view/web/student/home.jsp").forward(request, response);
     }
 

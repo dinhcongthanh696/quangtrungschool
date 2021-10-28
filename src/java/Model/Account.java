@@ -19,6 +19,7 @@ public class Account implements Serializable{
     private int roleNumber;
     private List<Group> groups = new ArrayList<>();
     private List<Feature> features = new ArrayList<>();
+    private List<News> group_of_news;
 
     public Account(String username, String password) {
         this.username = username;
@@ -27,6 +28,15 @@ public class Account implements Serializable{
 
     public Account() {
     }
+
+    public List<News> getGroup_of_news() {
+        return group_of_news;
+    }
+
+    public void setGroup_of_news(List<News> group_of_news) {
+        this.group_of_news = group_of_news;
+    }
+    
 
     public List<Group> getGroups() {
         return groups;
