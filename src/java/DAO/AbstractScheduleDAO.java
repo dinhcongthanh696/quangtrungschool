@@ -15,7 +15,7 @@ import java.util.List;
  * @author My Computer
  */
 public abstract class AbstractScheduleDAO extends BaseDAO{
-    public abstract List<Schedule> getSlotsOfClassInWeek(String classCode,Week week);
+    public abstract List<Schedule> getSchedulesOfClassInWeek(String classCode,Week week);
     public abstract void insert(Schedule schedule);
     public abstract void delete(Schedule schedule);
     public abstract void updateTeacherAndActive(Schedule schedule);

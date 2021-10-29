@@ -88,13 +88,17 @@
                 var slot = str_split[1];
                 var teacherCode = str_split[2];
                 var courseCode = str_split[3];
+                var type = str_split[4];
+                var active = str_split[5];
                 var year = $("#year").val();
                 var semester = $("#semester").val();
                 var classCode = $("#classCode").val();
                 var startDate = $("#startDate").val();
                 var endDate = $("#endDate").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-update?year=" + year + "&day=" +
-                        day + "&classCode=" + classCode + "&slot=" + slot + "&startDate=" + startDate + "&endDate=" + endDate;
+                day + "&classCode=" + classCode + "&slot=" + slot + "&startDate=" 
+                + startDate + "&endDate=" + endDate + "&type=" + type + "&courseCode="+courseCode+"&teacherCode="+teacherCode
+                + "&semester="+semester+"&active="+active;
             }
         </script>
     </head>
@@ -151,7 +155,8 @@
                                                 Teacher : <span> ${schedule.teacher.teacherCode} </span>
                                             </p>
                                             <button class="btn btn-primary" onclick="doUpdate(this.value)" 
-                                                    value="${''.concat(day[0]).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode).concat(' ').concat(schedule.course.courseCode)}
+                                                    value="${''.concat(day[0]).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)
+                                                             .concat(' ').concat(schedule.course.courseCode).concat(' ').concat(schedule.course.type).concat(' ').concat(schedule.active)}
                                                     ">
                                                 Edit
                                             </button>

@@ -30,8 +30,11 @@ import java.util.logging.Logger;
 public class ScheduleDAO extends AbstractScheduleDAO {
 
     @Override
-    public List<Schedule> getSlotsOfClassInWeek(String classCode, Week week) {
-        String sql = "SELECT * FROM schedule WHERE class_code = ? ";
+    public List<Schedule> getSchedulesOfClassInWeek(String classCode, Week week) {
+        String sql = "SELECT * FROM schedule "
+                + "left join course on schedule.course_code = course.course_code "
+                + "WHERE class_code = ? ";
+                
         List<Date> days = new ArrayList<>();
         List<Schedule> schedules = new ArrayList<>();
         Date day;
@@ -61,6 +64,7 @@ public class ScheduleDAO extends AbstractScheduleDAO {
                 classroom.setClassCode(rs.getString("class_code"));
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
+                course.setType(rs.getInt("type"));
                 teacher = new Teacher();
                 teacher.setTeacherCode(rs.getString("teacher_code"));
                 schedule.setClassroom(classroom);

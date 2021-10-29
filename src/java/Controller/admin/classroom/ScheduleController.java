@@ -118,7 +118,7 @@ public class ScheduleController extends BaseAuthorization {
         Week currentWeek = (raw_weekNum != null) ? year.getWeeks().get(Integer.parseInt(raw_weekNum) - calendarStartDate.get(Calendar.WEEK_OF_YEAR))
                 : year.getWeeks().get(0);
 
-        List<Schedule> schedules = scheduleDAO.getSlotsOfClassInWeek(raw_classCode, currentWeek);
+        List<Schedule> schedules = scheduleDAO.getSchedulesOfClassInWeek(raw_classCode, currentWeek);
 
         request.setAttribute("classCode", raw_classCode);
         request.setAttribute("currentWeek", currentWeek);

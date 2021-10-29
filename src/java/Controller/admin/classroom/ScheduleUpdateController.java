@@ -45,13 +45,12 @@ public class ScheduleUpdateController extends BaseAuthorization {
             throws ServletException, IOException {
         String raw_date = request.getParameter("day");
         String raw_slot = request.getParameter("slot");
-        String raw_classCode = request.getParameter("classCode");
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
-        Schedule schedule = scheduleDAO.getById(raw_classCode, slot, date);
-        List<Teacher> teachers = teacherDAO.getFreeTeacher(date, slot);
-        request.setAttribute("schedule", schedule);
+        List<Teacher> teachers = teacherDAO.getAll();
         request.setAttribute("teachers", teachers);
+        request.setAttribute("date", date);
+        request.setAttribute("slot", slot);
         request.getRequestDispatcher("view/admin/class/scheduleupdate.jsp").forward(request, response);
     }
 
