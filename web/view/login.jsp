@@ -46,6 +46,7 @@
         </style>
         <script>
              function doLogin(){
+                 $("#alert").empty();
                  var username = $("#username").val();
                  var password = $("#password").val();
                  var role = $("#role").val();
@@ -65,10 +66,9 @@
                     success : function(response){
                         // ! -->  alert message , window.location
                         if(response.length === 0){
-                            $("#alert").empty();
                             $("#alert").append("<span class='loginfail'>LOGIN FAIL</span>");
                         }else{
-                            window.location = "/QuangTrungSchool/"+response;
+                            window.location = "/QuangTrungSchool/login";
                         }
                     }
                  }); 

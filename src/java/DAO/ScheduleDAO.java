@@ -115,15 +115,16 @@ public class ScheduleDAO extends AbstractScheduleDAO {
     }
 
     @Override
-    public void updateTeacher(Schedule schedule) {
-        String sql = "UPDATE schedule SET teacher_code = ? WHERE "
+    public void updateTeacherAndActive(Schedule schedule) {
+        String sql = "UPDATE schedule SET teacher_code = ?,active = ? WHERE "
                 + "class_code = ? AND date = ? AND slot = ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, schedule.getTeacher().getTeacherCode());
-            prepare_stmt.setString(2, schedule.getClassroom().getClassCode());
-            prepare_stmt.setDate(3, schedule.getDate());
-            prepare_stmt.setInt(4, schedule.getSlot());
+            prepare_stmt.setInt(2, schedule.getActive());
+            prepare_stmt.setString(3, schedule.getClassroom().getClassCode());
+            prepare_stmt.setDate(4, schedule.getDate());
+            prepare_stmt.setInt(5, schedule.getSlot());
             prepare_stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -183,6 +184,41 @@ public class ScheduleDAO extends AbstractScheduleDAO {
         } catch (SQLException ex) {
             Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public Schedule getById(String classCode, int slot, java.sql.Date date) {
+        String sql = "SELECT * FROM schedule inner join course on schedule.course_code = course.course_code "
+                + "WHERE class_code = ? AND date = ? AND slot = ?";
+        try {
+            PreparedStatement prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, classCode);
+            prepare_stmt.setInt(3, slot);
+            prepare_stmt.setDate(2, date);
+            ResultSet rs = prepare_stmt.executeQuery();
+            if(rs.next()){
+                Schedule schedule = new Schedule();
+                ClassRoom classroom = new ClassRoom();
+                Course course = new Course();
+                course.setType(rs.getInt("type"));
+                course.setCourseCode(rs.getString("course_code"));
+                classroom.setClassCode(rs.getString("class_code"));
+                Teacher teacher = new Teacher();
+                teacher.setTeacherCode(rs.getString("teacher_code"));
+                schedule.setActive(rs.getInt("active"));
+                schedule.setSlot(rs.getInt("slot"));
+                schedule.setClassroom(classroom);
+                schedule.setTeacher(teacher);
+                schedule.setDate(rs.getDate("date"));
+                schedule.setCourse(course);
+                schedule.setSemester(rs.getInt("semester"));
+                return schedule;
+            }
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
 }

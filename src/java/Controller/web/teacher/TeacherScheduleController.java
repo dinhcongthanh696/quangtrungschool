@@ -104,10 +104,8 @@ public class TeacherScheduleController extends BaseAuthorization {
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
         teacherDAO.getSchedules(teacher, currentWeek);
-    //    int scheduleindex = getScheduleIndex(teacher, currentWeek); remove
         request.setAttribute("year", year);
         request.setAttribute("week", currentWeek);
-    //    request.setAttribute("scheduleindex", scheduleindex);    remove
         request.getRequestDispatcher("view/web/teacher/teacherschedule.jsp").forward(request, response);
     }
 

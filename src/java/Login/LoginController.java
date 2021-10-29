@@ -110,7 +110,7 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "";
+        String accept = "";
         String username = request.getParameter("username");
         Account account = accountDAO.getById(username);
         if (account != null) {
@@ -121,17 +121,7 @@ public class LoginController extends HttpServlet {
                     HttpSession session = request.getSession();
                     account.setRoleNumber(roleNumber);
                     session.setAttribute("account", account);
-                    switch (account.getRoleNumber()) {
-                        case 1:
-                            url = "web-student-home";
-                            break;
-                        case 2:
-                            url = "teacher-home";
-                            break;
-                        case 4:
-                            url = "admin-home";
-                            break;
-                    }
+                    accept = "true";
                     if (!request.getParameter("remember").isEmpty()) {
                         Cookie cookieUsername = new Cookie("username", username);
                         Cookie cookieRole = new Cookie("roleNumber", account.getRoleNumber() + "");
@@ -143,7 +133,7 @@ public class LoginController extends HttpServlet {
                 }
             }
         }
-        response.getWriter().print(url);
+        response.getWriter().print(accept);
     }
 
 }

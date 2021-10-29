@@ -73,17 +73,19 @@
                                     <td>   
                                         Class : <span> ${attendance.schedule.classroom.classCode} </span> <br/>
                                     Course : <span> ${attendance.schedule.course.courseCode} </span><br/>
-                                    <c:choose>
-                                        <c:when test="${attendance.status eq 0}" >
-                                            ( Not Yet )
-                                        </c:when>
-                                        <c:when test="${attendance.status eq 1}" >
-                                            ( <span id="attended">Attended</span> )
-                                        </c:when>
-                                        <c:otherwise>
-                                            ( <span id="absent">Absent</span> )
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <c:if test="${attendance.schedule.course.type != 0}">
+                                        <c:choose>
+                                            <c:when test="${attendance.status eq 0}" >
+                                                ( Not Yet )
+                                            </c:when>
+                                            <c:when test="${attendance.status eq 1}" >
+                                                ( <span id="attended">Attended</span> )
+                                            </c:when>
+                                            <c:otherwise>
+                                                ( <span id="absent">Absent</span> )
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>        
                                 </td>
                             </c:if>
                         </c:forEach>

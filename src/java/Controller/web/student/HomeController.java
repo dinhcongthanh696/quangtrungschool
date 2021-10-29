@@ -38,7 +38,7 @@ public class HomeController extends BaseAuthorization {
 
         if (request.getParameter("action") != null) {
             HttpSession session = request.getSession();
-            session.removeAttribute("account");
+            session.setAttribute("account", null);
             for (Cookie cookie : request.getCookies()) {
                 if (!cookie.getName().equals("JSESSIONID")) {
                     cookie.setMaxAge(0);

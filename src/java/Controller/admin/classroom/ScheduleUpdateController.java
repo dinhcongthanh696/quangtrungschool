@@ -5,12 +5,15 @@
  */
 package Controller.admin.classroom;
 
+import DAO.AbstractCourseDAO;
 import DAO.AbstractScheduleDAO;
 import DAO.AbstractTeacherDAO;
+import DAO.CourseDAO;
 import DAO.ScheduleDAO;
 import DAO.TeacherDAO;
 import Login.BaseAuthorization;
 import Model.ClassRoom;
+import Model.Course;
 import Model.Schedule;
 import Model.Teacher;
 import java.io.IOException;
@@ -43,24 +46,12 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String raw_date = request.getParameter("day");
         String raw_slot = request.getParameter("slot");
         String raw_classCode = request.getParameter("classCode");
-        String raw_semester = request.getParameter("semester");
-        String raw_year = request.getParameter("year");
-        String raw_teacherCode = request.getParameter("teacherCode");
-        String raw_courseCode = request.getParameter("courseCode");
-
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
-        int semester = Integer.parseInt(raw_semester);
-        int year = Integer.parseInt(raw_year);
+        Schedule schedule = scheduleDAO.getById(raw_classCode, slot, date);
         List<Teacher> teachers = teacherDAO.getFreeTeacher(date, slot);
-        request.setAttribute("semester", semester);
-        request.setAttribute("slot", slot);
-        request.setAttribute("classCode", raw_classCode);
-        request.setAttribute("date", date);
-        request.setAttribute("teacherCode", raw_teacherCode);
-        request.setAttribute("year", year);
+        request.setAttribute("schedule", schedule);
         request.setAttribute("teachers", teachers);
-        request.setAttribute("courseCode", raw_courseCode);
         request.getRequestDispatcher("view/admin/class/scheduleupdate.jsp").forward(request, response);
     }
 
@@ -71,9 +62,10 @@ public class ScheduleUpdateController extends BaseAuthorization {
         int slot = Integer.parseInt(request.getParameter("slot"));
         Date date = Date.valueOf(request.getParameter("date"));
         int semester = Integer.parseInt(request.getParameter("semester"));
-        String teacherCode = request.getParameter("teacher");
+        String teacherCode = request.getParameter("teacher").isEmpty() ? null : request.getParameter("teacher");
         String raw_startDate = request.getParameter("startDate");
         String raw_endDate = request.getParameter("endDate");
+        int active = Integer.parseInt(request.getParameter("active"));
 
         Schedule schedule = new Schedule();
         ClassRoom classroom = new ClassRoom();
@@ -84,7 +76,8 @@ public class ScheduleUpdateController extends BaseAuthorization {
         schedule.setClassroom(classroom);
         schedule.setSlot(slot);
         schedule.setDate(date);
-        scheduleDAO.updateTeacher(schedule);
+        schedule.setActive(active);
+        scheduleDAO.updateTeacherAndActive(schedule);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);

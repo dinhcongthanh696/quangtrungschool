@@ -94,8 +94,7 @@
                 var startDate = $("#startDate").val();
                 var endDate = $("#endDate").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-update?year=" + year + "&day=" +
-                        day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester + "&teacherCode=" + teacherCode
-                        + "&startDate=" + startDate + "&endDate=" + endDate + "&courseCode=" + courseCode;
+                        day + "&classCode=" + classCode + "&slot=" + slot + "&startDate=" + startDate + "&endDate=" + endDate;
             }
         </script>
     </head>

@@ -478,11 +478,12 @@ public class StudentDAO extends AbstractStudentDAO {
     public void getStudentAttendance(Student student, Week week) {
         List<StudentAttendance> studentAttendances = new ArrayList<>();
         SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
-        String sql = "select sche.class_code,sche.course_code,sche.date,sche.slot,sche.teacher_code,sche.attendance from student as s \n"
+        String sql = "select sche.class_code,sche.course_code,sche.date,sche.slot,sche.teacher_code,sche.attendance,c.type from student as s \n"
                 + "inner join learning as l on s.student_code = l.student_code\n"
                 + "inner join classyearsemester as cys on l.class_code = cys.class_code AND l.semester = cys.semester AND l.year = cys.year\n"
                 + "inner join schedule as sche on cys.class_code = sche.class_code AND cys.semester = sche.semester AND \n"
                 + "sche.date >= cys.stat_date AND sche.date <= cys.end_date "
+                + "inner join course as c on sche.course_code = c.course_code "
                 + "WHERE s.student_code = ? AND sche.date >= ? AND sche.date <= ?";
         try {
             PreparedStatement prepapre_stmt = connection.prepareStatement(sql);
@@ -510,6 +511,7 @@ public class StudentDAO extends AbstractStudentDAO {
                     schedule.setAttendance(rs.getString("attendance"));
                     Course course = new Course();
                     course.setCourseCode(rs.getString("course_code"));
+                    course.setType(rs.getInt("type"));
                     schedule.setCourse(course);
                     stuAttendance = new StudentAttendance();
                     stuAttendance.setSchedule(schedule);
