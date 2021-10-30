@@ -19,7 +19,7 @@
                 <form action="/QuangTrungSchool/admin-classyearsemester-schedule-update" method="POST">
                     <input type="hidden" name="classCode" value="${param.classCode}">
                 Class Code : <input disabled="disabled" value="${param.classCode}" class="form-control">
-                Teacher Code :  <input disabled="disabled" value="${empty param.teacherCode ? 'None' : ""}" class="form-control"> 
+                Teacher Code :  <input disabled="disabled" value="${empty param.teacherCode ? 'None' : param.teacherCode}" class="form-control"> 
                 Course Code :   <input disabled="disabled" value="${param.courseCode}" class="form-control">
                 <input type="hidden" name="year" value="${param.year}">
                 Year :  <input disabled="disabled" value="${param.year}" class="form-control">    
@@ -35,7 +35,7 @@
                 End Date : <input disabled="disabled" value="${param.endDate}" class="form-control">
                 <label for="teacher">Change Teacher : </label>
                 <select id="teacher" name="teacher" class="form-select">
-                    <option value="${param.teacherCode}" selected="selected">${empty param.teacherCode ? 'None' : ""}</option>
+                    <option value="${param.teacherCode}" selected="selected">${empty param.teacherCode ? 'None' : param.teacherCode}</option>
                     <c:forEach items="${requestScope.teachers}" var="teacher">
                         <option value="${teacher.teacherCode}">
                             ${teacher.account.username}

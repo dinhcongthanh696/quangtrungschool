@@ -57,7 +57,6 @@
             }
 
             function checkDuplidate() {
-                var classCode = $(".right #classroom").val();
                 var year = $(".right #year").val();
                 var semester = $("input[type=radio]:checked").val();
                 var totalClasses = $("#totalClasses").val();
@@ -87,8 +86,7 @@
                     <h4>Student Code: ${param.studentCode} </h4>
                 <input type="hidden" name="studentCode" value="${param.studentCode}"> <br/>
                 <label for="classroom">Class Room: </label>
-                <select id="classroom" name="classroom" class="form-select" required="required" onchange="checkDuplidate()">
-                    <option value="">None</option>
+                <select id="classroom" name="classroom" class="form-select">
                     <c:forEach items="${requestScope.classrooms}" var="classroom">
                         <option value="${classroom.classCode}">${classroom.classCode}</option>
                     </c:forEach>
