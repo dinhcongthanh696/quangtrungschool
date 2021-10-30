@@ -280,12 +280,15 @@ public class TeacherDAO extends AbstractTeacherDAO {
 
     @Override
     public List<Teacher> getFreeTeacher(Date date, int slot) {
-        String sql = "select * from teacher INNER JOIN account ON teacher.username = account.username "
-                + "WHERE teacher_code NOT IN \n"
-                + "(\n"
-                + "	SELECT sch.teacher_code FROM schedule sch\n"
-                + "	WHERE sch.slot = ? AND sch.date = ?\n"
-                + ")";
+        String sql = "select * from teacher \n"
+                + "   WHERE teacher_code NOT IN (\n"
+                + "          select teacher_code from teacher INNER JOIN account ON teacher.username = account.username \n"
+                + "          WHERE teacher_code IN \n"
+                + "	     (\n"
+                + "			SELECT sch.teacher_code FROM schedule sch\n"
+                + "                	WHERE sch.slot = ?  AND sch.date = ?\n"
+                + "          )\n"
+                + "			         )";
         List<Teacher> teachers = new ArrayList<>();
         Account account;
         Teacher teacher;
@@ -304,7 +307,6 @@ public class TeacherDAO extends AbstractTeacherDAO {
                 teacher.setEmail(rs.getString("teacher_email"));
                 teacher.setPhone(rs.getString("teacher_phone"));
                 account.setUsername(rs.getString("username"));
-                account.setPassword(rs.getString("password"));
                 teacher.setAccount(account);
                 teachers.add(teacher);
             }
@@ -355,8 +357,8 @@ public class TeacherDAO extends AbstractTeacherDAO {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getTeacherCode());
             ResultSet rs = prepare_stmt.executeQuery();
-            while(rs.next()){
-                if(rs.getString("class_code") != null){
+            while (rs.next()) {
+                if (rs.getString("class_code") != null) {
                     classyearsemester = new ClassYearSemester();
                     classroom = new ClassRoom();
                     classroom.setClassCode(rs.getString("class_code"));
@@ -388,17 +390,17 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt.setString(1, teacher.getTeacherCode());
             ResultSet rs = prepare_stmt.executeQuery();
             while (rs.next()) {
-                    schedule = new Schedule();
-                    classroom = new ClassRoom();
-                    course = new Course();
-                    classroom.setClassCode(rs.getString("class_code"));
-                    course.setCourseCode(rs.getString("course_code"));
-                    schedule.setClassroom(classroom);
-                    schedule.setCourse(course);
-                    schedule.setActive(rs.getInt("active"));
-                    schedule.setDate(rs.getDate("date"));
-                    schedule.setSlot(rs.getInt("slot"));
-                    schedules.add(schedule);
+                schedule = new Schedule();
+                classroom = new ClassRoom();
+                course = new Course();
+                classroom.setClassCode(rs.getString("class_code"));
+                course.setCourseCode(rs.getString("course_code"));
+                schedule.setClassroom(classroom);
+                schedule.setCourse(course);
+                schedule.setActive(rs.getInt("active"));
+                schedule.setDate(rs.getDate("date"));
+                schedule.setSlot(rs.getInt("slot"));
+                schedules.add(schedule);
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,7 +416,7 @@ public class TeacherDAO extends AbstractTeacherDAO {
         ClassRoom classroom;
         Course course;
         String sql = "SELECT * FROM teacher "
-                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code OR schedule.teacher_code IS NULL "
+                + " INNER JOIN schedule ON teacher.teacher_code = schedule.teacher_code "
                 + " INNER JOIN course ON schedule.course_code = course.course_code "
                 + " WHERE teacher.teacher_code = ? AND schedule.date >= ? AND schedule.date <= ?";
         try {
@@ -432,19 +434,19 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt.setDate(3, new java.sql.Date(last_day_of_week.getTime().getTime()));
             ResultSet rs = prepare_stmt.executeQuery();
             while (rs.next()) {
-                    schedule = new Schedule();
-                    classroom = new ClassRoom();
-                    course = new Course();
-                    classroom.setClassCode(rs.getString("class_code"));
-                    course.setCourseCode(rs.getString("course_code"));
-                    course.setCourseName(rs.getString("course_name"));
-                    course.setType(rs.getInt("type"));
-                    schedule.setClassroom(classroom);
-                    schedule.setCourse(course);
-                    schedule.setActive(rs.getInt("active"));
-                    schedule.setDate(rs.getDate("date"));
-                    schedule.setSlot(rs.getInt("slot"));
-                    schedules.add(schedule);
+                schedule = new Schedule();
+                classroom = new ClassRoom();
+                course = new Course();
+                classroom.setClassCode(rs.getString("class_code"));
+                course.setCourseCode(rs.getString("course_code"));
+                course.setCourseName(rs.getString("course_name"));
+                course.setType(rs.getInt("type"));
+                schedule.setClassroom(classroom);
+                schedule.setCourse(course);
+                schedule.setActive(rs.getInt("active"));
+                schedule.setDate(rs.getDate("date"));
+                schedule.setSlot(rs.getInt("slot"));
+                schedules.add(schedule);
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -458,7 +460,7 @@ public class TeacherDAO extends AbstractTeacherDAO {
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             ResultSet rs = prepare_stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getInt("totalteachers");
             }
         } catch (SQLException ex) {
