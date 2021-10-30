@@ -39,9 +39,9 @@ public class ClassYearSemesterListController extends BaseAuthorization {
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String raw_classperpage = request.getParameter("classperpage");
-        if(raw_classperpage != null && !raw_classperpage.isEmpty()){
+        if (raw_classperpage != null && !raw_classperpage.isEmpty()) {
             CLASSPERPAGE = Integer.parseInt(raw_classperpage);
-        } 
+        }
         String query = request.getParameter("query");
         int pageId = (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
         int pageNeeded = 1;
@@ -78,10 +78,12 @@ public class ClassYearSemesterListController extends BaseAuthorization {
         request.setAttribute("totalsearchedclasses", totalClassesSearched);
         request.setAttribute("pageId", pageId);
         request.setAttribute("totalPage", pageNeeded);
-        if(CLASSPERPAGE > searchedClaseses.size()){
+        if (CLASSPERPAGE > searchedClaseses.size() && !searchedClaseses.isEmpty()) {
             CLASSPERPAGE = searchedClaseses.size();
         }
-        request.setAttribute("classperpage", CLASSPERPAGE);
+        if (!searchedClaseses.isEmpty()) {
+            request.setAttribute("classperpage", CLASSPERPAGE);
+        }
         request.getRequestDispatcher("view/admin/class/classyearsemlist.jsp").forward(request, response);
 
     }

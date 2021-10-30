@@ -95,8 +95,9 @@ public class StudentDAO extends AbstractStudentDAO {
                     account.setUsername(rs.getString("username"));
                     account.setPassword(rs.getString("password"));
                     student.setAccount(account);
+                    student.setClasses(new ArrayList<>());
                 }
-                if (rs.getString("class_code") == null) {
+                if (rs.getString("class_code") != null) {
                     classyearsemester = new ClassYearSemester();
                     classroom = new ClassRoom();
                     classroom.setClassCode(rs.getString("class_code"));

@@ -47,7 +47,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String raw_slot = request.getParameter("slot");
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
-        List<Teacher> teachers = teacherDAO.getAll();
+        List<Teacher> teachers = teacherDAO.getFreeTeacher(date, slot);
         request.setAttribute("teachers", teachers);
         request.setAttribute("date", date);
         request.setAttribute("slot", slot);
