@@ -78,12 +78,6 @@ public class ClassYearSemesterListController extends BaseAuthorization {
         request.setAttribute("totalsearchedclasses", totalClassesSearched);
         request.setAttribute("pageId", pageId);
         request.setAttribute("totalPage", pageNeeded);
-        if (CLASSPERPAGE > searchedClaseses.size() && !searchedClaseses.isEmpty()) {
-            CLASSPERPAGE = searchedClaseses.size();
-        }
-        if (!searchedClaseses.isEmpty()) {
-            request.setAttribute("classperpage", CLASSPERPAGE);
-        }
         request.getRequestDispatcher("view/admin/class/classyearsemlist.jsp").forward(request, response);
 
     }

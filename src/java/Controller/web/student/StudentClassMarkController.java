@@ -35,6 +35,8 @@ public class StudentClassMarkController extends BaseAuthorization {
     }
 
     public double getCetificate(Student student) {
+        if(student.getStudentcourses().isEmpty()) return 0;
+        
         int totalFinalExam = 0;
         double totalScore = 0;
         int totalCourseMarked = 0;
@@ -101,6 +103,7 @@ public class StudentClassMarkController extends BaseAuthorization {
         ClassYearSemester classyearsemester = student.getClasses().get(classindex - 1);
         studentDAO.getStudentCourses(student, classyearsemester);
         double averageScore = getCetificate(student);
+        System.out.println(averageScore);
         request.setAttribute("averageScore", averageScore);
         request.getRequestDispatcher("view/web/student/studentmarkdetail.jsp").forward(request, response);
     }
