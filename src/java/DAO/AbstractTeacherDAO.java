@@ -34,7 +34,7 @@ public abstract class AbstractTeacherDAO extends BaseDAO{
     public abstract List<Teacher> getFreeTeacher(Date date,int slot);
     public abstract void getMainClasses(Teacher teacher);
     public abstract void delete(Teacher teacher);
-    public abstract void update(Teacher teacher);
+    public abstract void update(Teacher teacher,String isAdmin , int group);
     
     
    

@@ -21,6 +21,7 @@
         <jsp:include page="../header.jsp"></jsp:include>
         <section class="right">
             <form action="/QuangTrungSchool/admin-teacher-update" method="POST">
+                <input type="hidden" name="username" value="${requestScope.teacher.account.username}">
                 <h2>Update Student</h2>
                 <input type="hidden" value="${requestScope.teacher.teacherCode}" name="teacherCode">  
               Teacher code :  <input disabled="disabled" value="${requestScope.teacher.teacherCode}" class="form-control"> <br/>
@@ -32,6 +33,14 @@
               <input type="text" value="${requestScope.teacher.email}" id="email" name="email" class="form-control"><br/>
               <label for="phone">Phone</label>
               <input type="text" value="${requestScope.teacher.phone}" id="phone" name="phone" class="form-control" pattern="[0-9]{10}|[0-9]*"><br/>
+              <c:set var="isadmin" value="false"></c:set>
+              <c:forEach items="${requestScope.teacher.account.groups}" var="group">
+                  <c:if test="${group.gid == 4}">
+                      <c:set var="isadmin" value="true"></c:set>
+                  </c:if>
+              </c:forEach>
+              <label for="isadmin">  Is Admin : </label>
+              <input type="checkbox" ${isadmin ? "checked='checked'" : ""} id="isadmin" name="isadmin" value="true"><br/>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </section>

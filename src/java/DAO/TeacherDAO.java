@@ -9,6 +9,7 @@ import Model.Account;
 import Model.ClassRoom;
 import Model.ClassYearSemester;
 import Model.Course;
+import Model.Group;
 import Model.Schedule;
 import Model.Teacher;
 import Model.Week;
@@ -62,27 +63,37 @@ public class TeacherDAO extends AbstractTeacherDAO {
     @Override
     public Teacher getById(String teacherCode) {
         String sql = "SELECT * FROM teacher INNER JOIN account ON teacher.username = account.username "
+                + "left join groupaccount as gc on account.username = gc.username "
+                + "left join [group] as g on gc.gid = g.gid "
                 + "WHERE teacher.teacher_code = ?";
         PreparedStatement prepare_stmt;
         ResultSet rs;
         Teacher teacher = null;
-        Account account;
+        Account account = null;
+        Group group;
         try {
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacherCode);
             rs = prepare_stmt.executeQuery();
-            if (rs.next()) {
-                teacher = new Teacher();
-                account = new Account();
-                teacher.setTeacherCode(rs.getString("teacher_code"));
-                teacher.setFullname(rs.getString("teacher_fullname"));
-                teacher.setAddress(rs.getString("teacher_address"));
-                teacher.setDob(rs.getDate("teacher_dob"));
-                teacher.setEmail(rs.getString("teacher_email"));
-                teacher.setPhone(rs.getString("teacher_phone"));
-                account.setUsername(rs.getString("username"));
-                account.setPassword(rs.getString("password"));
-                teacher.setAccount(account);
+            while (rs.next()) {
+                if (teacher == null) {
+                    teacher = new Teacher();
+                    account = new Account();
+                    teacher.setTeacherCode(rs.getString("teacher_code"));
+                    teacher.setFullname(rs.getString("teacher_fullname"));
+                    teacher.setAddress(rs.getString("teacher_address"));
+                    teacher.setDob(rs.getDate("teacher_dob"));
+                    teacher.setEmail(rs.getString("teacher_email"));
+                    teacher.setPhone(rs.getString("teacher_phone"));
+                    account.setUsername(rs.getString("username"));
+                    account.setPassword(rs.getString("password"));
+                    teacher.setAccount(account);
+                }
+                if (rs.getInt("gid") != 0) {
+                    group = new Group();
+                    group.setGid(rs.getInt("gid"));
+                    account.getGroups().add(group);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -263,17 +274,42 @@ public class TeacherDAO extends AbstractTeacherDAO {
     }
 
     @Override
-    public void update(Teacher teacher) {
+    public void update(Teacher teacher, String isadmin, int group) {
         String sql = "UPDATE teacher SET teacher_address = ?,teacher_phone = ?,teacher_email = ? WHERE teacher_code = ?";
         try {
+            connection.setAutoCommit(false);
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, teacher.getAddress());
             prepare_stmt.setString(2, teacher.getPhone());
             prepare_stmt.setString(3, teacher.getEmail());
             prepare_stmt.setString(4, teacher.getTeacherCode());
             prepare_stmt.executeUpdate();
+            sql = "DELETE FROM groupaccount WHERE username = ? AND gid = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, teacher.getAccount().getUsername());
+            prepare_stmt.setInt(2, group);
+            prepare_stmt.executeUpdate();
+            if (isadmin != null) {
+                sql = "INSERT INTO groupaccount VALUES (?,?)";
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setInt(1, group);
+                prepare_stmt.setString(2, teacher.getAccount().getUsername());
+                prepare_stmt.executeUpdate();
+            }
+            connection.commit();
         } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
             Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }

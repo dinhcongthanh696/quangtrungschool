@@ -8,6 +8,7 @@ package Controller.admin.Teacher;
 import DAO.AbstractTeacherDAO;
 import DAO.TeacherDAO;
 import Login.BaseAuthorization;
+import Model.Account;
 import Model.Teacher;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -32,7 +33,6 @@ public class TeacherUpdateController extends BaseAuthorization {
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String teacherCode = request.getParameter("teacherCode");
-        System.out.println(teacherCode);
         Teacher teacher = teacherDAO.getById(teacherCode);
         request.setAttribute("teacher", teacher);
         request.getRequestDispatcher("view/admin/teacher/teacherupdate.jsp").forward(request, response);
@@ -45,12 +45,18 @@ public class TeacherUpdateController extends BaseAuthorization {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String teacherCode = request.getParameter("teacherCode");
+        String raw_isadmin = request.getParameter("isadmin");
+        String username = request.getParameter("username");
         Teacher teacher = new Teacher();
+        Account account = new Account();
+        account.setUsername(username);
+        teacher.setAccount(account);
         teacher.setTeacherCode(teacherCode);
         teacher.setEmail(email);
         teacher.setAddress(address);
         teacher.setPhone(phone);
-        teacherDAO.update(teacher);
+        int adminGroup = 4;
+        teacherDAO.update(teacher,raw_isadmin,adminGroup);
         response.sendRedirect("admin-teacher-list?pageId=1");
     }
 
