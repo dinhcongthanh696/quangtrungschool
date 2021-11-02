@@ -47,8 +47,8 @@
             }
             
             .left ul li:nth-child(2) div{
-                margin-top: 250px;
-                margin-bottom: 100px;
+                margin-top: 300px;
+                margin-bottom: 150px;
             }
             
             .left ul{
@@ -130,6 +130,7 @@
                             <li>  <a href="/QuangTrungSchool/admin-news-add" class="list-group-item"><i class="fas fa-plus"></i>News</a> </li>
                             <li>  <a href="/QuangTrungSchool/admin-course-add" class="list-group-item"><i class="fas fa-plus"></i>Course</a> </li>
                             <li>  <a href="/QuangTrungSchool/admin-department-add" class="list-group-item"><i class="fas fa-plus"></i>Department</a> </li>
+                            <li>  <a href="/QuangTrungSchool/admin-class-add" class="list-group-item"><i class="fas fa-plus"></i>Class</a> </li>
                         </ul>
                     </div>
                 </li>
@@ -142,6 +143,7 @@
                               <a href="/QuangTrungSchool/admin-classyearsemester-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>Class Year Semester</a>
                               <a href="/QuangTrungSchool/admin-news-list?pageId=1" class="list-group-item"><i class="fas fa-plus"></i>News</a>
                               <a href="/QuangTrungSchool/admin-department-list" class="list-group-item"><i class="fas fa-plus"></i>Department</a>
+                              <a href="/QuangTrungSchool/admin-class-list" class="list-group-item"><i class="fas fa-plus"></i>Class</a>
                         </ul>
                     </div>
                 </li>
