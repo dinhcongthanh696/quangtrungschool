@@ -67,14 +67,18 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Course/CourseAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/news/newslist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/studentdetail.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/DepartmentDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractScheduleDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/student/studentattendancedetail.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Student/StudentAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Feature.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ClassYearSemesterUpdate.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractStudentDAO.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/department/departmentlist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/teacherdetail.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/MarkDAO.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractDepartmentDAO.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/department/DepartmentListController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/AbstractGroupDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/Student/StudentUpdateController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/BaseDAO.java</file>
@@ -88,6 +92,7 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ScheduleAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/Learning.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/teacher/teacherlist.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/department/departmentadd.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/student/studentupdate.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/web/teacher/classstudentlist.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/redirect.jsp</file>
@@ -127,9 +132,11 @@
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/login.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/news/newsupdate.jsp</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/student/HomeController.java</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/department/DepartmentCheckAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/ScheduleDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/DAO/TeacherDAO.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/web/view/admin/class/schedule.jsp</file>
+            <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/department/DepartmentAddController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/web/teacher/StudentMarkUpdateController.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Model/StudentCourse.java</file>
             <file>file:/C:/Users/My%20Computer/Desktop/QuangTrungSchool/src/java/Controller/admin/classroom/ScheduleUpdateController.java</file>

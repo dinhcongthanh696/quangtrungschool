@@ -5,16 +5,19 @@
  */
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author My Computer
  */
 public class Department {
-    private int departmentCode;
+    private String departmentCode;
     private String departmentName;
     private Teacher dean;
+    private List<ClassRoom> classrooms;
 
-    public Department(int departmentCode, String departmentName, Teacher dean) {
+    public Department(String departmentCode, String departmentName, Teacher dean) {
         this.departmentCode = departmentCode;
         this.departmentName = departmentName;
         this.dean = dean;
@@ -23,11 +26,20 @@ public class Department {
     public Department() {
     }
 
-    public int getDepartmentCode() {
+    public List<ClassRoom> getClassrooms() {
+        return classrooms;
+    }
+
+    public void setClassrooms(List<ClassRoom> classrooms) {
+        this.classrooms = classrooms;
+    }
+    
+    
+    public String getDepartmentCode() {
         return departmentCode;
     }
 
-    public void setDepartmentCode(int departmentCode) {
+    public void setDepartmentCode(String departmentCode) {
         this.departmentCode = departmentCode;
     }
 
