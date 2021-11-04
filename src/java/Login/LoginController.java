@@ -63,7 +63,7 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account account  = (Account) session.getAttribute("account");
+        Account account = (Account) session.getAttribute("account");
         Cookie[] cookies = request.getCookies();
         Cookie cookieUsername = getCookie("username", cookies);
         if (cookieUsername != null && account == null) {
@@ -72,7 +72,7 @@ public class LoginController extends HttpServlet {
             account.setRoleNumber(Integer.parseInt(cookieRole.getValue()));
             session.setAttribute("account", account);
         }
-
+        
         if (account != null) {
             String url = "";
             switch (account.getRoleNumber()) {

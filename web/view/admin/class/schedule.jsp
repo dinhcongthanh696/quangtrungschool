@@ -122,10 +122,12 @@
                         <td rowspan="2">
                             <br/>
                             Week : <select onchange="doChange()" id="week">
-                                <c:forEach items="${requestScope.currentYear.weeks}" var="week"> 
-                                    <option value="${week.weekNumber}" ${(week.weekNumber eq requestScope.currentWeek.weekNumber) ? "selected = 'selected'" : ""}>
+                                <c:set var="weekNumber" value="0"></c:set>
+                                <c:forEach items="${requestScope.weeks}" var="week"> 
+                                    <option value="${weekNumber}" ${(week.weekNumber eq requestScope.currentWeek.weekNumber) ? "selected = 'selected'" : ""}>
                                         ${week.days[0][0].concat('  -  ').concat(week.days[week.totalDays - 1][0])}
                                     </option>
+                                    <c:set var="weekNumber" value="${weekNumber + 1}"></c:set>
                                 </c:forEach>    
                             </select>
                             <c:forEach items="${requestScope.currentWeek.days}" var="day">

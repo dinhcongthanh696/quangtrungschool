@@ -215,10 +215,6 @@ public class StudentDAO extends AbstractStudentDAO {
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getAccount().getUsername());
             prepare_stmt.executeUpdate();
-            sql = "DELETE FROM news WHERE constructor = ?";
-            prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getAccount().getUsername());
-            prepare_stmt.executeUpdate();
             sql = "DELETE FROM mark WHERE student_code = ?";
             prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getStudentCode());
@@ -383,7 +379,8 @@ public class StudentDAO extends AbstractStudentDAO {
     @Override
     public void getClassesCourses(Student student, int except) {
         List<ClassYearSemester> classes = new ArrayList<>();
-        String sql = "SELECT cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code FROM student as s "
+        String sql = "SELECT cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code,c.course_name"
+                + " FROM student as s "
                 + "inner join learning as l\n"
                 + "on s.student_code = l.student_code inner join classyearsemester as cys \n"
                 + "on l.semester = cys.semester AND l.year = cys.year AND l.class_code = cys.class_code\n"
@@ -391,7 +388,7 @@ public class StudentDAO extends AbstractStudentDAO {
                 + "sche.semester = cys.semester AND sche.class_code = cys.class_code\n"
                 + "inner join course as c on sche.course_code = c.course_code "
                 + "WHERE s.student_code = ? AND c.type != ? "
-                + " GROUP BY cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code";
+                + " GROUP BY cys.class_code,cys.stat_date,cys.end_date,cys.year,cys.semester,cys.homeroom_teacher,sche.course_code,c.course_name";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, student.getStudentCode());
@@ -421,6 +418,7 @@ public class StudentDAO extends AbstractStudentDAO {
                 }
                 course = new Course();
                 course.setCourseCode(rs.getString("course_code"));
+                course.setCourseName(rs.getString("course_name"));
                 classyearsemester.getCourses().add(course);
             }
         } catch (SQLException ex) {

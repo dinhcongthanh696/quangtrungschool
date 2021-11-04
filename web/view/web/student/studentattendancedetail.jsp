@@ -19,10 +19,16 @@
             .table{
                 text-align: center;
             }
+            
+            h2{
+                text-align: center;
+                color : blue;
+            }
         </style>
     </head>
     <body>
          <jsp:include page="header.jsp"></jsp:include>
+         <h2>${sessionScope.student.studentAttendances[0].schedule.course.courseName}</h2>
          <table class="table table-striped table-hover table-bordered">
              <tr>
                  <th>Date</th>

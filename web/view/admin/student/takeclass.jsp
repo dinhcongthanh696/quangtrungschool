@@ -48,7 +48,6 @@
                             },
                             function (data, textStatus) {
                                 $(".right table tbody #" + stt).css("display", "none");
-                                $("#totalClasses").attr("value",$("#totalClasses").val() - 1);
                                 $(".right table tbody #" + stt).attr("id", "-1");
                                 checkDuplidate();
                             }
@@ -62,6 +61,8 @@
                 var totalClasses = $("#totalClasses").val();
                 var isDuplicate = false;
                 for (let i = 1; i <= totalClasses; i++) {
+                    if (typeof $("#" + i).children()[3] === 'undefined')
+                        continue;
                     if (year == $("#" + i).children()[3].innerHTML &&
                             semester == $("#" + i).children()[4].innerHTML) {
                         isDuplicate = true;

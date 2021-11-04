@@ -23,7 +23,7 @@
                 border: 1px solid black;
                 border-radius: 5px;
             }
-            h2{
+            .left h2,.right h2{
                 margin-top: 0px;
                 background-color: #00FFFF;
                 text-align: center;

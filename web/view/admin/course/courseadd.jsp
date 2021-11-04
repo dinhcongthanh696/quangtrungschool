@@ -79,7 +79,7 @@
             <input type="text" required="required" class="form-control" id="courseCode" 
                    placeholder="Enter..." onkeyup="alertMessage(this.value)">
             <span id="alertDuplicate">X course code is duplicated</span><br/>
-            <label for="courseName" class="form-label">Course Code</label>
+            <label for="courseName" class="form-label">Course Name</label>
             <input type="text" required="required" class="form-control" id="courseName" 
                    placeholder="Enter...">
             <label for="type" class="form-label">Type : </label>

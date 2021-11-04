@@ -60,7 +60,7 @@ public class StudentAddController extends BaseAuthorization {
         account.getGroups().add(group);
         Student student = new Student(studentCode, studentFullName , address, dob, email, phone, account);
         studentDAO.insert(student);     // insert new student
-        response.sendRedirect("admin-student-list?pageId=1"); // redirect to first page of student list
+        doGet(request, response);
     }
 
 }

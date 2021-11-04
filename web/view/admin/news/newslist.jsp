@@ -26,7 +26,7 @@
                 if (currentPage - gap > 1) {
                     $("#paging").append(
                             "<a id='1' href=/QuangTrungSchool/admin-news-list?query=" + query
-                            + "&pageId=1&totalsearchednews=" + totalSearchedNews + "&newsperpage=" + newsperpage + "> 1 </a>"
+                            + "&pageId=1&totalsearchednews=" + totalSearchedNews + "&newsperpage=" + newsperpage + "> 1 ... </a>"
                             );
                 }
                 for (let i = currentPage - gap; i <= currentPage; i++) {
@@ -50,7 +50,7 @@
                 if (currentPage + gap < totalPage) {
                     $("#paging").append(
                             "<a id='" + totalPage + "' href=/QuangTrungSchool/admin-news-list?query=" + query
-                            + "&pageId=" + totalPage + "&totalsearchednews=" + totalSearchedNews + "&newsperpage=" + newsperpage + "> " + totalPage + " </a>"
+                            + "&pageId=" + totalPage + "&totalsearchednews=" + totalSearchedNews + "&newsperpage=" + newsperpage + "> ... " + totalPage + " </a>"
                             );
                 }
             }

@@ -18,6 +18,7 @@ import Model.Year;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,38 +47,24 @@ public class ScheduleController extends BaseAuthorization {
         scheduleDAO = new ScheduleDAO();
     }
 
-    public void getAllDays(Year year, Date startDate, Date endDate) {
+    public List<Week> getAllDays(Date startDate, Date endDate) {
+        List<Week> weeks = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(startDate);
         Week week = new Week();
-        year.getWeeks().add(week);
+        weeks.add(week);
         week.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
         Object[] day;
         SimpleDateFormat formatterDayOfWeek = new SimpleDateFormat("EEEE");
         SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
 
         while (calendar.getTime().before(endDate)) {
-            if (week.getWeekNumber() == 52 && calendar.get(Calendar.WEEK_OF_YEAR) == 1) {
-                week.setTotalDays(week.getDays().size());
-                week = new Week();
-                week.setWeekNumber(53);
-                while (calendar.getTime().before(endDate)) {
-                    day = new Object[2];
-                    calendar.add(Calendar.DAY_OF_YEAR, 1);
-                    day[0] = formatterDate.format(calendar.getTime());
-                    day[1] = formatterDayOfWeek.format(calendar.getTime());
-                    week.getDays().add(day);
-                }
-                year.getWeeks().add(week);
-                break;
-            }
-
             if (week.getWeekNumber() != calendar.get(Calendar.WEEK_OF_YEAR)) {
                 week.setTotalDays(week.getDays().size());
                 week = new Week();
                 week.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
-                year.getWeeks().add(week);
+                weeks.add(week);
             }
             day = new Object[2];
             day[0] = formatterDate.format(calendar.getTime());
@@ -85,7 +72,12 @@ public class ScheduleController extends BaseAuthorization {
             week.getDays().add(day);
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
+        day = new Object[2];   // including the endDate
+        day[0] = formatterDate.format(calendar.getTime());
+        day[1] = formatterDayOfWeek.format(calendar.getTime());
+        week.getDays().add(day);
         week.setTotalDays(week.getDays().size());
+        return weeks;
     }
 
     @Override
@@ -112,18 +104,16 @@ public class ScheduleController extends BaseAuthorization {
         Calendar calendarEndDate = Calendar.getInstance();
         calendarStartDate.setTime(startDate);
         calendarEndDate.setTime(endDate);
-        Year year = new Year();
-        year.setYear(Integer.parseInt(raw_year));
-        getAllDays(year, startDate, endDate);
-        Week currentWeek = (raw_weekNum != null) ? year.getWeeks().get(Integer.parseInt(raw_weekNum) - calendarStartDate.get(Calendar.WEEK_OF_YEAR))
-                : year.getWeeks().get(0);
+        List<Week> weeks = getAllDays(startDate, endDate);
+        Week currentWeek = (raw_weekNum != null) ? weeks.get(Integer.parseInt(raw_weekNum))
+                : weeks.get(0);
 
         List<Schedule> schedules = scheduleDAO.getSchedulesOfClassInWeek(raw_classCode, currentWeek);
 
         request.setAttribute("classCode", raw_classCode);
         request.setAttribute("currentWeek", currentWeek);
-        request.setAttribute("currentYear", year);
-        request.setAttribute("year", year.getYear());
+        request.setAttribute("weeks", weeks);
+        request.setAttribute("year", raw_year);
         request.setAttribute("schedules", schedules);
         request.setAttribute("semester", semester);
         request.setAttribute("startDate", raw_startDate);

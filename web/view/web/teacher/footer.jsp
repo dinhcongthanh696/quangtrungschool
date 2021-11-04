@@ -16,12 +16,18 @@
                 padding-top: 10px;
                 clear: both;
                 margin-top: 20%;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+                padding-top: 15px;
+                padding-bottom: 15px;
             }
         </style>
     </head>
     <body>
         <footer>
-            Trường Trung Học Phổ Thông Quang Trung - Hà Đông
+            Trang Thông tin dành cho giáo viên 
+            trường Trung Học Phổ Thông Quang Trung - Hà Đông
         </footer>
     </body>
 </html>

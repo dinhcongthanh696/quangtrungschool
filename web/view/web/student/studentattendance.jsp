@@ -34,7 +34,8 @@
                                 <form action="/QuangTrungSchool/student-attendance" method="POST">
                                     <input type="hidden" name="classindex" value="${classindex}">
                                     <input type="hidden" name="courseindex" value="${courseindex}">
-                                    <button class="btn btn-primary">${course.courseCode}</button>
+                                    ${course.courseName}  | 
+                                    <button class="btn btn-primary">Detail</button>
                                 </form>
                             </li>
                             <c:set var="courseindex" value="${courseindex + 1}"></c:set>

@@ -16,6 +16,11 @@
                 padding-top: 10px;
                 clear: both;
                 margin-top: 20%;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                padding-top: 15px;
+                padding-bottom: 15px;
             }
         </style>
     </head>

@@ -108,13 +108,8 @@
                         <option value="${classroom.classCode}">${classroom.classCode}</option>
                     </c:forEach>
                 </select><br/>
-                <label for="year">Year: </label>
-                <select id="year" name="year" onchange="searchSemester()" required="required">
-                    <option value="">None</option>
-                    <c:forEach begin="${requestScope.currentYear}" end="${requestScope.currentYear + 10}" var="year">
-                        <option value="${year}">${year}</option>
-                    </c:forEach>
-                </select>
+                <input name="year" type="hidden" value="${requestScope.currentYear}" id="year">
+                Year : <input disabled="disabled" value="${requestScope.currentYear}">
                 <br/>
                 <label for="semester1">Semester 1</label>
                 <input type="radio" checked="checked" value="1" name="semester" id="semester1" onclick="onClickSemester(this.value)">
