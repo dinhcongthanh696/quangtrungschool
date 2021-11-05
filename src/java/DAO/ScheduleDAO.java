@@ -35,24 +35,22 @@ public class ScheduleDAO extends AbstractScheduleDAO {
                 + "left join course on schedule.course_code = course.course_code "
                 + "WHERE class_code = ? ";
                 
-        List<Date> days = new ArrayList<>();
         List<Schedule> schedules = new ArrayList<>();
-        Date day;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        for (Object[] params : week.getDays()) {
-            try {
-                day = formatter.parse((String) params[0]);
-                days.add(day);
-            } catch (ParseException ex) {
-                Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        Date start_date = null;
+        Date end_date = null;
+        try {
+            start_date = formatter.parse((String) week.getDays().get(0)[0]);
+            end_date = formatter.parse((String) week.getDays().get(week.getDays().size() - 1)[0]);
+        } catch (ParseException ex) {
+            Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         sql += " AND date >= ? AND date <= ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);
             prepare_stmt.setString(1, classCode);
-            prepare_stmt.setDate(2, new java.sql.Date(days.get(0).getTime()));
-            prepare_stmt.setDate(3, new java.sql.Date(days.get(days.size() - 1).getTime()));
+            prepare_stmt.setDate(2, new java.sql.Date(start_date.getTime()));
+            prepare_stmt.setDate(3, new java.sql.Date(end_date.getTime()));
             ResultSet rs = prepare_stmt.executeQuery();
             Schedule schedule;
             ClassRoom classroom;

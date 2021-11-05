@@ -47,7 +47,14 @@ public class ScheduleController extends BaseAuthorization {
         scheduleDAO = new ScheduleDAO();
     }
 
-    public List<Week> getAllDays(Date startDate, Date endDate) {
+    public Object[] generateDate(Calendar calendar, SimpleDateFormat formatter_EEEE, SimpleDateFormat formatter_yyyyMMdd) {
+        Object[] day = new Object[2];
+        day[1] = formatter_EEEE.format(calendar.getTime());
+        day[0] = formatter_yyyyMMdd.format(calendar.getTime());
+        return day;
+    }
+
+    public List<Week> getAllDays(Date startDate, Date endDate, int weekIndex) {
         List<Week> weeks = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
 
@@ -56,25 +63,28 @@ public class ScheduleController extends BaseAuthorization {
         weeks.add(week);
         week.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
         Object[] day;
-        SimpleDateFormat formatterDayOfWeek = new SimpleDateFormat("EEEE");
-        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter_EEEE = new SimpleDateFormat("EEEE");
+        SimpleDateFormat formatter_yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
 
         while (calendar.getTime().before(endDate)) {
             if (week.getWeekNumber() != calendar.get(Calendar.WEEK_OF_YEAR)) {
+                if (weeks.size() - 1 != weekIndex) {
+                    day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd);
+                    week.getDays().add(day);
+                }
                 week.setTotalDays(week.getDays().size());
                 week = new Week();
                 week.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
                 weeks.add(week);
             }
-            day = new Object[2];
-            day[0] = formatterDate.format(calendar.getTime());
-            day[1] = formatterDayOfWeek.format(calendar.getTime());
-            week.getDays().add(day);
+            // first day of normarl week and all days of selected week
+            if (weeks.size() - 1 == weekIndex || (weeks.size() - 1 != weekIndex && week.getDays().isEmpty())) {
+                day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd);
+                week.getDays().add(day);
+            }
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
-        day = new Object[2];   // including the endDate
-        day[0] = formatterDate.format(calendar.getTime());
-        day[1] = formatterDayOfWeek.format(calendar.getTime());
+        day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd); // including the last day of the year
         week.getDays().add(day);
         week.setTotalDays(week.getDays().size());
         return weeks;
@@ -86,7 +96,7 @@ public class ScheduleController extends BaseAuthorization {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String raw_classCode = request.getParameter("classCode");
         String raw_year = request.getParameter("year");
-        String raw_weekNum = request.getParameter("weekNumber");
+        String raw_weekIndex = request.getParameter("weekNumber");
         String raw_semester = request.getParameter("semester");
         String raw_startDate = request.getParameter("startDate");
         String raw_endDate = request.getParameter("endDate");
@@ -104,10 +114,9 @@ public class ScheduleController extends BaseAuthorization {
         Calendar calendarEndDate = Calendar.getInstance();
         calendarStartDate.setTime(startDate);
         calendarEndDate.setTime(endDate);
-        List<Week> weeks = getAllDays(startDate, endDate);
-        Week currentWeek = (raw_weekNum != null) ? weeks.get(Integer.parseInt(raw_weekNum))
-                : weeks.get(0);
-
+        int weekIndex = (raw_weekIndex != null) ? Integer.parseInt(raw_weekIndex) : 0;
+        List<Week> weeks = getAllDays(startDate, endDate, weekIndex);
+        Week currentWeek = weeks.get(weekIndex);
         List<Schedule> schedules = scheduleDAO.getSchedulesOfClassInWeek(raw_classCode, currentWeek);
 
         request.setAttribute("classCode", raw_classCode);
@@ -118,7 +127,7 @@ public class ScheduleController extends BaseAuthorization {
         request.setAttribute("semester", semester);
         request.setAttribute("startDate", raw_startDate);
         request.setAttribute("endDate", raw_endDate);
-        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response);
+        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response); 
     }
 
     @Override

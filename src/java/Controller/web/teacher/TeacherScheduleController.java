@@ -31,64 +31,83 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "TeacherSchedule", urlPatterns = {"/teacher-schedule"})
 public class TeacherScheduleController extends BaseAuthorization {
+
     private final AbstractTeacherDAO teacherDAO;
-    
-    public TeacherScheduleController(){
+
+    public TeacherScheduleController() {
         teacherDAO = new TeacherDAO();
     }
 
-    public void getDays(Year year) {
-        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
-        SimpleDateFormat formatterDate = new SimpleDateFormat("yyyy-MM-dd");
+    public Object[] generateDay(Calendar calendar, SimpleDateFormat formatter_EEEE, SimpleDateFormat formatter_yyyyMMdd) {
+        Object[] date;
+        String weekName = formatter_EEEE.format(calendar.getTime());
+        date = new Object[2];
+        date[0] = formatter_yyyyMMdd.format(calendar.getTime());
+        date[1] = weekName;
+        return date;
+    }
+
+    public void getDays(Year year, int weekNumber) {
+        SimpleDateFormat formatter_EEEE = new SimpleDateFormat("EEEE");
+        SimpleDateFormat formatter_yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarFirstDay = Calendar.getInstance();
         calendarFirstDay.set(Calendar.YEAR, year.getYear());
         calendarFirstDay.set(Calendar.DAY_OF_YEAR, 1);  // set to the first day of the year
-        Date first_day_of_year = calendarFirstDay.getTime();
         Calendar calendarLastday = Calendar.getInstance();
         calendarLastday.set(Calendar.YEAR, year.getYear());
-        calendarLastday.set(Calendar.MONTH, 11); // MONTH START FROM 0
-        calendarLastday.set(Calendar.DAY_OF_MONTH, 31); // set to the last day of the year
+        calendarLastday.set(Calendar.MONTH, 11); // BECAUSE MONTH START FROM 0
+        calendarLastday.set(Calendar.DAY_OF_MONTH, 31); // set to the last day of last month
         Date last_day_of_year = calendarLastday.getTime();
-
         Week week = new Week();
         week.setWeekNumber(1); // first week
         year.getWeeks().add(week);
-        String weekName;
-        Object[] params;
-        while (first_day_of_year.before(last_day_of_year)) {
+        Object[] day;
+        while (calendarFirstDay.getTime().before(last_day_of_year)) {
             if (week.getWeekNumber() == 52 && calendarFirstDay.get(Calendar.WEEK_OF_YEAR) == 1) {
-                week.setTotalDays(week.getDays().size());
+                if (week.getWeekNumber() != weekNumber) {
+                    calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) - 1);   // MINUS 1
+                    day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd);
+                    week.getDays().add(day);
+                    week.setTotalDays(week.getDays().size());
+                    calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) + 1);   // ADD 1 
+                }
+
                 week = new Week();
                 week.setWeekNumber(53);
                 while (calendarFirstDay.getTime().before(last_day_of_year)) {
-                    params = new Object[2];
+                    day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd);
+                    week.getDays().add(day);
                     calendarFirstDay.add(Calendar.DAY_OF_YEAR, 1);
-                    weekName = formatter.format(calendarFirstDay.getTime());
-                    params[0] = formatterDate.format(calendarFirstDay.getTime());
-                    params[1] = weekName;
-                    week.getDays().add(params);
                 }
-                year.getWeeks().add(week);
+                day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd); // including last of the year
+                week.getDays().add(day);
                 week.setTotalDays(week.getDays().size());
+                year.getWeeks().add(week);
                 return;
             }
 
             if (week.getWeekNumber() != calendarFirstDay.get(Calendar.WEEK_OF_YEAR)) {
+                if (week.getWeekNumber() != weekNumber) {
+                    calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) - 1);   // MINUS 1
+                    day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd);
+                    week.getDays().add(day);
+                    calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) + 1);   // ADD 1 
+                }
                 week.setTotalDays(week.getDays().size());
                 week = new Week();
                 week.setWeekNumber(calendarFirstDay.get(Calendar.WEEK_OF_YEAR));
                 year.getWeeks().add(week);
             }
-            weekName = formatter.format(calendarFirstDay.getTime());
-            params = new Object[2];
-            params[0] = formatterDate.format(calendarFirstDay.getTime());
-            params[1] = weekName;
-            week.getDays().add(params);
+            if (week.getWeekNumber() == weekNumber || (week.getWeekNumber() != weekNumber && week.getDays().isEmpty())) {
+                day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd);
+                week.getDays().add(day);
+            }
             calendarFirstDay.add(Calendar.DAY_OF_YEAR, 1);
         }
+        day = generateDay(calendarFirstDay, formatter_EEEE, formatter_yyyyMMdd); // including the last day of year
+        week.getDays().add(day);
+        week.setTotalDays(week.getDays().size());
     }
-    
-
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -96,10 +115,14 @@ public class TeacherScheduleController extends BaseAuthorization {
         String raw_week = request.getParameter("week");
         Calendar calendar = Calendar.getInstance();
         int yearNumber = (raw_year == null) ? calendar.get(Calendar.YEAR) : Integer.parseInt(raw_year);
+        int weekNumber = (raw_week == null) ? calendar.get(Calendar.WEEK_OF_YEAR) : Integer.parseInt(raw_week);
+        System.out.println(weekNumber);
         Year year = new Year();
         year.setYear(yearNumber);
-        getDays(year);
-        int weekNumber = (raw_week == null) ? calendar.get(Calendar.WEEK_OF_YEAR) : Integer.parseInt(raw_week);
+        getDays(year, weekNumber);
+        if (weekNumber > year.getWeeks().size()) {
+            weekNumber = 1;   // THE WEEK 53TH
+        }
         Week currentWeek = year.getWeeks().get(weekNumber - 1);
         HttpSession session = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
