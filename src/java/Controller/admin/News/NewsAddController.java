@@ -9,6 +9,7 @@ import DAO.AbstractGroupDAO;
 import DAO.AbstractNewsDAO;
 import DAO.GroupDAO;
 import DAO.NewsDAO;
+import Login.BaseAuthorization;
 import Model.Account;
 import Model.Group;
 import Model.GroupNews;
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpSession;
  * @author My Computer
  */
 @WebServlet(name = "NewsAddController", urlPatterns = {"/admin-news-add"})
-public class NewsAddController extends HttpServlet {
+public class NewsAddController extends BaseAuthorization {
     private final AbstractNewsDAO newsDAO;
     private final AbstractGroupDAO groupDAO;
     
@@ -41,7 +42,7 @@ public class NewsAddController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Group> groups = groupDAO.getAll();
         request.setAttribute("groups", groups);
@@ -49,7 +50,7 @@ public class NewsAddController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String title = request.getParameter("title");
         String content = request.getParameter("content");

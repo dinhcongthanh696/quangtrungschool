@@ -9,6 +9,7 @@ import DAO.AbstractDepartmentDAO;
 import DAO.AbstractTeacherDAO;
 import DAO.DepartmentDAO;
 import DAO.TeacherDAO;
+import Login.BaseAuthorization;
 import Model.Department;
 import Model.Teacher;
 import com.google.gson.Gson;
@@ -26,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "DepartmentUpdateController", urlPatterns = {"/admin-department-update"})
-public class DepartmentUpdateController extends HttpServlet {
+public class DepartmentUpdateController extends BaseAuthorization {
     private final AbstractTeacherDAO teacherDAO;
     private final AbstractDepartmentDAO departmentDAO;
     public DepartmentUpdateController(){
@@ -36,7 +37,7 @@ public class DepartmentUpdateController extends HttpServlet {
     
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Teacher> teachers = teacherDAO.getAll();
         Gson gson = new Gson();
@@ -44,7 +45,7 @@ public class DepartmentUpdateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String deanCode = request.getParameter("dean");
         String departmentCode = request.getParameter("departmentCode");

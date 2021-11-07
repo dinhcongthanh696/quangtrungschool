@@ -7,6 +7,7 @@ package Controller.admin.News;
 
 import DAO.AbstractNewsDAO;
 import DAO.NewsDAO;
+import Login.BaseAuthorization;
 import Model.News;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "NewsUpdateController", urlPatterns = {"/admin-news-update"})
-public class NewsUpdateController extends HttpServlet {
+public class NewsUpdateController extends BaseAuthorization {
     private final AbstractNewsDAO newsDAO;
     
     public NewsUpdateController(){
@@ -30,7 +31,7 @@ public class NewsUpdateController extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int no = Integer.parseInt(request.getParameter("no"));
         News news = newsDAO.getById(no);
@@ -39,7 +40,7 @@ public class NewsUpdateController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String title = request.getParameter("title");
         String content = request.getParameter("content");

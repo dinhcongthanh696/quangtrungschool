@@ -43,6 +43,8 @@
                 color : red;
                 font-weight: bold;
             }
+            
+            
         </style>
         <script>
              function doLogin(){
@@ -101,7 +103,9 @@
                     </c:if>
                 </c:forEach>
             </select>
-        <button type="submit" class="btn btn-primary" onclick="doLogin()">Login</button> 
+        <button type="submit" class="btn btn-primary" onclick="doLogin()">
+             <span class="glyphicon glyphicon-log-in"></span>       Login
+        </button> 
         </div>
         <footer>
             Fanpage:   <a href="https://www.facebook.com/HumansofQuangTrung/" target="_blank"><i class="fab fa-facebook fa-2x">Humans of Quang Trung </i></a>

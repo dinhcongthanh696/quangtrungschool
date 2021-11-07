@@ -7,6 +7,7 @@ package Controller.admin.Course;
 
 import DAO.AbstractCourseDAO;
 import DAO.CourseDAO;
+import Login.BaseAuthorization;
 import Model.Course;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "CourseAddController", urlPatterns = {"/admin-course-add"})
-public class CourseAddController extends HttpServlet {
+public class CourseAddController extends BaseAuthorization {
     public final AbstractCourseDAO courseDAO;
 
     public CourseAddController(){
@@ -31,13 +32,13 @@ public class CourseAddController extends HttpServlet {
     }
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("view/admin/course/courseadd.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String courseCode = request.getParameter("courseCode");
         String courseName = request.getParameter("courseName");

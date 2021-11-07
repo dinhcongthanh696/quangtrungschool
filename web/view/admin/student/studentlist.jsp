@@ -97,7 +97,7 @@
                         <td>Delete</td>
                         <td>Taking Class</td>
                     </tr>
-                <c:forEach items="${requestScope.students}" var="student">
+                <c:forEach items="${requestScope.searchedstudents}" var="student">
                     <tr id="${student.studentCode}">
                         <td>${student.studentCode}</td>
                         <td>${student.fullname}</td>
@@ -121,7 +121,10 @@
             <h2>Page</h2>
             <div>
                 <c:forEach begin="1" end="${requestScope.totalPage}" var="page">
-                    <a id="${page}" href="/QuangTrungSchool/admin-student-list?pageId=${page}&query=${requestScope.query}">${page}</a>
+                    <a id="${page}" 
+                        href="/QuangTrungSchool/admin-student-list?pageId=${page}&query=${requestScope.query}&totalsearchedstudents=${requestScope.totalsearchedstudents}">
+                        ${page}
+                    </a>
                 </c:forEach>
             </div>
         </section>

@@ -26,48 +26,50 @@ import javax.servlet.http.HttpServletResponse;
 public class StudentListController extends BaseAuthorization {
 
     private final AbstractStudentDAO studentDAO;
-    private final int STUDENTPERPAGE = 10;
+    private final int STUDENTPERPAGE = 5;
 
     public StudentListController() {
         studentDAO = new StudentDAO();
-    }
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String query = request.getParameter("query");
-        int totalStudent = studentDAO.getAll().size();
-        List<Student> studentsSearched = new ArrayList<>();
-        if(totalStudent != 0){// FETCH must be greater than or equal to 1
-            studentsSearched = studentDAO.search(query, 0, totalStudent);
-        }
-        int totalStudentSearched = studentsSearched.size();
-        int pageId =  (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
-        int pageRemain = ((totalStudentSearched % STUDENTPERPAGE) > 0) ? 1 : 0;
-        int pageNeeded = (totalStudentSearched / STUDENTPERPAGE) + pageRemain;
-        boolean isOverPaged = pageId > pageNeeded;
-        if (isOverPaged) {
-            pageId = 1; // WHEN IS OVERPAGED ---> TAKE IT TO FIRST PAGE
-        }
-        int offset = (pageId - 1) * STUDENTPERPAGE;
-        studentsSearched = studentDAO.search(query, offset, STUDENTPERPAGE);
-        request.setAttribute("students", studentsSearched);
-        request.setAttribute("pageId",pageId);
-        request.setAttribute("totalPage", pageNeeded);
-        request.setAttribute("query", query);
-        request.getRequestDispatcher("view/admin/student/studentlist.jsp").forward(request, response);
     }
 
     @Override
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String query = request.getParameter("query");
+        int pageId = (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
+        int pageNeeded = 1;
+        int totalSearchedStudent = 0;
+        if (query != null) {
+            totalSearchedStudent = Integer.parseInt(request.getParameter("totalsearchedstudents"));
+            int pageRemain = ((totalSearchedStudent % STUDENTPERPAGE) > 0) ? 1 : 0;
+            pageNeeded = (totalSearchedStudent / STUDENTPERPAGE) + pageRemain;
+            int offset = (pageId - 1) * STUDENTPERPAGE;
+            List<Student> searchedstudents = studentDAO.search(query, offset, STUDENTPERPAGE);
+            request.setAttribute("searchedstudents", searchedstudents);
+        }
+        request.setAttribute("pageId", pageId);
+        request.setAttribute("totalPage", pageNeeded);
+        request.setAttribute("query", query);
+        request.setAttribute("totalsearchedstudents", totalSearchedStudent);
+        request.getRequestDispatcher("view/admin/student/studentlist.jsp").forward(request, response);
     }
 
     @Override
     public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String query = request.getParameter("query");
+        int totalSearchedStudent = studentDAO.getTotalSearchedStudent(query);
+        int pageId = 1;
+        int pageRemain = ((totalSearchedStudent % STUDENTPERPAGE) > 0) ? 1 : 0;
+        int pageNeeded = (totalSearchedStudent / STUDENTPERPAGE) + pageRemain;
+        int offset = (pageId - 1) * STUDENTPERPAGE;
+        List<Student> searchedstudents = studentDAO.search(query, offset, STUDENTPERPAGE);
+        request.setAttribute("totalsearchedstudents", totalSearchedStudent);
+        request.setAttribute("searchedstudents", searchedstudents);
+        request.setAttribute("pageId", pageId);
+        request.setAttribute("totalPage", pageNeeded);
+        request.setAttribute("query", query);
+        request.getRequestDispatcher("view/admin/student/studentlist.jsp").forward(request, response);
     }
-
 
 }

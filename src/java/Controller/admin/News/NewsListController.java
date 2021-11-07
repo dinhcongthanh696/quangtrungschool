@@ -7,6 +7,7 @@ package Controller.admin.News;
 
 import DAO.AbstractNewsDAO;
 import DAO.NewsDAO;
+import Login.BaseAuthorization;
 import Model.News;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "NewsListController", urlPatterns = {"/admin-news-list"})
-public class NewsListController extends HttpServlet {
+public class NewsListController extends BaseAuthorization {
 
     private final AbstractNewsDAO newsDAO;
     private int NEWSPERPAGE = 10;
@@ -32,7 +33,7 @@ public class NewsListController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int pageId = (request.getParameter("pageId") == null) ? 1 : Integer.parseInt(request.getParameter("pageId"));
         String query = request.getParameter("query");
@@ -63,7 +64,7 @@ public class NewsListController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int pageId = 1;
         String query = request.getParameter("query");

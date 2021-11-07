@@ -7,6 +7,7 @@ package Controller.admin.department;
 
 import DAO.AbstractDepartmentDAO;
 import DAO.DepartmentDAO;
+import Login.BaseAuthorization;
 import Model.Department;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -23,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "DepartmentCheckAddController", urlPatterns = {"/admin-department-check-add"})
-public class DepartmentCheckAddController extends HttpServlet {
+public class DepartmentCheckAddController extends BaseAuthorization {
     private final AbstractDepartmentDAO departmentDAO;
     
     public DepartmentCheckAddController(){
@@ -46,7 +47,7 @@ public class DepartmentCheckAddController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -60,7 +61,7 @@ public class DepartmentCheckAddController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

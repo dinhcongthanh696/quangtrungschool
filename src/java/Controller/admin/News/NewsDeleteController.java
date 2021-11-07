@@ -7,6 +7,7 @@ package Controller.admin.News;
 
 import DAO.AbstractNewsDAO;
 import DAO.NewsDAO;
+import Login.BaseAuthorization;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "NewsDeleteController", urlPatterns = {"/admin-news-delete"})
-public class NewsDeleteController extends HttpServlet {
+public class NewsDeleteController extends BaseAuthorization {
 
     private AbstractNewsDAO newsDAO;
     
@@ -43,7 +44,7 @@ public class NewsDeleteController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -57,7 +58,7 @@ public class NewsDeleteController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

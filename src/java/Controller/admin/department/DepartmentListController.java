@@ -7,6 +7,7 @@ package Controller.admin.department;
 
 import DAO.AbstractDepartmentDAO;
 import DAO.DepartmentDAO;
+import Login.BaseAuthorization;
 import Model.Department;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "DepartmentListController", urlPatterns = {"/admin-department-list"})
-public class DepartmentListController extends HttpServlet {
+public class DepartmentListController extends BaseAuthorization {
     private final AbstractDepartmentDAO departmentDAO;
     
     public DepartmentListController(){
@@ -45,7 +46,7 @@ public class DepartmentListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -59,7 +60,7 @@ public class DepartmentListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

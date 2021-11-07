@@ -7,6 +7,7 @@ package Controller.admin.classroom;
 
 import DAO.AbstractClassRoomDAO;
 import DAO.ClassRoomDAO;
+import Login.BaseAuthorization;
 import Model.ClassRoom;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "ClassListController", urlPatterns = {"/admin-class-list"})
-public class ClassListController extends HttpServlet {
+public class ClassListController extends BaseAuthorization {
     private final AbstractClassRoomDAO classroomDAO;
     
     public ClassListController(){
@@ -45,7 +46,7 @@ public class ClassListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -59,7 +60,7 @@ public class ClassListController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

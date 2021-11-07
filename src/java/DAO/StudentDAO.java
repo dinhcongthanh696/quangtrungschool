@@ -567,4 +567,42 @@ public class StudentDAO extends AbstractStudentDAO {
         student.setClasses(classes);
     }
 
+    @Override
+    public int getTotalSearchedStudent(String query) {
+        String sql = "SELECT COUNT(*) as totalsearchedstudent "
+                + "FROM student as s INNER JOIN account ON s.username = account.username WHERE ";
+        PreparedStatement prepare_stmt = null;
+        ResultSet rs;
+        int totalSearchedStudent = 0;
+        try {
+            Date date = Date.valueOf(query);
+            sql += " student_dob = ? ";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                prepare_stmt.setDate(1, date);
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {
+                   totalSearchedStudent = rs.getInt("totalsearchedstudent");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IllegalArgumentException ex) {
+            sql += " s.student_code LIKE ? OR s.student_address LIKE ? OR s.student_email LIKE ? OR "
+                    + "s.student_fullname LIKE ? OR s.student_phone LIKE ? OR s.username LIKE ? ";
+            try {
+                prepare_stmt = connection.prepareStatement(sql);
+                for (int i = 1; i <= 6; i++) {
+                    prepare_stmt.setString(i, "%" + query + "%");
+                }
+                rs = prepare_stmt.executeQuery();
+                while (rs.next()) {
+                    totalSearchedStudent = rs.getInt("totalsearchedstudent");
+                }
+            } catch (SQLException ex1) {
+                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        return totalSearchedStudent;   
+    }
 }

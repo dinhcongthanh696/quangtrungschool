@@ -9,6 +9,7 @@ import DAO.AbstractClassRoomDAO;
 import DAO.AbstractDepartmentDAO;
 import DAO.ClassRoomDAO;
 import DAO.DepartmentDAO;
+import Login.BaseAuthorization;
 import Model.ClassRoom;
 import Model.Department;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "ClassAddController", urlPatterns = {"/admin-class-add"})
-public class ClassAddController extends HttpServlet {
+public class ClassAddController extends BaseAuthorization {
     private final AbstractClassRoomDAO classroomDAO;
     private final AbstractDepartmentDAO departmentDAO;
     public ClassAddController(){
@@ -35,7 +36,7 @@ public class ClassAddController extends HttpServlet {
     
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Department> departments = departmentDAO.getAll();
         request.setAttribute("departments", departments);
@@ -43,7 +44,7 @@ public class ClassAddController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String classcode = request.getParameter("classcode");
         String departmentcode = request.getParameter("departmentcode");

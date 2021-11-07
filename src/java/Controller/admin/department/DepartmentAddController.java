@@ -7,6 +7,7 @@ package Controller.admin.department;
 
 import DAO.AbstractTeacherDAO;
 import DAO.TeacherDAO;
+import Login.BaseAuthorization;
 import Model.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "DepartmentAddController", urlPatterns = {"/admin-department-add"})
-public class DepartmentAddController extends HttpServlet {
+public class DepartmentAddController extends BaseAuthorization {
     private final AbstractTeacherDAO teacherDAO;
     
     public DepartmentAddController(){
@@ -30,7 +31,7 @@ public class DepartmentAddController extends HttpServlet {
     }
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Teacher> teachers = teacherDAO.getAll();
         request.setAttribute("teachers", teachers);
@@ -38,7 +39,7 @@ public class DepartmentAddController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
     }
