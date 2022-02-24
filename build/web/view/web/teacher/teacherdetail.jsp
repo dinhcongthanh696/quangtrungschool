@@ -17,21 +17,30 @@
             <h2>Teacher Detail</h2>
             <table class="table table-bordered table-hover">
                 <tr>
-                    <th>Teacher Code</th>
+                    <th>Teacher Code</th><td>${sessionScope.teacher.teacherCode}</td>
+                </tr>
+                <tr>    
                     <th>Full Name</th>
-                    <th>Address</th>
-                    <th>Date of Birth</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Username</th>
+                    <td>${sessionScope.teacher.fullname}</td>
                 </tr>
                 <tr>
-                    <td>${sessionScope.teacher.teacherCode}</td>
-                    <td>${sessionScope.teacher.fullname}</td>
+                    <th>Address</th>
                     <td>${(empty sessionScope.teacher.address) ? 'Unkown' : sessionScope.teacher.address}</td>
+                </tr>
+                <tr>
+                    <th>Date of Birth</th>
                     <td>${sessionScope.teacher.dob}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
                     <td>${(empty sessionScope.teacher.email) ? 'Unkown' : sessionScope.teacher.email}</td>
+                </tr>
+                <tr>
+                    <th>Phone</th>
                     <td>${(empty sessionScope.teacher.phone) ? 'Unkown' : sessionScope.teacher.phone}</td>
+                </tr>
+                <tr>
+                    <th>Username</th>
                     <td>${sessionScope.teacher.account.username}</td>
                 </tr>
             </table>

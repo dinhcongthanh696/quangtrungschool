@@ -37,14 +37,8 @@ public class ScheduleDAO extends AbstractScheduleDAO {
                 
         List<Schedule> schedules = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date start_date = null;
-        Date end_date = null;
-        try {
-            start_date = formatter.parse((String) week.getDays().get(0)[0]);
-            end_date = formatter.parse((String) week.getDays().get(week.getDays().size() - 1)[0]);
-        } catch (ParseException ex) {
-            Logger.getLogger(ScheduleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Date start_date = week.getDays().get(0);
+        Date end_date = week.getDays().get(week.getTotalDays() - 1);
         sql += " AND date >= ? AND date <= ?";
         try {
             PreparedStatement prepare_stmt = connection.prepareStatement(sql);

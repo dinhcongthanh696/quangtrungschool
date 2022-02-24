@@ -446,7 +446,6 @@ public class TeacherDAO extends AbstractTeacherDAO {
 
     @Override
     public void getSchedules(Teacher teacher, Week week) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         List<Schedule> schedules = new ArrayList<>();
         Schedule schedule;
         ClassRoom classroom;
@@ -460,12 +459,8 @@ public class TeacherDAO extends AbstractTeacherDAO {
             prepare_stmt.setString(1, teacher.getTeacherCode());
             Calendar first_day_of_week = Calendar.getInstance();
             Calendar last_day_of_week = Calendar.getInstance();
-            try {
-                first_day_of_week.setTime(formatter.parse((String) week.getDays().get(0)[0]));
-                last_day_of_week.setTime(formatter.parse((String) week.getDays().get(week.getDays().size() - 1)[0]));
-            } catch (ParseException ex) {
-                Logger.getLogger(TeacherDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            first_day_of_week.setTime(week.getDays().get(0));
+            last_day_of_week.setTime(week.getDays().get(week.getTotalDays() - 1));
             prepare_stmt.setDate(2, new java.sql.Date(first_day_of_week.getTime().getTime()));
             prepare_stmt.setDate(3, new java.sql.Date(last_day_of_week.getTime().getTime()));
             ResultSet rs = prepare_stmt.executeQuery();

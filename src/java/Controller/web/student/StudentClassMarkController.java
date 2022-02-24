@@ -35,8 +35,10 @@ public class StudentClassMarkController extends BaseAuthorization {
     }
 
     public double getCetificate(Student student) {
-        if(student.getStudentcourses().isEmpty()) return 0;
-        
+        if (student.getStudentcourses().isEmpty()) {
+            return 0;
+        }
+
         int totalFinalExam = 0;
         double totalScore = 0;
         int totalCourseMarked = 0;
@@ -45,6 +47,7 @@ public class StudentClassMarkController extends BaseAuthorization {
             double totalCourseScore = 0;
             int totalExamType = 0;
             int markedCourse = 2;
+            boolean isHavingFinal = false;
             if (studentCourse.getCourse().getType() == markedCourse) {
                 totalCourseMarked++;
             }
@@ -60,6 +63,7 @@ public class StudentClassMarkController extends BaseAuthorization {
                         }
                         break;
                     case 3:
+                        isHavingFinal = true;
                         totalFinalExam++;
                         totalCourseScore += mark.getScore() * mark.getExam_type();
                         break;
@@ -68,15 +72,19 @@ public class StudentClassMarkController extends BaseAuthorization {
                         break;
                 }
             }
-            if(totalExamType == 0){
+            if (totalExamType == 0) {
                 studentCourse.setTotalScore(totalCourseScore);
-            }else{
-                studentCourse.setTotalScore(totalCourseScore / totalExamType);
-                totalScore += studentCourse.getTotalScore();
+            } else {
+                if (isHavingFinal) {
+                    studentCourse.setTotalScore(totalCourseScore / totalExamType);
+                    totalScore += studentCourse.getTotalScore();
+                }
             }
         }
-        
-        if(isFailed) return -1;
+
+        if (isFailed) {
+            return -1;
+        }
         if (totalFinalExam != student.getStudentcourses().size()) {
             return 0;
         }
@@ -90,7 +98,7 @@ public class StudentClassMarkController extends BaseAuthorization {
         HttpSession session = request.getSession();
         Student student = (Student) session.getAttribute("student");
         int activitiesExcept = 0;
-        studentDAO.getClassesCourses(student,activitiesExcept);
+        studentDAO.getClassesCourses(student, activitiesExcept);
         request.getRequestDispatcher("view/web/student/studentmark.jsp").forward(request, response);
     }
 

@@ -15,10 +15,8 @@
                 text-align: center;
                 padding-top: 10px;
                 clear: both;
-                margin-top: 20%;
-                position: fixed;
+                margin-top: 3%;
                 width: 100%;
-                bottom: 0;
                 padding-top: 15px;
                 padding-bottom: 15px;
             }

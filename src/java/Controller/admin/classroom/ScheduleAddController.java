@@ -91,9 +91,7 @@ public class ScheduleAddController extends BaseAuthorization {
         scheduleDAO.insert(schedule);
 
         // GET THE WEEK OF SCHEDULE'S DATE ADDED
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int weekNumber = calendar.get(Calendar.WEEK_OF_YEAR);
+        int weekNumber = Integer.parseInt(request.getParameter("weekNumber"));
         response.sendRedirect("admin-classyearsemester-schedule?weekNumber=" + weekNumber + "&classCode=" + raw_classCode
                 + "&year=" + year + "&semester=" + semester + "&startDate=" + raw_startDate + "&endDate=" + raw_endDate);
     }

@@ -66,7 +66,6 @@
                         remember : remember
                     },
                     success : function(response){
-                        // ! -->  alert message , window.location
                         if(response.length === 0){
                             $("#alert").append("<span class='loginfail'>LOGIN FAIL</span>");
                         }else{

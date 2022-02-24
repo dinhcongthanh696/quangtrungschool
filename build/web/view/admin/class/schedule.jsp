@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -77,9 +78,10 @@
                 var classCode = $("#classCode").val();
                 var startDate = $("#startDate").val();
                 var endDate = $("#endDate").val();
-                window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-add?year=" + year + "&day=" +
+                var weekNumber = $("#week").val();
+                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-add?year=" + year + "&day=" +
                         day + "&classCode=" + classCode + "&slot=" + slot + "&semester=" + semester
-                        + "&startDate=" + startDate + "&endDate=" + endDate;
+                        + "&startDate=" + startDate + "&endDate=" + endDate + "&weekNumber="+weekNumber; 
             }
 
             function doUpdate(str) {
@@ -95,10 +97,11 @@
                 var classCode = $("#classCode").val();
                 var startDate = $("#startDate").val();
                 var endDate = $("#endDate").val();
+                var weekNumber = $("#week").val();
                 window.location = "/QuangTrungSchool/admin-classyearsemester-schedule-update?year=" + year + "&day=" +
                 day + "&classCode=" + classCode + "&slot=" + slot + "&startDate=" 
                 + startDate + "&endDate=" + endDate + "&type=" + type + "&courseCode="+courseCode+"&teacherCode="+teacherCode
-                + "&semester="+semester+"&active="+active;
+                + "&semester="+semester+"&active="+active+"&weekNumber="+weekNumber;
             }
         </script>
     </head>
@@ -125,19 +128,20 @@
                                 <c:set var="weekNumber" value="0"></c:set>
                                 <c:forEach items="${requestScope.weeks}" var="week"> 
                                     <option value="${weekNumber}" ${(week.weekNumber eq requestScope.currentWeek.weekNumber) ? "selected = 'selected'" : ""}>
-                                        ${week.days[0][0].concat('  -  ').concat(week.days[week.totalDays - 1][0])}
+                                        <fmt:formatDate value="${week.days[0]}" pattern="dd/MM/yyyy"></fmt:formatDate> -
+                                        <fmt:formatDate value="${week.days[week.totalDays - 1]}" pattern="dd/MM/yyyy"></fmt:formatDate>
                                     </option>
                                     <c:set var="weekNumber" value="${weekNumber + 1}"></c:set>
                                 </c:forEach>    
                             </select>
                             <c:forEach items="${requestScope.currentWeek.days}" var="day">
-                            <td>${day[1]}</td>
-                        </c:forEach>
+                            <td><fmt:formatDate value="${day}" pattern="dd/MM/yyyy"></fmt:formatDate></td>
+                        </c:forEach>  
                         </td>
                     </tr>
                     <tr>
                         <c:forEach items="${requestScope.currentWeek.days}" var="day">
-                            <td>${day[0]}</td>
+                            <td>  <fmt:formatDate value="${day}" pattern="EEEE"></fmt:formatDate> </td>
                         </c:forEach>
                     </tr>
                 </thead>
@@ -148,8 +152,9 @@
                             <td>Slot ${slot}</td>
                             <c:forEach items="${requestScope.currentWeek.days}" var="day">
                                 <c:set var="isHaving" value="false"></c:set>
+                                <fmt:formatDate value="${day}" pattern="yyyy-MM-dd" var="formatDay"></fmt:formatDate>
                                 <c:forEach items="${requestScope.schedules}" var="schedule">
-                                    <c:if test="${(schedule.slot eq slot) and  ''.concat(schedule.date)  eq day[0]  }">
+                                    <c:if test="${(schedule.slot eq slot) and  schedule.date  eq formatDay  }">
                                         <c:set var="isHaving" value="true"></c:set>
                                         <td id="${stt}"> 
                                             <p>
@@ -157,13 +162,13 @@
                                                 Teacher : <span> ${schedule.teacher.teacherCode} </span>
                                             </p>
                                             <button class="btn btn-primary" onclick="doUpdate(this.value)" 
-                                                    value="${''.concat(day[0]).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)
+                                                    value="${''.concat(day).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)
                                                              .concat(' ').concat(schedule.course.courseCode).concat(' ').concat(schedule.course.type).concat(' ').concat(schedule.active)}
                                                     ">
                                                 Edit
                                             </button>
                                             <c:if test="${schedule.active == 0}" >
-                                                <button class="btn btn-danger" onclick="doDelete(this.value,${stt})" value="${day[0].concat(' ').concat(slot)}">
+                                                <button class="btn btn-danger" onclick="doDelete(this.value,${stt})" value="${('').concat(day).concat(' ').concat(slot)}">
                                                     Delete
                                                 </button>
                                             </c:if>    
@@ -172,7 +177,7 @@
                                 </c:forEach>
                                 <c:if test="${!isHaving}">
                                     <td id="${stt}"> 
-                                        <button class="btn btn-success" onclick="doInsert(this.value,${stt})" value="${day[0].concat(' ').concat(slot)}">
+                                        <button class="btn btn-success" onclick="doInsert(this.value,${stt})" value="${('').concat(formatDay).concat(' ').concat(slot)}">
                                             Insert
                                         </button> 
                                     </td>

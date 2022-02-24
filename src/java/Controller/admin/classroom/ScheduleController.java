@@ -47,13 +47,6 @@ public class ScheduleController extends BaseAuthorization {
         scheduleDAO = new ScheduleDAO();
     }
 
-    public Object[] generateDate(Calendar calendar, SimpleDateFormat formatter_EEEE, SimpleDateFormat formatter_yyyyMMdd) {
-        Object[] day = new Object[2];
-        day[1] = formatter_EEEE.format(calendar.getTime());
-        day[0] = formatter_yyyyMMdd.format(calendar.getTime());
-        return day;
-    }
-
     public List<Week> getAllDays(Date startDate, Date endDate, int weekIndex) {
         List<Week> weeks = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -62,15 +55,13 @@ public class ScheduleController extends BaseAuthorization {
         Week week = new Week();
         weeks.add(week);
         week.setWeekNumber(calendar.get(Calendar.WEEK_OF_YEAR));
-        Object[] day;
-        SimpleDateFormat formatter_EEEE = new SimpleDateFormat("EEEE");
-        SimpleDateFormat formatter_yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
 
         while (calendar.getTime().before(endDate)) {
             if (week.getWeekNumber() != calendar.get(Calendar.WEEK_OF_YEAR)) {
                 if (weeks.size() - 1 != weekIndex) {
-                    day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd);
-                    week.getDays().add(day);
+                    date = calendar.getTime();
+                    week.getDays().add(date);
                 }
                 week.setTotalDays(week.getDays().size());
                 week = new Week();
@@ -79,13 +70,13 @@ public class ScheduleController extends BaseAuthorization {
             }
             // first day of normarl week and all days of selected week
             if (weeks.size() - 1 == weekIndex || (weeks.size() - 1 != weekIndex && week.getDays().isEmpty())) {
-                day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd);
-                week.getDays().add(day);
+                date = calendar.getTime();
+                week.getDays().add(date);
             }
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
-        day = generateDate(calendar, formatter_EEEE, formatter_yyyyMMdd); // including the last day of the year
-        week.getDays().add(day);
+        date = calendar.getTime();  // including the end date
+        week.getDays().add(date);
         week.setTotalDays(week.getDays().size());
         return weeks;
     }
@@ -127,7 +118,7 @@ public class ScheduleController extends BaseAuthorization {
         request.setAttribute("semester", semester);
         request.setAttribute("startDate", raw_startDate);
         request.setAttribute("endDate", raw_endDate);
-        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response); 
+        request.getRequestDispatcher("view/admin/class/schedule.jsp").forward(request, response);
     }
 
     @Override

@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,6 +21,16 @@
             }
         </script>
         <style>
+            .table{
+                text-align: center;
+                color: blue;
+            }
+            
+            h2{
+                text-align: center;
+                color: #00FFFF;
+            }
+            
             table span{
                 color: red;
             }
@@ -31,8 +42,8 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
+        <h2>Weekly Schedule</h2>
             <table class="table table-bordered table-hover">
-                <h2>Weekly Schedule</h2>
                 <tr>
                     <td rowspan="2">
                         <label for="year">Year : </label>
@@ -47,18 +58,19 @@
                     <select name="week" id="week" onchange="doChange()">
                         <c:forEach items="${requestScope.year.weeks}" var="week">
                             <option value="${week.weekNumber}" ${(week.weekNumber eq requestScope.week.weekNumber) ? "selected='selected'" : ""}>
-                                ${week.days[0][0]} - ${week.days[week.totalDays - 1][0]} 
+                                <fmt:formatDate value="${week.days[0]}" pattern="dd/MM/yyyy"></fmt:formatDate> 
+                                - <fmt:formatDate value="${week.days[week.totalDays - 1]}" pattern="dd/MM/yyyy"></fmt:formatDate> 
                             </option>
                         </c:forEach>
                     </select>
                     <c:forEach items="${requestScope.week.days}" var="day">
-                    <td>${day[1]}</td>
+                    <td><fmt:formatDate value="${day}" pattern="dd/MM/yyyy"></fmt:formatDate></td>
                 </c:forEach>
                 </td>
             </tr>
             <tr>
                 <c:forEach items="${requestScope.week.days}" var="day">
-                    <td>${day[0]}</td>
+                    <td><fmt:formatDate value="${day}" pattern="EEEE"></fmt:formatDate></td>
                 </c:forEach>
             </tr>
 
@@ -66,9 +78,10 @@
                 <tr>
                     <td>Slot ${slot} </td>
                     <c:forEach items="${requestScope.week.days}" var="day">
+                        <fmt:formatDate var="formatDay" value="${day}" pattern="yyyy-MM-dd"></fmt:formatDate>
                         <c:set value="false" var="isHaving"></c:set>
                         <c:forEach items="${sessionScope.student.studentAttendances}" var="attendance">
-                            <c:if test="${attendance.schedule.slot eq slot and ('').concat(attendance.schedule.date) eq ('').concat(day[0])}">
+                            <c:if test="${attendance.schedule.slot eq slot and attendance.schedule.date eq formatDay}">
                                 <c:set value="true" var="isHaving"></c:set>
                                     <td>   
                                         Class : <span> ${attendance.schedule.classroom.classCode} </span> <br/>

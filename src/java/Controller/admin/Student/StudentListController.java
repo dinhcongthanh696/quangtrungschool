@@ -9,7 +9,10 @@ import DAO.AbstractStudentDAO;
 import DAO.StudentDAO;
 import Login.BaseAuthorization;
 import Model.Student;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -70,6 +73,22 @@ public class StudentListController extends BaseAuthorization {
         request.setAttribute("totalPage", pageNeeded);
         request.setAttribute("query", query);
         request.getRequestDispatcher("view/admin/student/studentlist.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String studentCode = req.getParameter("studentCode");
+        String username = req.getParameter("username");
+        studentDAO.delete(studentCode, username);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd");
+        Gson gson = gsonBuilder.create();
+        Student student = gson.fromJson(request.getReader(), Student.class);
+        studentDAO.update(student);
     }
 
 }

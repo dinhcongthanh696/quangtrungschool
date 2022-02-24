@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -57,18 +58,19 @@
                     <select name="week" id="week" onchange="doChange()">
                         <c:forEach items="${requestScope.year.weeks}" var="week">
                             <option value="${week.weekNumber}" ${(week.weekNumber eq requestScope.week.weekNumber) ? "selected='selected'" : ""}>
-                                ${week.days[0][0]} - ${week.days[week.totalDays - 1][0]} 
+                                <fmt:formatDate value="${week.days[0]}" pattern="dd/MM"/>
+                                - <fmt:formatDate value="${week.days[week.totalDays - 1]}" pattern="dd/MM"/>
                             </option>
                         </c:forEach>
                     </select>
                     <c:forEach items="${requestScope.week.days}" var="day">
-                    <td>${day[1]}</td>
+                    <td><fmt:formatDate value="${day}" pattern="EEEE"></fmt:formatDate></td>
                 </c:forEach>
                 </td>
             </tr>
             <tr>
                 <c:forEach items="${requestScope.week.days}" var="day">
-                    <td>${day[0]}</td>
+                    <td><fmt:formatDate value="${day}" pattern="dd/MM/yyyy"></fmt:formatDate></td>
                 </c:forEach>
             </tr>
 
@@ -78,9 +80,10 @@
                 <tr>
                     <td>Slot ${slot} </td>
                     <c:forEach items="${requestScope.week.days}" var="day">
+                        <fmt:formatDate value="${day}" pattern="yyyy-MM-dd" var="formatDay"></fmt:formatDate>
                         <c:set value="false" var="isHaving"></c:set>
                         <c:forEach items="${sessionScope.teacher.schedules}" var="schedule">
-                            <c:if test="${schedule.slot eq slot and ('').concat(schedule.date) eq ('').concat(day[0])}">
+                            <c:if test="${schedule.slot eq slot and schedule.date eq formatDay}">
                                 <c:set value="true" var="isHaving"></c:set>
                                     <td>   
                                         Class : <span> ${schedule.classroom.classCode} </span> <br/>

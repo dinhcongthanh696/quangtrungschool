@@ -43,6 +43,7 @@
                         <option value="${teacher.teacherCode}">${teacher.account.username}</option>
                     </c:forEach>
                 </select><br/>
+                <input type="hidden" name="weekNumber" value="${param.weekNumber}">
                 <button type="submit" class="btn btn-primary">Save changes</button>
             </form>  
 

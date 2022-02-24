@@ -47,6 +47,7 @@
                                                    value="2" name="active" ${param.active == 2 ? "checked='checked'" : ""} id="active">
                 <label for="closed">Closed</label> <input type="radio" value="1" name="active" ${param.active == 1 ? "checked='checked'" : ""} id="closed"><br/>
                 </c:if>
+                <input type="hidden" name="weekNumber" value="${param.weekNumber}">
                 <button class="btn btn-primary">Save changes</button>
             </form>
         </section>

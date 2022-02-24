@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author My Computer
  */
 @WebServlet(name = "TeacherCheckAddController", urlPatterns = {"/admin-teacher-check-add"})
-public class TeacherCheckAddController extends BaseAuthorization {
+public class TeacherCheckAddController extends HttpServlet {
     private final AbstractTeacherDAO teacherDAO;
     public TeacherCheckAddController(){
         teacherDAO = new TeacherDAO();
@@ -41,7 +41,9 @@ public class TeacherCheckAddController extends BaseAuthorization {
         Gson jsonifier = new Gson();
         String teachersToJSON = jsonifier.toJson(teachers);
         String toArrObjectJSON = toJSONObject("teachers",teachersToJSON);
-        response.getWriter().print(toArrObjectJSON);
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods","GET");
+        response.getWriter().print(teachersToJSON);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,7 +56,7 @@ public class TeacherCheckAddController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -68,7 +70,7 @@ public class TeacherCheckAddController extends BaseAuthorization {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public void processPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }

@@ -35,16 +35,6 @@ public class StudentScheduleController extends BaseAuthorization {
         studentDAO = new StudentDAO();
     }
 
-    public Object[] generateDate(Calendar calendar, SimpleDateFormat formatter_EEEE, SimpleDateFormat formatter_yyyyMMdd) {
-        String weekName;
-        Object[] date;
-        weekName = formatter_EEEE.format(calendar.getTime());
-        date = new Object[2];
-        date[0] = formatter_yyyyMMdd.format(calendar.getTime());
-        date[1] = weekName;
-        return date;
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String raw_year = request.getParameter("year");
@@ -68,8 +58,6 @@ public class StudentScheduleController extends BaseAuthorization {
     }
 
     public void getDays(Year year, int currentWeek) {
-        SimpleDateFormat formatter_EEEE = new SimpleDateFormat("EEEE");
-        SimpleDateFormat formatter_yyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendarFirstDay = Calendar.getInstance();
         calendarFirstDay.set(Calendar.YEAR, year.getYear());
         calendarFirstDay.set(Calendar.DAY_OF_YEAR, 1);  // set to the first day of the year
@@ -81,13 +69,13 @@ public class StudentScheduleController extends BaseAuthorization {
         Week week = new Week();
         week.setWeekNumber(1); // first week
         year.getWeeks().add(week);
-        Object[] day;
+        Date date;
         while (calendarFirstDay.getTime().before(last_day_of_year)) {
             if (week.getWeekNumber() == 52 && calendarFirstDay.get(Calendar.WEEK_OF_YEAR) == 1) {
                 if (week.getWeekNumber() != currentWeek) { // add last day for normal week
                     calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) - 1);   // MINUS 1
-                    day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd);
-                    week.getDays().add(day);
+                    date = calendarFirstDay.getTime();
+                    week.getDays().add(date);
                     week.setTotalDays(week.getDays().size());
                     calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) + 1);   // ADD 1 
                 }
@@ -95,12 +83,12 @@ public class StudentScheduleController extends BaseAuthorization {
                 week = new Week();
                 week.setWeekNumber(53);
                 while (calendarFirstDay.getTime().before(last_day_of_year)) {
-                    day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd);
-                    week.getDays().add(day);
+                    date = calendarFirstDay.getTime();
+                    week.getDays().add(date);
                     calendarFirstDay.add(Calendar.DAY_OF_YEAR, 1);
                 }
-                day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd); // including last day of the year
-                week.getDays().add(day);
+                date = calendarFirstDay.getTime(); // including the last day of the year
+                week.getDays().add(date);
                 week.setTotalDays(week.getDays().size());
                 year.getWeeks().add(week);
                 return;
@@ -109,8 +97,8 @@ public class StudentScheduleController extends BaseAuthorization {
             if (week.getWeekNumber() != calendarFirstDay.get(Calendar.WEEK_OF_YEAR)) {
                 if (week.getWeekNumber() != currentWeek) { // add last day for normal week
                     calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) - 1);   // MINUS 1
-                    day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd);
-                    week.getDays().add(day);
+                    date = calendarFirstDay.getTime();
+                    week.getDays().add(date);
                     calendarFirstDay.set(Calendar.DAY_OF_YEAR, calendarFirstDay.get(Calendar.DAY_OF_YEAR) + 1);   // ADD 1 
                 }
                 week.setTotalDays(week.getDays().size());
@@ -119,13 +107,13 @@ public class StudentScheduleController extends BaseAuthorization {
                 year.getWeeks().add(week);
             }
             if (week.getWeekNumber() == currentWeek || (week.getWeekNumber() != currentWeek && week.getDays().isEmpty())) {
-                day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd);
-                week.getDays().add(day);
+                date = calendarFirstDay.getTime();
+                week.getDays().add(date);
             }
             calendarFirstDay.add(Calendar.DAY_OF_YEAR, 1);
         }
-        day = generateDate(calendarFirstDay, formatter_EEEE, formatter_yyyMMdd); // including last day of the year
-        week.getDays().add(day);
+        date = calendarFirstDay.getTime(); // including the last day of the year
+        week.getDays().add(date);
         week.setTotalDays(week.getDays().size());
     }
 

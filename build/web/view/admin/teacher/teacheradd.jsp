@@ -35,11 +35,11 @@
         <script>
             var teachers;
 
-            function loadData() {  // PAGE LOADED --> LOAD teachers AND ACCOUNTS IN DATABASE --> PUT IT INTO students and usernames;
+            function loadData() {  // PAGE LOADED --> LOAD teachers IN DATABASE --> PUT IT INTO teachers;
                     $.ajax(
                         {url: "/QuangTrungSchool/admin-teacher-check-add",
                             type: 'GET',
-                            success: function (response) {  // servlet /admin-teacher-check-add response 2 arraylist STUDENTS AND ACCOUTS IN JSON FORMAT
+                            success: function (response) {  // servlet /admin-teacher-check-add response JSON FORMAT
                                 const JSONtoObjects = JSON.parse(response);
                                 teachers = JSONtoObjects.teachers;
                             }

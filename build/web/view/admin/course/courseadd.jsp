@@ -19,9 +19,7 @@
                    type : "GET",
                    success : function(response){
                        var object = JSON.parse(response);
-                       for(let i = 0 ; i < object.length ; i++){
-                           courses[i] = object[i];
-                       }
+                       courses = object;
                    }
                 });
             }

@@ -31,15 +31,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ScheduleUpdateController", urlPatterns = {"/admin-classyearsemester-schedule-update"})
 public class ScheduleUpdateController extends BaseAuthorization {
-
+    
     private final AbstractTeacherDAO teacherDAO;
     private final AbstractScheduleDAO scheduleDAO;
-
+    
     public ScheduleUpdateController() {
         teacherDAO = new TeacherDAO();
         scheduleDAO = new ScheduleDAO();
     }
-
+    
     @Override
     public void processGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -53,7 +53,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
         request.setAttribute("slot", slot);
         request.getRequestDispatcher("view/admin/class/scheduleupdate.jsp").forward(request, response);
     }
-
+    
     @Override
     public void processPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -64,8 +64,8 @@ public class ScheduleUpdateController extends BaseAuthorization {
         String teacherCode = request.getParameter("teacher").isEmpty() ? null : request.getParameter("teacher");
         String raw_startDate = request.getParameter("startDate");
         String raw_endDate = request.getParameter("endDate");
-        int active = Integer.parseInt(request.getParameter("active"));
-
+        String raw_active = request.getParameter("active");
+        
         Schedule schedule = new Schedule();
         ClassRoom classroom = new ClassRoom();
         Teacher teacher = new Teacher();
@@ -75,14 +75,16 @@ public class ScheduleUpdateController extends BaseAuthorization {
         schedule.setClassroom(classroom);
         schedule.setSlot(slot);
         schedule.setDate(date);
-        schedule.setActive(active);
+        if (raw_active != null) {
+            schedule.setActive(Integer.parseInt(raw_active));
+        }
         scheduleDAO.updateTeacherAndActive(schedule);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
-        int week = calendar.get(Calendar.WEEK_OF_YEAR);
+        int week = Integer.parseInt(request.getParameter("weekNumber"));
         response.sendRedirect("admin-classyearsemester-schedule?year=" + year + "&weekNumber=" + week + "&classCode=" + classCode
                 + "&semester=" + semester + "&startDate=" + raw_startDate + "&endDate=" + raw_endDate);
     }
-
+    
 }

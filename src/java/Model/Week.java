@@ -6,6 +6,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class Week {
     private int weekNumber;
     private String weekName;
-    private ArrayList<Object[]> days = new ArrayList<>();
+    private ArrayList<Date> days = new ArrayList<>();
     private int totalDays;
 
     public String getWeekName() {
@@ -33,11 +34,11 @@ public class Week {
         this.weekNumber = weekNumber;
     }
 
-    public ArrayList<Object[]> getDays() {
+    public ArrayList<Date> getDays() {
         return days;
     }
 
-    public void setDays(ArrayList<Object[]> days) {
+    public void setDays(ArrayList<Date> days) {
         this.days = days;
     }
 

@@ -20,9 +20,7 @@
                     type : 'GET',
                     success : function(response){
                         var toObject = JSON.parse(response);
-                        for(let i = 0 ; i < toObject.length ; i++){
-                            departments[i] = toObject[i];
-                        }
+                        departments = toObject;
                     }
                 });
             }

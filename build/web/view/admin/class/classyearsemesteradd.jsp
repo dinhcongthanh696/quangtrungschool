@@ -45,7 +45,7 @@
                                 var checkedBoxValue = $("input[type=radio]:checked").val();
                                 var isDuplicated = false;
                                 for (let i = 0; i < toObject.length; i++) {
-                                    semesters[i] = (i + 1);
+                                    semesters[i] = toObject[i].semester;
                                     if (checkedBoxValue == semesters[i]) {
                                         isDuplicated = true;
                                         break;

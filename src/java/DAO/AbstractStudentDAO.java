@@ -26,7 +26,7 @@ public abstract class AbstractStudentDAO extends BaseDAO {
       
     public abstract void update(Student student);
     
-    public abstract void delete(Student student);
+    public abstract void delete(String studentCode,String username);
     
     public abstract List<Student> search(String query,int offset,int fetch);
     

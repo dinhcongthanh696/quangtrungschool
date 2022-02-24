@@ -24,9 +24,20 @@
         <servlet-name>TeacherAddController</servlet-name>
         <url-pattern>/admin-teacher-add</url-pattern>
     </servlet-mapping>
+    
+    <error-page>
+        <error-code>401</error-code>
+        <location>/view/error/code401.jsp</location>
+    </error-page>
+    
+    <error-page>
+        <error-code>403</error-code>
+        <location>/view/error/code403.jsp</location>
+    </error-page>
+    
     <session-config>
         <session-timeout>
-            45
+            30
         </session-timeout>
     </session-config>
     <welcome-file-list>

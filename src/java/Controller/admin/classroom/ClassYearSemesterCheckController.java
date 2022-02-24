@@ -24,20 +24,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ClassYearSemesterCheckController", urlPatterns = {"/admin-classyearsemester-check"})
 public class ClassYearSemesterCheckController extends BaseAuthorization {
+
     private final AbstractClassYearSemesterDAO classyearsemesterDAO;
-    
-    public ClassYearSemesterCheckController(){
+
+    public ClassYearSemesterCheckController() {
         classyearsemesterDAO = new ClassYearSemesterDAO();
     }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String classCode = request.getParameter("classCode");
-        int year = ( request.getParameter("year").isEmpty() ) ? -1 : Integer.parseInt(request.getParameter("year"));
-        if(!classCode.isEmpty() && year != -1){
-            List<ClassYearSemester> classes = classyearsemesterDAO.getSemesters(classCode, year);
-            Gson jsonifier = new Gson();
-            response.getWriter().print(jsonifier.toJson(classes));
-        }
+        int year = Integer.parseInt(request.getParameter("year"));
+        List<ClassYearSemester> classes = classyearsemesterDAO.getSemesters(classCode, year);
+        Gson jsonifier = new Gson();
+        response.getWriter().print(jsonifier.toJson(classes));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -194,30 +194,29 @@ public class StudentDAO extends AbstractStudentDAO {
     }
 
     @Override
-    public void delete(Student student) {
-        String sql = "DELETE FROM student "
-                + " WHERE student_code = ?";
+    public void delete(String studentCode,String username) {
         PreparedStatement prepare_stmt = null;
         try {
             connection.setAutoCommit(false);
+            String sql = "DELETE FROM learning WHERE student_code = ?";
             prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getStudentCode());
-            prepare_stmt.executeUpdate();
-            sql = "DELETE FROM learning WHERE student_code = ?";
-            prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getStudentCode());
-            prepare_stmt.executeUpdate();
-            sql = "DELETE FROM account WHERE username = ?";
-            prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getAccount().getUsername());
-            prepare_stmt.executeUpdate();
-            sql = "DELETE FROM groupaccount WHERE username = ?";
-            prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getAccount().getUsername());
+            prepare_stmt.setString(1, studentCode);
             prepare_stmt.executeUpdate();
             sql = "DELETE FROM mark WHERE student_code = ?";
             prepare_stmt = connection.prepareStatement(sql);
-            prepare_stmt.setString(1, student.getStudentCode());
+            prepare_stmt.setString(1, studentCode);
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM student WHERE student_code = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, studentCode);
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM groupaccount WHERE username = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, username);
+            prepare_stmt.executeUpdate();
+            sql = "DELETE FROM account WHERE username = ?";
+            prepare_stmt = connection.prepareStatement(sql);
+            prepare_stmt.setString(1, username);
             prepare_stmt.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
@@ -487,45 +486,40 @@ public class StudentDAO extends AbstractStudentDAO {
         try {
             PreparedStatement prepapre_stmt = connection.prepareStatement(sql);
             prepapre_stmt.setString(1, student.getStudentCode());
-            try {
-                Date first_day_of_week = new java.sql.Date(formatterDate.parse((String) week.getDays().get(0)[0]).getTime());
-                Date last_day_of_week = new java.sql.Date(formatterDate.parse((String) week.getDays().get(week.getDays().size() - 1)[0]).getTime());
-                prepapre_stmt.setDate(2, first_day_of_week);
-                prepapre_stmt.setDate(3, last_day_of_week);
-                ResultSet rs = prepapre_stmt.executeQuery();
-                StudentAttendance stuAttendance;
-                Schedule schedule;
-                ClassRoom classroom;
-                Teacher teacher;
-                while (rs.next()) {
-                    schedule = new Schedule();
-                    schedule.setDate(rs.getDate("date"));
-                    classroom = new ClassRoom();
-                    classroom.setClassCode(rs.getString("class_code"));
-                    schedule.setClassroom(classroom);
-                    teacher = new Teacher();
-                    teacher.setTeacherCode(rs.getString("teacher_code"));
-                    schedule.setTeacher(teacher);
-                    schedule.setSlot(rs.getInt("slot"));
-                    schedule.setAttendance(rs.getString("attendance"));
-                    Course course = new Course();
-                    course.setCourseCode(rs.getString("course_code"));
-                    course.setType(rs.getInt("type"));
-                    schedule.setCourse(course);
-                    stuAttendance = new StudentAttendance();
-                    stuAttendance.setSchedule(schedule);
-                    if (schedule.getAttendance() == null) {
-                        stuAttendance.setStatus(0);   //REPERSENT FOR NOT YET
-                    } else if (schedule.getAttendance().contains(student.getStudentCode())) {
-                        stuAttendance.setStatus(-1);  // ABSENT
-                    } else {
-                        stuAttendance.setStatus(1);   // ATTENDED
-                    }
-                    studentAttendances.add(stuAttendance);
+            Date first_day_of_week = new java.sql.Date(week.getDays().get(0).getTime());
+            Date last_day_of_week = new java.sql.Date(week.getDays().get(week.getTotalDays() - 1).getTime());
+            prepapre_stmt.setDate(2, first_day_of_week);
+            prepapre_stmt.setDate(3, last_day_of_week);
+            ResultSet rs = prepapre_stmt.executeQuery();
+            StudentAttendance stuAttendance;
+            Schedule schedule;
+            ClassRoom classroom;
+            Teacher teacher;
+            while (rs.next()) {
+                schedule = new Schedule();
+                schedule.setDate(rs.getDate("date"));
+                classroom = new ClassRoom();
+                classroom.setClassCode(rs.getString("class_code"));
+                schedule.setClassroom(classroom);
+                teacher = new Teacher();
+                teacher.setTeacherCode(rs.getString("teacher_code"));
+                schedule.setTeacher(teacher);
+                schedule.setSlot(rs.getInt("slot"));
+                schedule.setAttendance(rs.getString("attendance"));
+                Course course = new Course();
+                course.setCourseCode(rs.getString("course_code"));
+                course.setType(rs.getInt("type"));
+                schedule.setCourse(course);
+                stuAttendance = new StudentAttendance();
+                stuAttendance.setSchedule(schedule);
+                if (schedule.getAttendance() == null) {
+                    stuAttendance.setStatus(0);   //REPERSENT FOR NOT YET
+                } else if (schedule.getAttendance().contains(student.getStudentCode())) {
+                    stuAttendance.setStatus(-1);  // ABSENT
+                } else {
+                    stuAttendance.setStatus(1);   // ATTENDED
                 }
-            } catch (ParseException ex) {
-                System.out.println("Can not parse");
-                Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
+                studentAttendances.add(stuAttendance);
             }
         } catch (SQLException ex) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -582,7 +576,7 @@ public class StudentDAO extends AbstractStudentDAO {
                 prepare_stmt.setDate(1, date);
                 rs = prepare_stmt.executeQuery();
                 while (rs.next()) {
-                   totalSearchedStudent = rs.getInt("totalsearchedstudent");
+                    totalSearchedStudent = rs.getInt("totalsearchedstudent");
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -603,6 +597,6 @@ public class StudentDAO extends AbstractStudentDAO {
                 Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        return totalSearchedStudent;   
+        return totalSearchedStudent;
     }
 }
