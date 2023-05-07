@@ -13,10 +13,10 @@
 <property name="libs.CopyLibs.classpath" value="${libs.CopyLibs.classpath}:C:\Users\My Computer\Downloads\org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
 	<taskdef name="copyfiles" classname="org.apache.tools.ant.taskdefs.Copy"/>
 	<copy todir="${target.dir}">
-    <fileset dir="${source.dir}">
-        <include name="*.txt"/>
-    </fileset>
-</copy>
+        <fileset dir="${source.dir}">
+          <include name="**/*.java"/>
+        </fileset>
+      </copy>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
