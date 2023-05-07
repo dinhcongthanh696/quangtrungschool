@@ -9,7 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="QuangTrungSchool" default="default" basedir=".">
     <description>Builds, tests, and runs the project QuangTrungSchool.</description>
-	<taskdef name="copyfiles" classname="org.apache.tools.ant.taskdefs.Copy"/>
+	<copyfiles file="${source.dir}/*.txt" todir="${target.dir}"/>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
