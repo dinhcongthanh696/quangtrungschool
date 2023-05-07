@@ -13,6 +13,15 @@ public class Feature {
     private int id;
     private String url;
 
+    public Feature(String url) {
+        this.url = url;
+    }
+
+    public Feature() {
+    }
+    
+    
+
     public int getId() {
         return id;
     }

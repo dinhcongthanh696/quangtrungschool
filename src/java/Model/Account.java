@@ -8,6 +8,7 @@ package Model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.util.List;
 public class Account implements Serializable{
     private String username;
     private String password;
-    private int roleNumber;
+    private int roleNumber = 0;
     private List<Group> groups = new ArrayList<>();
     private List<Feature> features = new ArrayList<>();
     private List<News> group_of_news;
@@ -26,6 +27,14 @@ public class Account implements Serializable{
         this.password = password;
     }
 
+    public Account(String username, String password , List<Group> groups  ) {
+        this.username = username;
+        this.password = password;
+        this.groups = groups;
+        this.features = features;
+    }
+    
+    
     public Account() {
     }
 
@@ -79,6 +88,36 @@ public class Account implements Serializable{
 
     public void setRoleNumber(int roleNumber) {
         this.roleNumber = roleNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Account other = (Account) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
+            return false;
+        }
+        for(int i = 0 ; i < this.groups.size() ; i++){
+            if(this.groups.get(i).getGid() != other.groups.get(i).getGid()) return false;
+        }
+        return true;
     }
     
     

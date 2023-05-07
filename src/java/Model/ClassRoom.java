@@ -18,6 +18,11 @@ public class ClassRoom {
         this.department = department;
     }
 
+    public ClassRoom(String classCode) {
+        this.classCode = classCode;
+    }
+    
+
     public ClassRoom() {
     }
     

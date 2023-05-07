@@ -13,6 +13,15 @@ public class Group {
     private int gid;
     private String gname;
 
+    public Group(int gid) {
+        this.gid = gid;
+    }
+
+    public Group() {
+    }
+    
+    
+
     public int getGid() {
         return gid;
     }
