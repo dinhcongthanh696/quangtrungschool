@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<taskdef name="copyfiles" classname="org.apache.tools.ant.taskdefs.Copy"/>
 <!--
         *** GENERATED FROM project.xml - DO NOT EDIT  ***
         ***         EDIT ../build.xml INSTEAD         ***
