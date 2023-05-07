@@ -1,12 +1,12 @@
 name: Quang Trung School | © 2021 by dinhcongthanh9901
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the main branch
+# events but only for the master branch
 on:
   push:
-    branches: [ main ] # Lấy code từ nhánh main nếu có ai push code lên  
+    branches: [ master ] # Lấy code từ nhánh master nếu có ai push code lên  
   pull_request:
-    branches: [ main ] # Lấy code từ nhánh main nếu có ai gửi pull request  
+    branches: [ master ] # Lấy code từ nhánh master nếu có ai gửi pull request  
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs: # Những công việc dev làm thường ngày: lấy code, build, chạy test, đóng gói, gửi build...
