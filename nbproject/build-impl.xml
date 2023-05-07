@@ -998,9 +998,6 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init,compile,test,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
-        <copy todir="${dist.ear.dir}/lib">
-    <fileset dir="${libs.spring-framework400.classpath}" includes="*.jar"/>
-</copy>
 <copy todir="${dist.ear.dir}/lib">
     <fileset dir="${libs.jstl.classpath}" includes="*.jar"/>
 </copy>
@@ -1024,9 +1021,6 @@ exists or setup the property manually. For example like this:
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
         <copy todir="${target.dir}/WEB-INF/lib">
-    <fileset dir="${libs.spring-framework400.classpath}"/>
-</copy>
-<copy todir="${target.dir}/WEB-INF/lib">
     <fileset dir="${libs.jstl.classpath}"/>
 </copy>
 <copy todir="${target.dir}/WEB-INF/lib">
