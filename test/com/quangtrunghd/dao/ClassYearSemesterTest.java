@@ -28,7 +28,7 @@ public class ClassYearSemesterTest {
     public static Collection<Object[]> initData(){
         List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"10d5" , 2021 , new ClassYearSemester(new ClassRoom("10d5"), null, 2021, 0)});
-        data.add(new Object[]{"11d5" , 2021 , new ClassYearSemester(new ClassRoom("11d5"), null, 2021, 0)});
+        data.add(new Object[]{"11d5" , 2021 , new ClassYearSemester(new ClassRoom("11d6"), null, 2021, 0)});
         return data;
     }
     

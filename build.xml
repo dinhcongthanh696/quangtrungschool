@@ -9,15 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="QuangTrungSchool" default="default" basedir=".">
     <description>Builds, tests, and runs the project QuangTrungSchool.</description>
-<target name="-pre-init">
-  <property name="libs.CopyLibs.classpath" value="C:\Program Files\NetBeans 8.2\enterprise\ant\extra\org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
-</target>
-<taskdef resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml">
-  <classpath>
-    <pathelement location="NetBeans 8.2/ant/extra/copylibstask.jar"/>
-  </classpath>
-</taskdef>
-<import file="nbproject/build-impl.xml"/>
+    <import file="nbproject/build-impl.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
