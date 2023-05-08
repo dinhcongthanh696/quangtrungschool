@@ -14,7 +14,7 @@
 </target>
 <taskdef resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml">
   <classpath>
-    <pathelement location="C:/Program Files/NetBeans 8.2/java/ant/extra/copylibstask.jar"/>
+    <pathelement location="NetBeans 8.2/ant/extra/copylibstask.jar"/>
   </classpath>
 </taskdef>
 <import file="nbproject/build-impl.xml"/>
