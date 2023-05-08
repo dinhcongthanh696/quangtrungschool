@@ -12,6 +12,11 @@
 <target name="-pre-init">
   <property name="libs.CopyLibs.classpath" value="C:\Program Files\NetBeans 8.2\enterprise\ant\extra\org-netbeans-modules-java-j2seproject-copylibstask.jar"/>
 </target>
+<taskdef resource="net/sf/antcontrib/antlib.xml">
+  <classpath>
+    <pathelement location="C:\Program Files\NetBeans 8.2\javacard\JCDK3.0.2_ConnectedEdition\lib\ant-contrib-1.0b3.jar"/>
+  </classpath>
+</taskdef>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
