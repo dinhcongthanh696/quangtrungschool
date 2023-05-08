@@ -17,12 +17,6 @@ jobs: # Những công việc dev làm thường ngày: lấy code, build, chạy
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-	- name: Install Ant
-  	  run: sudo apt-get install ant
-	
-	- name: Install ant-contrib
-  	  run: sudo apt-get install ant-contrib
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Check-out repository # Lấy code từ kho thảy vào máy ảo của GitHub chuẩn bị build ở bước sau
         uses: actions/checkout@v2
@@ -31,6 +25,12 @@ jobs: # Những công việc dev làm thường ngày: lấy code, build, chạy
         uses: actions/setup-java@v1 # Khai báo cần dùng JDK để build
         with:
           java-version: 1.8 # Khai báo sử dụng phiên bản JDK 1.8 để build
+
+	- name: Install ant-contrib
+  	  run: |
+          wget https://sourceforge.net/projects/ant-contrib/files/ant-contrib/1.0b3/ant-contrib-1.0b3-bin.tar.gz/download -O ant-contrib.tar.gz
+          tar -xzf ant-contrib.tar.gz
+          cp ant-contrib/lib/ant-contrib.jar /usr/share/ant/lib/
 
       - name: Build project with Ant
         run: ant -noinput -buildfile build.xml # Quá trình build sẽ cần đến file cấu hình build.xml, build-impl.xml
