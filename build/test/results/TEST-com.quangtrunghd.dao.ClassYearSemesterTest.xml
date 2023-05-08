@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="LAPTOP-J7TMDJ5A" name="com.quangtrunghd.dao.ClassYearSemesterTest" skipped="0" tests="2" time="0.86" timestamp="2023-05-08T04:30:51">
+<testsuite errors="0" failures="1" hostname="LAPTOP-J7TMDJ5A" name="com.quangtrunghd.dao.ClassYearSemesterTest" skipped="0" tests="2" time="0.853" timestamp="2023-05-08T04:33:16">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="US" />
@@ -67,7 +67,7 @@
     <property name="libs.j2me_common_ant.maven-pom" value="" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.quangtrunghd.dao.ClassYearSemesterTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\My Computer\Downloads\QuangTrungSchool\build\test\results\TEST-com.quangtrunghd.dao.ClassYearSemesterTest.xml crashfile=C:\Users\My Computer\Downloads\QuangTrungSchool\build\junitvmwatcher8773774612976465901.properties propsfile=C:\Users\My Computer\Downloads\QuangTrungSchool\build\junit5627661525420055229.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner com.quangtrunghd.dao.ClassYearSemesterTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\My Computer\Downloads\QuangTrungSchool\build\test\results\TEST-com.quangtrunghd.dao.ClassYearSemesterTest.xml crashfile=C:\Users\My Computer\Downloads\QuangTrungSchool\build\junitvmwatcher7080041493828029298.properties propsfile=C:\Users\My Computer\Downloads\QuangTrungSchool\build\junit8596439250833419112.properties" />
     <property name="build.classes.dir" value="build/web/WEB-INF/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="ap.supported.internal" value="true" />
@@ -446,8 +446,12 @@
     <property name="war.ear.name" value="QuangTrungSchool.war" />
     <property name="libs.javaee-web-api-7.0.javadoc" value="C:\Program Files\NetBeans 8.2\enterprise\docs\javaee-doc-api.jar" />
   </properties>
-  <testcase classname="com.quangtrunghd.dao.ClassYearSemesterTest" name="checkGetClassYearSemesterGivenRightArguementReturnsWell[0]" time="0.78" />
-  <testcase classname="com.quangtrunghd.dao.ClassYearSemesterTest" name="checkGetClassYearSemesterGivenRightArguementReturnsWell[1]" time="0.03" />
+  <testcase classname="com.quangtrunghd.dao.ClassYearSemesterTest" name="checkGetClassYearSemesterGivenRightArguementReturnsWell[0]" time="0.774" />
+  <testcase classname="com.quangtrunghd.dao.ClassYearSemesterTest" name="checkGetClassYearSemesterGivenRightArguementReturnsWell[1]" time="0.03">
+    <failure message="expected:&lt;11d[5]&gt; but was:&lt;11d[6]&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;11d[5]&gt; but was:&lt;11d[6]&gt;
+	at com.quangtrunghd.dao.ClassYearSemesterTest.checkGetClassYearSemesterGivenRightArguementReturnsWell(ClassYearSemesterTest.java:47)
+</failure>
+  </testcase>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
