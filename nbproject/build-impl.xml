@@ -1009,48 +1009,15 @@ exists or setup the property manually. For example like this:
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="hamcrest-core-1.3.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="gson-2.8.2.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="junit-4.11.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="jersey-json-1.19.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="jstl.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="sqljdbc42.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="spring-framework-4.0.0.jar"/>
-				<!-- Adjust the exact filename as needed -->
-			</fileset>
-		</copy>
-		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
-				<include name="*.jar"/>
-			</fileset>
-		</copy>
-	</target>
+        <copyfiles files="${file.reference.hamcrest-core-1.3.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.gson-2.8.2.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.junit-4.11.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.jersey-json-1.19.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.jstl.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.sqljdbc42.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.spring-framework400.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${libs.CopyLibs.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+    </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
     </target>
