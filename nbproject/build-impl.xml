@@ -1046,7 +1046,7 @@ exists or setup the property manually. For example like this:
 			</fileset>
 		</copy>
 		<copy todir="${build.web.dir}/WEB-INF/lib">
-			<fileset dir="C:/Users/My Computer/Downloads/QuangTrungSchool">
+			<fileset dir="C:/Program Files/NetBeans 8.2/java/ant/extra">
 				<include name="*.jar"/>
 			</fileset>
 		</copy>
