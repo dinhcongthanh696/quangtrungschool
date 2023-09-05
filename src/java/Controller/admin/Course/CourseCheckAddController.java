@@ -43,7 +43,6 @@ public class CourseCheckAddController extends BaseAuthorization {
             throws ServletException, IOException {
         List<Course> courses = courseDAO.getAll();
         Gson gson = new Gson();
-        System.out.println(gson.toJson(courses));
         response.getWriter().print(gson.toJson(courses));
     }
 
