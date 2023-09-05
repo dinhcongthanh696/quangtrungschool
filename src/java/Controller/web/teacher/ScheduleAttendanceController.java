@@ -47,7 +47,7 @@ public class ScheduleAttendanceController extends BaseAuthorization {
         int scheduleindex = Integer.parseInt(request.getParameter("scheduleindex"));
         HttpSession session  = request.getSession();
         Teacher teacher = (Teacher) session.getAttribute("teacher");
-        Schedule schedule = teacher.getSchedules().get(scheduleindex - 1);
+        Schedule schedule = teacher.getSchedules().get(scheduleindex == 0 ? scheduleindex : scheduleindex - 1);
         scheduleDAO.getAttendances(schedule);
         if (schedule.getActive() != 2) {
             response.sendError(403);

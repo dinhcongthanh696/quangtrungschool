@@ -38,6 +38,7 @@ public class ClassYearSemesterUpdate extends BaseAuthorization {
         int year = (request.getParameter("year") == null) ? -1 : Integer.parseInt(request.getParameter("year"));
         int semester = (request.getParameter("semester") == null) ? -1 : Integer.parseInt(request.getParameter("semester"));
         String homeroomTeacherCode = request.getParameter("teacherCode");
+        System.out.println("First time : " + classCode);
         if(!classCode.isEmpty() && year != -1 && semester != -1){
             ClassYearSemester classYearSemester = new ClassYearSemester();
             Teacher homeroomTeacher;
@@ -54,6 +55,7 @@ public class ClassYearSemesterUpdate extends BaseAuthorization {
             classyearsemesterDAO.getTeachers(classYearSemester);
             request.setAttribute("classyearsemester", classYearSemester);
         }
+        System.out.println("Second time : " + classCode);
         request.getRequestDispatcher("view/admin/class/classyearsemesterupdate.jsp").forward(request, response);
     }
 

@@ -162,7 +162,7 @@
                                                 Teacher : <span> ${schedule.teacher.teacherCode} </span>
                                             </p>
                                             <button class="btn btn-primary" onclick="doUpdate(this.value)" 
-                                                    value="${''.concat(day).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)
+                                                    value="${''.concat(formatDay).concat(' ').concat(slot).concat(' ').concat(schedule.teacher.teacherCode)
                                                              .concat(' ').concat(schedule.course.courseCode).concat(' ').concat(schedule.course.type).concat(' ').concat(schedule.active)}
                                                     ">
                                                 Edit

@@ -45,6 +45,7 @@ public class ScheduleUpdateController extends BaseAuthorization {
             throws ServletException, IOException {
         String raw_date = request.getParameter("day");
         String raw_slot = request.getParameter("slot");
+        System.out.println("Raw date : "+raw_date);
         Date date = Date.valueOf(raw_date);
         int slot = Integer.parseInt(raw_slot);
         List<Teacher> teachers = teacherDAO.getFreeTeacher(date, slot);
