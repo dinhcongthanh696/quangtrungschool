@@ -22,8 +22,6 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
     - name: Build with Ant
-      run: ant -noinput -buildfile build.xml
-    - name: Set libs.CopyLibs.classpath
-      env:
-        libs.CopyLibs.classpath: https://github.com/dinhcongthanh696/quangtrungschool/blob/master/org-netbeans-modules-java-j2seproject-copylibstask.jar
-
+      run: |
+        ant -noinput -buildfile build.xml
+        echo "libs.CopyLibs.classpath=https://github.com/dinhcongthanh696/quangtrungschool/blob/master/org-netbeans-modules-java-j2seproject-copylibstask.jar" >> $GITHUB_ENV
